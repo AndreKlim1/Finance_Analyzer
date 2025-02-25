@@ -13,7 +13,7 @@ namespace UsersService.Services.Mappings
             return new UserResponse
             ( 
                 user.Id,
-                Convert.ToInt32(user.Role),
+                user.Role.ToString(),
                 user.Email,
                 user.RegistrationDate,
                 user.ProfileId
@@ -24,7 +24,7 @@ namespace UsersService.Services.Mappings
         {
             return new User
             {
-                Role = (Role)request.Role,
+                Role = Enum.Parse<Role>(request.Role),
                 Email = request.Email,
                 RegistrationDate = request.RegistrationDate,
                 ProfileId = request.ProfileId,
@@ -36,7 +36,7 @@ namespace UsersService.Services.Mappings
             return new User
             {
                 Id = request.Id,
-                Role = (Role)request.Role,
+                Role = Enum.Parse<Role>(request.Role),
                 Email = request.Email,
                 RegistrationDate = request.RegistrationDate,
                 ProfileId = request.ProfileId,

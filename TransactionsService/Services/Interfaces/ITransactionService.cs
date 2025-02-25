@@ -1,0 +1,16 @@
+﻿using TransactionsService.Models.DTO.Requests;
+using TransactionsService.Models.DTO.Responses;
+using TransactionsService.Models.Errors;
+
+
+namespace TransactionsService.Services.Interfaces
+{
+    public interface ITransactionService
+    {
+        Task<Result<TransactionResponse>> GetTransactionByIdAsync(long id, CancellationToken token);
+        Task<Result<TransactionResponse>> GetTransactionByEmailAsync(string email, CancellationToken token);
+        Task<Result<TransactionResponse>> CreateTransactionAsync(CreateTransactionRequest createTransactionRequest, CancellationToken token);
+        Task<Result<TransactionResponse>> UpdateTransactionAsync(UpdateTransactionRequest updateTransactionRequest, CancellationToken token);
+        Task<bool> DeleteTransactionAsync(long id, CancellationToken token);
+    }
+}

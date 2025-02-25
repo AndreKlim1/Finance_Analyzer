@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using UsersService.Models;
+using BudgetingService.Models;
 
-namespace UsersService.Repositories
+namespace BudgetingService.Repositories
 {
-    public class UsersServiceDbContext : DbContext
+    public class BudgetingServiceDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
 
-        public UsersServiceDbContext(DbContextOptions<UsersServiceDbContext> options, IConfiguration configuration) : base(options)
+        public BudgetingServiceDbContext(DbContextOptions<BudgetingServiceDbContext> options, IConfiguration configuration) : base(options)
         {
             _configuration = configuration;
 
@@ -16,12 +16,11 @@ namespace UsersService.Repositories
             Database.EnsureCreated();
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Profile> Profiles { get; set; }
+        public DbSet<Budget> Transactions { get; set; }
    
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(UsersServiceDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(BudgetingServiceDbContext).Assembly);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

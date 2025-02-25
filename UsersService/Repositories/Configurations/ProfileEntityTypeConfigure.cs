@@ -18,11 +18,6 @@ namespace UsersService.Repositories.Configurations
                 .IsRequired()
                 .HasMaxLength(32);
 
-            builder.HasOne<User>()
-                .WithOne(u => u.Profile)
-                .HasForeignKey<User>(u => u.ProfileId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasData(
                 new Profile
                 {

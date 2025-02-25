@@ -3,6 +3,27 @@ version: '3.4'
 services:
   usersservice:
     image: ${DOCKER_REGISTRY-}usersservice
+    container_name: usersservice
     build:
       context: .
       dockerfile: UsersService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - "24110:8080"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:alpine3.17
+    container_name: postgres-service
+    hostname: postgres-service
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: users
+      POSTGRES_AUTH_METHOD: TRUST
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432" 

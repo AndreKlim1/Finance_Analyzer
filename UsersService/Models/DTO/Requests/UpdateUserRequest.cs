@@ -2,7 +2,7 @@
 {
     public record UpdateUserRequest(
         long Id,
-        int Role,
+        string Role,
         string Email,
         DateTime RegistrationDate,
         long ProfileId,

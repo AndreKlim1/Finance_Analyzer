@@ -27,7 +27,7 @@ namespace UsersService.Repositories.Configurations
 
             builder.HasOne(u => u.Profile)
                 .WithOne()
-                .HasForeignKey<User>(u => u.ProfileId)//!!!!!!<User>
+                .HasForeignKey<User>(u => u.ProfileId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(u => u.Email).IsUnique();
@@ -37,8 +37,8 @@ namespace UsersService.Repositories.Configurations
                 Id = 1,
                 Email = "user1@example.com",
                 PasswordHash = "h",
-                RegistrationDate = DateTime.UtcNow,
-                Role = Role.User,
+                RegistrationDate = new DateTime(2025, 2, 1),
+                Role = Role.USER,
                 ProfileId = 1
             },
             new User
@@ -46,8 +46,8 @@ namespace UsersService.Repositories.Configurations
                 Id = 2,
                 Email = "user2@example.com",
                 PasswordHash = "h",
-                RegistrationDate = DateTime.UtcNow,
-                Role = Role.Admin,
+                RegistrationDate = new DateTime(2025, 2, 1),
+                Role = Role.ADMIN,
                 ProfileId = 2
             }
         );

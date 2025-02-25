@@ -13,8 +13,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using UsersService.Extensions;
-using UsersService.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using UsersService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,7 +72,7 @@ builder.Services.AddAuthentication(options =>
     });
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AdminPolicy", policy =>
-        policy.RequireClaim(ClaimTypes.Role, Role.Admin.ToString()));
+        policy.RequireClaim(ClaimTypes.Role, Role.ADMIN.ToString()));
 
 
 builder.Services.AddDbContext<UsersServiceDbContext>();
@@ -99,10 +99,6 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.All
 });
 app.UseRouting();
-
-app.UseHttpsRedirection();
-
-
 
 app.UseAuthentication();
 

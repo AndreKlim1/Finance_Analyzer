@@ -4,7 +4,6 @@ namespace UsersService.Services
 {
     public interface IServiceManager
     {
-        IUserService UserService { get; }
-        IProfileService ProfileService { get; }
+        
     }
 }

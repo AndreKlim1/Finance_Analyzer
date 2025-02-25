@@ -10,7 +10,7 @@ namespace UsersService.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/users")]
+    [Route("api/v{version:apiVersion}/profiles")]
     public class ProfileController : ControllerBase
     {
         private readonly IProfileService _profileService;

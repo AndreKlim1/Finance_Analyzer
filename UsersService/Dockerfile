@@ -3,10 +3,11 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 24110
+EXPOSE 24111
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+RUN dotnet dev-certs https --trust
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["UsersService/UsersService.csproj", "UsersService/"]
