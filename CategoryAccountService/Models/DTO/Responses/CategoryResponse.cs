@@ -4,7 +4,7 @@ namespace CaregoryAccountService.Models.DTO.Responses
 {
     public record CategoryResponse(
         long Id,
-        long UserId,
+        long? UserId,
         string CategoryName,
         string CategoryType);
 }

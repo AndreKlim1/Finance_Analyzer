@@ -5,6 +5,8 @@ using TransactionsService.Models.DTO.Requests;
 using TransactionsService.Models.DTO.Responses;
 using TransactionsService.Models.Errors;
 using TransactionsService.Services.Mappings;
+using TransactionsService.Repositories.Implementations;
+using Microsoft.EntityFrameworkCore;
 
 namespace TransactionsService.Services.Implementations
 {
@@ -29,15 +31,6 @@ namespace TransactionsService.Services.Implementations
             return transaction is null
                 ? Result<TransactionResponse>.Failure(TransactionErrors.TransactionNotFound)
                 : Result<TransactionResponse>.Success(transaction.ToTransactionResponse());
-        }
-
-        public async Task<Result<TransactionResponse>> GetTransactionByEmailAsync(string email, CancellationToken token)
-        {
-            var user = await _transactionRepository.GetByEmailAsync(email, token);
-
-            return user is null
-                ? Result<TransactionResponse>.Failure(TransactionErrors.TransactionNotFound)
-                : Result<TransactionResponse>.Success(user.ToTransactionResponse());
         }
 
         public async Task<Result<TransactionResponse>> CreateTransactionAsync(CreateTransactionRequest createTransactionRequest,
@@ -76,6 +69,24 @@ namespace TransactionsService.Services.Implementations
             await _transactionRepository.DeleteAsync(id, token);
 
             return true;
+        }
+
+        public async Task<Result<List<TransactionResponse>>> GetTransactionsAsync(CancellationToken token)
+        {
+            var transactions = await _transactionRepository.FindAll(true).ToListAsync();
+            if (transactions is null)
+            {
+                return Result<List<TransactionResponse>>.Failure(TransactionErrors.TransactionNotFound);
+            }
+            else
+            {
+                var responses = new List<TransactionResponse>();
+                foreach (var transaction in transactions)
+                {
+                    responses.Add(transaction.ToTransactionResponse());
+                }
+                return Result<List<TransactionResponse>>.Success(responses);
+            }
         }
     }
 }

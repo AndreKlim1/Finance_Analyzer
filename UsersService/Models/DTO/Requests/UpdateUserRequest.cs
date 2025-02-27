@@ -6,5 +6,5 @@
         string Email,
         DateTime RegistrationDate,
         long ProfileId,
-        string Password);
+        string PasswordHash);
 }

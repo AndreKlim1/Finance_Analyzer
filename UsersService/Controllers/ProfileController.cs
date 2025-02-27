@@ -10,7 +10,7 @@ namespace UsersService.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/profiles")]
+    [Route("api/v1.0/profiles")]
     public class ProfileController : ControllerBase
     {
         private readonly IProfileService _profileService;
@@ -23,7 +23,7 @@ namespace UsersService.Controllers
         [HttpGet("{id:long}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProfileResponse>> GetProfileByIdAsync(int id, CancellationToken token)
+        public async Task<ActionResult<ProfileResponse>> GetProfileByIdAsync(long id, CancellationToken token)
         {
             var result = await _profileService.GetProfileByIdAsync(id, token);
 
@@ -33,15 +33,28 @@ namespace UsersService.Controllers
                 
         }
 
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<ProfileResponse>>> GetProfilesAsync(CancellationToken token)
+        {
+            var result = await _profileService.GetProfilesAsync(token);
+
+            return result.Match<ActionResult<List<ProfileResponse>>>(
+                onSuccess: () => Ok(result.Value),
+                onFailure: error => NotFound(error));
+
+        }
+
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateProfileAsync(CreateProfileRequest createProfileRequest, CancellationToken token)
         {
             var result = await _profileService.CreateProfileAsync(createProfileRequest, token);
 
             if (result.IsSuccess)
-                return CreatedAtAction(nameof(GetProfileByIdAsync), new { id = result.Value.Id }, result.Value);
+                return Ok(result.Value);
 
             return BadRequest(result.Error);
         }

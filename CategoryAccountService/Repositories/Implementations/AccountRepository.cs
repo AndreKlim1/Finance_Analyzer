@@ -12,10 +12,5 @@ namespace CaregoryAccountService.Repositories.Implementations
         {
             _context = context;
         }
-
-        public async Task<Account?> GetByEmailAsync(string email, CancellationToken token)
-        {
-            return await _context.Users.FirstOrDefaultAsync(x => x.Email == email, token);
-        }
     }
 }

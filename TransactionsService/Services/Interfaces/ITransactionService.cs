@@ -8,7 +8,7 @@ namespace TransactionsService.Services.Interfaces
     public interface ITransactionService
     {
         Task<Result<TransactionResponse>> GetTransactionByIdAsync(long id, CancellationToken token);
-        Task<Result<TransactionResponse>> GetTransactionByEmailAsync(string email, CancellationToken token);
+        Task<Result<List<TransactionResponse>>> GetTransactionsAsync(CancellationToken token);
         Task<Result<TransactionResponse>> CreateTransactionAsync(CreateTransactionRequest createTransactionRequest, CancellationToken token);
         Task<Result<TransactionResponse>> UpdateTransactionAsync(UpdateTransactionRequest updateTransactionRequest, CancellationToken token);
         Task<bool> DeleteTransactionAsync(long id, CancellationToken token);

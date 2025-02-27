@@ -1,20 +1,16 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Security.Claims;
-using UsersService.Models.Enums;
-using UsersService.Repositories.Implementations;
-using UsersService.Repositories.Interfaces;
-using UsersService.Services.Implementations;
-using UsersService.Services.Interfaces;
-using UsersService.Services.Validators;
 using FluentValidation;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using UsersService.Extensions;
-using UsersService.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using BudgetingService.Extensions;
+using BudgetingService.Repositories;
+using BudgetingService.Repositories.Interfaces;
+using BudgetingService.Repositories.Implementations;
+using BudgetingService.Services.Interfaces;
+using BudgetingService.Services.Implementations;
+using BudgetingService.Services.Validators;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,15 +22,11 @@ builder.Services.AddApiVersioning();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<IUserRepository, TransactionRepository>();
-builder.Services.AddTransient<IProfileRepository, ProfileRepository>();
+builder.Services.AddTransient<IBudgetRepository, BudgetRepository>();
 
-builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IProfileService, ProfileService>();
+builder.Services.AddTransient<IBudgetService, BudgetService>();
 
-builder.Services.AddValidatorsFromAssemblyContaining<UpdateProfileRequestValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<CreateProfileRequestValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetRequestValidator>();
 
 builder.Services.AddFluentValidationAutoValidation();
@@ -49,33 +41,12 @@ builder.Services.ConfigureServiceManager();
 //builder.Services.AddControllers().AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
 
 #endregion
-
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddJwtBearer(options =>
-    {
-        options.SaveToken = true;
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["JWT:ValidAudience"],
-            ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
-        };
-    });
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("AdminPolicy", policy =>
-        policy.RequireClaim(ClaimTypes.Role, Role.Admin.ToString()));
-
-
-builder.Services.AddDbContext<UsersServiceDbContext>();
+var dbContextOptions = new DbContextOptionsBuilder<BudgetingServiceDbContext>()
+                .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).Options;
+var context = new BudgetingServiceDbContext(dbContextOptions);
+context.Database.Migrate();
+builder.Services.AddDbContext<BudgetingServiceDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+context.Dispose();
 
 var app = builder.Build();
 
@@ -99,8 +70,6 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.All
 });
 app.UseRouting();
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 

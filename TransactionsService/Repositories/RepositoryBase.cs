@@ -37,7 +37,7 @@ namespace TransactionsService.Repositories
         {
             var ent = await DbContext.FindAsync<T>(entity.Id, token);
             if (ent == null) return null;
-            DbContext.Update(entity);
+            DbContext.Entry(ent).CurrentValues.SetValues(entity);
             await DbContext.SaveChangesAsync(token);
             return entity;
         }

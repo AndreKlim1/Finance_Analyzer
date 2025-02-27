@@ -5,6 +5,7 @@ using UsersService.Services.Interfaces;
 using UsersService.Services.Mappings;
 using UsersService.Models.Errors;
 using UsersService.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace UsersService.Services.Implementations
 {
@@ -76,6 +77,25 @@ namespace UsersService.Services.Implementations
             await _userRepository.DeleteAsync(id, token);
 
             return true;
+        }
+
+        public async Task<Result<List<UserResponse>>> GetUsersAsync(CancellationToken token)
+        {
+            var users = await _userRepository.FindAll(true).ToListAsync();
+
+            if(users is null)
+            {
+                return Result<List<UserResponse>>.Failure(UserErrors.UserNotFound);
+            }
+            else
+            {
+                var responses = new List<UserResponse>();
+                foreach (var user in users)
+                {
+                    responses.Add(user.ToUserResponse());
+                }
+                return Result<List<UserResponse>>.Success(responses);
+            }
         }
     }
 }

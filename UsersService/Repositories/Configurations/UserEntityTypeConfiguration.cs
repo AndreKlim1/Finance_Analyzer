@@ -37,7 +37,7 @@ namespace UsersService.Repositories.Configurations
                 Id = 1,
                 Email = "user1@example.com",
                 PasswordHash = "h",
-                RegistrationDate = new DateTime(2025, 2, 1),
+                RegistrationDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
                 Role = Role.USER,
                 ProfileId = 1
             },
@@ -46,7 +46,7 @@ namespace UsersService.Repositories.Configurations
                 Id = 2,
                 Email = "user2@example.com",
                 PasswordHash = "h",
-                RegistrationDate = new DateTime(2025, 2, 1),
+                RegistrationDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
                 Role = Role.ADMIN,
                 ProfileId = 2
             }

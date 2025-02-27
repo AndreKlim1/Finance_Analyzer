@@ -3,7 +3,7 @@
 namespace CaregoryAccountService.Models.DTO.Requests
 {
     public record CreateCategoryRequest(
-        long UserId,
+        long? UserId,
         string CategoryName,
         string CategoryType);
 }

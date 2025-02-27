@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using CaregoryAccountService.Models.Errors;
+using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
-using UsersService.Models.Errors;
 
 namespace CaregoryAccountService.Extensions
 {

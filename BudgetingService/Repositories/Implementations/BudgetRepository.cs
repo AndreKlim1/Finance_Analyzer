@@ -14,9 +14,5 @@ namespace BudgetingService.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<Budget?> GetByEmailAsync(string email, CancellationToken token)
-        {
-            return await _context.Transactions.FirstOrDefaultAsync(x => x.Email == email, token);
-        }
     }
 }

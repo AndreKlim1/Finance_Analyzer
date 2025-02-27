@@ -15,7 +15,7 @@ namespace UsersService.Services.Implementations
             var result = await repository.GetByEmailAsync(userRequest.Email, token);
             if (result == null) return null;
             await repository.AddAsync(userRequest.ToUser(), token);
-            return TokenGenerator.GenerateToken(userRequest.Email, (Role)userRequest.Role, config);
+            return TokenGenerator.GenerateToken(userRequest.Email, Enum.Parse<Role>(userRequest.Role), config);
         }
 
         public async Task<string?> LoginAsync(string email, string passwordHash, CancellationToken token)

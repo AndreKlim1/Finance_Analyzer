@@ -14,7 +14,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using UsersService.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using UsersService;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using UsersService.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,7 +53,7 @@ builder.Services.ConfigureServiceManager();
 #endregion
 
 
-builder.Services.AddAuthentication(options =>
+/*builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,10 +74,14 @@ builder.Services.AddAuthentication(options =>
     });
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AdminPolicy", policy =>
-        policy.RequireClaim(ClaimTypes.Role, Role.ADMIN.ToString()));
+        policy.RequireClaim(ClaimTypes.Role, Role.ADMIN.ToString()));*/
 
-
-builder.Services.AddDbContext<UsersServiceDbContext>();
+var dbContextOptions = new DbContextOptionsBuilder<UsersServiceDbContext>()
+                .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).Options;
+var context = new UsersServiceDbContext(dbContextOptions);
+context.Database.Migrate();
+builder.Services.AddDbContext<UsersServiceDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+context.Dispose();
 
 var app = builder.Build();
 

@@ -12,8 +12,7 @@ namespace CaregoryAccountService.Repositories.Configurations
             builder.HasKey(c => c.Id);
             builder.ToTable("Categories");
 
-            builder.Property(c => c.UserId)
-                .IsRequired();
+            builder.Property(c => c.UserId);
 
             builder.Property(c => c.CategoryName)
                 .IsRequired()

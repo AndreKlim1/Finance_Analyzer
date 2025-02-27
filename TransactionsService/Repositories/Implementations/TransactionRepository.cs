@@ -14,9 +14,5 @@ namespace TransactionsService.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<Transaction?> GetByEmailAsync(string email, CancellationToken token)
-        {
-            return await _context.Transactions.FirstOrDefaultAsync(x => x.Email == email, token);
-        }
     }
 }

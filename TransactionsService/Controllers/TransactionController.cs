@@ -3,13 +3,14 @@ using Asp.Versioning;
 using TransactionsService.Models.DTO.Responses;
 using TransactionsService.Models.DTO.Requests;
 using TransactionsService.Services.Interfaces;
+using TransactionsService.Models.Errors;
 
 
 namespace TransactionsService.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/users")]
+    [Route("api/v1.0/transactions")]
     public class TransactionController : ControllerBase
     {
         private readonly ITransactionService _transactionService;
@@ -22,21 +23,21 @@ namespace TransactionsService.Controllers
         [HttpGet("{id:long}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TransactionResponse>> GetTransactionByIdAsync(long id, CancellationToken token)
+        public async Task<ActionResult<List<TransactionResponse>>> GetTransactionByIdAsync(long id, CancellationToken token)
         {
             var result = await _transactionService.GetTransactionByIdAsync(id, token);
 
-            return result.Match<ActionResult<TransactionResponse>>(
+            return result.Match<ActionResult<List<TransactionResponse>>>(
                 onSuccess: () => Ok(result.Value),
                 onFailure: error => NotFound(error));
         }
 
-        [HttpGet("email/{email}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TransactionResponse>> GetTransactionByEmailAsync(string email, CancellationToken token)
+        public async Task<ActionResult<TransactionResponse>> GetTransactionsAsync(CancellationToken token)
         {
-            var result = await _transactionService.GetTransactionByEmailAsync(email, token);
+            var result = await _transactionService.GetTransactionsAsync(token);
 
             return result.Match<ActionResult<TransactionResponse>>(
                 onSuccess: () => Ok(result.Value),
@@ -44,14 +45,14 @@ namespace TransactionsService.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateTransactionAsync(CreateTransactionRequest createTransactionRequest, CancellationToken token)
         {
             var result = await _transactionService.CreateTransactionAsync(createTransactionRequest, token);
 
             if (result.IsSuccess)
-                return CreatedAtAction(nameof(GetTransactionByIdAsync), new { id = result.Value.Id }, result.Value);
+                return Ok(result.Value);
 
             return BadRequest(result.Error);
         }

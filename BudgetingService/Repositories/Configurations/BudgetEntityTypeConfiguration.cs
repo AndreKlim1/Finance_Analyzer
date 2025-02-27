@@ -16,8 +16,7 @@ namespace BudgetingService.Repositories.Configurations
             builder.Property(b => b.UserId)
                 .IsRequired();
 
-            builder.Property(b => b.CategoryId)
-                .IsRequired(false);
+            builder.Property(b => b.CategoryId);
 
             builder.Property(b => b.BudgetName)
                 .IsRequired()
@@ -60,8 +59,8 @@ namespace BudgetingService.Repositories.Configurations
                     Description = "Budget for monthly grocery shopping",
                     PlannedAmount = 500,
                     Currency = Currency.USD,
-                    PeriodStart = new DateTime(2025, 3, 1),
-                    PeriodEnd = new DateTime(2025, 3, 31),
+                    PeriodStart = new DateTime(2025, 3, 1, 0, 0, 0, DateTimeKind.Utc),
+                    PeriodEnd = new DateTime(2025, 3, 31, 0, 0, 0, DateTimeKind.Utc),
                     BudgetStatus = BudgetStatus.ACTIVE,
                     BudgetType = BudgetType.EXPENSE,
                     WarningThreshold = 80
@@ -75,8 +74,8 @@ namespace BudgetingService.Repositories.Configurations
                     Description = "Saving up for a summer vacation",
                     PlannedAmount = 2000,
                     Currency = Currency.EUR,
-                    PeriodStart = new DateTime(2025, 1, 1),
-                    PeriodEnd = new DateTime(2025, 12, 31),
+                    PeriodStart = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    PeriodEnd = new DateTime(2025, 12, 31, 0, 0, 0, DateTimeKind.Utc),
                     BudgetStatus = BudgetStatus.FINISHED,
                     BudgetType = BudgetType.SAVINGS,
                     WarningThreshold = 90

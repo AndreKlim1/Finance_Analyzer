@@ -28,6 +28,7 @@ namespace UsersService.Services.Mappings
                 Email = request.Email,
                 RegistrationDate = request.RegistrationDate,
                 ProfileId = request.ProfileId,
+                PasswordHash = request.PasswordHash,
             };
         }
 
@@ -40,6 +41,7 @@ namespace UsersService.Services.Mappings
                 Email = request.Email,
                 RegistrationDate = request.RegistrationDate,
                 ProfileId = request.ProfileId,
+                PasswordHash = request.PasswordHash
             };
         }
     }

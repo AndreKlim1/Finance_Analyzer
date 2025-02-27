@@ -1,20 +1,18 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Security.Claims;
-using UsersService.Models.Enums;
-using UsersService.Repositories.Implementations;
-using UsersService.Repositories.Interfaces;
-using UsersService.Services.Implementations;
-using UsersService.Services.Interfaces;
 using UsersService.Services.Validators;
-using FluentValidation;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using UsersService.Extensions;
-using UsersService.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using FluentValidation;
+using TransactionsService.Extensions;
+using TransactionsService.Repositories;
+using TransactionsService.Repositories.Interfaces;
+using TransactionsService.Repositories.Implementations;
+using TransactionsService.Services.Interfaces;
+using TransactionsService.Services.Implementations;
+using TransactionsService.Services.Validators;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,15 +24,11 @@ builder.Services.AddApiVersioning();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<IUserRepository, TransactionRepository>();
-builder.Services.AddTransient<IProfileRepository, ProfileRepository>();
+builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();;
 
-builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IProfileService, ProfileService>();
+builder.Services.AddTransient<ITransactionService, TransactionService>();
 
-builder.Services.AddValidatorsFromAssemblyContaining<UpdateProfileRequestValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<CreateProfileRequestValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateTransactionRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateTransactionRequestValidator>();
 
 builder.Services.AddFluentValidationAutoValidation();
@@ -50,32 +44,12 @@ builder.Services.ConfigureServiceManager();
 
 #endregion
 
+var dbContextOptions = new DbContextOptionsBuilder<TransactionsServiceDbContext>()
+                .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).Options;
+var context = new TransactionsServiceDbContext(dbContextOptions);
+context.Database.Migrate();
+builder.Services.AddDbContext<TransactionsServiceDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddJwtBearer(options =>
-    {
-        options.SaveToken = true;
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["JWT:ValidAudience"],
-            ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
-        };
-    });
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("AdminPolicy", policy =>
-        policy.RequireClaim(ClaimTypes.Role, Role.Admin.ToString()));
-
-
-builder.Services.AddDbContext<UsersServiceDbContext>();
 
 var app = builder.Build();
 
@@ -99,8 +73,6 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.All
 });
 app.UseRouting();
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 

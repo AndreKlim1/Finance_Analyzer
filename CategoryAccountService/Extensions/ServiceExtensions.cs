@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using UsersService.Repositories;
-using UsersService.Services;
+﻿using CaregoryAccountService.Repositories;
+using CaregoryAccountService.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace CaregoryAccountService.Extensions
 {

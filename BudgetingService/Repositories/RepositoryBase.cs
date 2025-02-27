@@ -9,46 +9,46 @@ using BudgetingService.Models;
 
 namespace BudgetingService.Repositories
 {
-    public abstract class RepositoryBase<T, TKey>(BudgetingServiceDbContext DbContext)
+    public abstract class RepositoryBase<T, TKey>(BudgetingServiceDbContext dbContext)
     : IRepositoryBase<T, TKey> where T : BaseModel<TKey> where TKey : struct
     {
         public async Task<T?> GetByIdAsync(TKey id, CancellationToken token)
         {
-            return await DbContext.FindAsync<T>(id, token);
+            return await dbContext.FindAsync<T>(id, token);
         }
 
         public virtual async Task AddAsync(T entity, CancellationToken token)
         {
-            await DbContext.AddAsync(entity, token);
-            await DbContext.SaveChangesAsync(token);
+            await dbContext.AddAsync(entity, token);
+            await dbContext.SaveChangesAsync(token);
         }
 
         public virtual async Task DeleteAsync(TKey id, CancellationToken token)
         {
-            var ent = await DbContext.FindAsync<T>(id, token);
+            var ent = await dbContext.FindAsync<T>(id, token);
             if (ent != null)
             {
-                DbContext.Remove(ent);
-                await DbContext.SaveChangesAsync(token);
+                dbContext.Remove(ent);
+                await dbContext.SaveChangesAsync(token);
             }
         }
 
         public virtual async Task<T?> UpdateAsync(T entity, CancellationToken token)
         {
-            var ent = await DbContext.FindAsync<T>(entity.Id, token);
+            var ent = await dbContext.FindAsync<T>(entity.Id, token);
             if (ent == null) return null;
-            DbContext.Update(entity);
-            await DbContext.SaveChangesAsync(token);
+            dbContext.Entry(ent).CurrentValues.SetValues(entity);
+            await dbContext.SaveChangesAsync(token);
             return entity;
         }
 
-        public IQueryable<T> FindAll(bool trackChanges) => !trackChanges ? DbContext.Set<T>().AsNoTracking() : DbContext.Set<T>();
+        public IQueryable<T> FindAll(bool trackChanges) => !trackChanges ? dbContext.Set<T>().AsNoTracking() : dbContext.Set<T>();
 
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges) =>
-            !trackChanges ? DbContext.Set<T>().Where(expression).AsNoTracking() : DbContext.Set<T>().Where(expression);
+            !trackChanges ? dbContext.Set<T>().Where(expression).AsNoTracking() : dbContext.Set<T>().Where(expression);
 
-        public void Add(T entity) => DbContext.Set<T>().AddAsync(entity);
-        public void Update(T entity) => DbContext.Set<T>().Update(entity);
-        public void Delete(T entity) => DbContext.Set<T>().Remove(entity);
+        public void Add(T entity) => dbContext.Set<T>().AddAsync(entity);
+        public void Update(T entity) => dbContext.Set<T>().Update(entity);
+        public void Delete(T entity) => dbContext.Set<T>().Remove(entity);
     }
 }

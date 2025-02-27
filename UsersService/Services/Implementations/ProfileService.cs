@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using UsersService.Models.DTO.Requests;
 using UsersService.Models.DTO.Responses;
 using UsersService.Models.Errors;
@@ -48,9 +49,28 @@ namespace UsersService.Services.Implementations
         {
             var profile = await _profileRepository.GetByIdAsync(id, token);
 
-            return profile is null
+            return profile is not null
                 ? Result<ProfileResponse>.Success(profile.ToProfileResponse())
                 : Result<ProfileResponse>.Failure(ProfileErrors.ProfileNotFound);
+        }
+
+        public async Task<Result<List<ProfileResponse>>> GetProfilesAsync(CancellationToken token)
+        {
+            var profiles = await _profileRepository.FindAll(true).ToListAsync();
+
+            if (profiles is null)
+            {
+                return Result<List<ProfileResponse>>.Failure(ProfileErrors.ProfileNotFound);
+            }
+            else
+            {
+                var responses = new List<ProfileResponse>();
+                foreach (var profile in profiles)
+                {
+                    responses.Add(profile.ToProfileResponse());
+                }
+                return Result<List<ProfileResponse>>.Success(responses);
+            }
         }
 
         public async Task<Result<ProfileResponse>> UpdateProfileAsync(UpdateProfileRequest updateProfileRequest, CancellationToken token)

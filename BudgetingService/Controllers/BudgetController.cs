@@ -3,55 +3,57 @@ using Asp.Versioning;
 using BudgetingService.Models.DTO.Responses;
 using BudgetingService.Models.DTO.Requests;
 using BudgetingService.Services.Interfaces;
+using BudgetingService.Models.Errors;
+using BudgetingService.Services.Implementations;
 
 
 namespace BudgetingService.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/users")]
+    [Route("api/v1.0/budgets")]
     public class BudgetController : ControllerBase
     {
-        private readonly IBudgetService _transactionService;
+        private readonly IBudgetService _budgetService;
 
-        public BudgetController(IBudgetService transactionService)
+        public BudgetController(IBudgetService budgetService)
         {
-            _transactionService = transactionService;
+            _budgetService = budgetService;
         }
 
         [HttpGet("{id:long}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<BudgetResponse>> GetTransactionByIdAsync(long id, CancellationToken token)
+        public async Task<ActionResult<BudgetResponse>> GetBudgetByIdAsync(long id, CancellationToken token)
         {
-            var result = await _transactionService.GetTransactionByIdAsync(id, token);
+            var result = await _budgetService.GetBudgetByIdAsync(id, token);
 
             return result.Match<ActionResult<BudgetResponse>>(
                 onSuccess: () => Ok(result.Value),
                 onFailure: error => NotFound(error));
         }
 
-        [HttpGet("email/{email}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<BudgetResponse>> GetTransactionByEmailAsync(string email, CancellationToken token)
+        public async Task<ActionResult<List<BudgetResponse>>> GetBudgetsAsync(CancellationToken token)
         {
-            var result = await _transactionService.GetTransactionByEmailAsync(email, token);
+            var result = await _budgetService.GetBudgetsAsync(token);
 
-            return result.Match<ActionResult<BudgetResponse>>(
+            return result.Match<ActionResult<List<BudgetResponse>>>(
                 onSuccess: () => Ok(result.Value),
                 onFailure: error => NotFound(error));
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateTransactionAsync(CreateBudgetRequest createTransactionRequest, CancellationToken token)
+        public async Task<IActionResult> CreateBudgetAsync(CreateBudgetRequest createBudgetRequest, CancellationToken token)
         {
-            var result = await _transactionService.CreateTransactionAsync(createTransactionRequest, token);
+            var result = await _budgetService.CreateBudgetAsync(createBudgetRequest, token);
 
             if (result.IsSuccess)
-                return CreatedAtAction(nameof(GetTransactionByIdAsync), new { id = result.Value.Id }, result.Value);
+                return Ok(result.Value);
 
             return BadRequest(result.Error);
         }
@@ -59,10 +61,10 @@ namespace BudgetingService.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<BudgetResponse>> UpdateTransactionAsync(UpdateBudgetRequest updateTransactionRequest,
+        public async Task<ActionResult<BudgetResponse>> UpdateBudgetAsync(UpdateBudgetRequest updateBudgetRequest,
             CancellationToken token)
         {
-            var result = await _transactionService.UpdateTransactionAsync(updateTransactionRequest, token);
+            var result = await _budgetService.UpdateBudgetAsync(updateBudgetRequest, token);
 
             return result.Match<ActionResult<BudgetResponse>>(
                 onSuccess: () => Ok(result.Value),
@@ -72,9 +74,9 @@ namespace BudgetingService.Controllers
         [HttpDelete("{id:long}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteTransactionAsync(long id, CancellationToken token)
+        public async Task<IActionResult> DeleteBudgetAsync(long id, CancellationToken token)
         {
-            var isDeleted = await _transactionService.DeleteTransactionAsync(id, token);
+            var isDeleted = await _budgetService.DeleteBudgetAsync(id, token);
 
             return isDeleted ? NoContent() : BadRequest();
         }

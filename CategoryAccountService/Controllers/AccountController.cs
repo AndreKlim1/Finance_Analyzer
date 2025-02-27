@@ -1,57 +1,58 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UsersService.Models.DTO.Requests;
-using UsersService.Models.DTO.Responses;
-using UsersService.Services.Interfaces;
 using Asp.Versioning;
-using UsersService.Models.Errors;
+using CaregoryAccountService.Services.Interfaces;
+using CaregoryAccountService.Models.DTO.Responses;
+using CaregoryAccountService.Services.Implementations;
+using CaregoryAccountService.Models.Errors;
+using CaregoryAccountService.Models.DTO.Requests;
 
 namespace CaregoryAccountService.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/users")]
+    [Route("api/v1.0/accounts")]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountService _userService;
+        private readonly IAccountService _accountService;
 
-        public AccountController(IAccountService userService)
+        public AccountController(IAccountService accountService)
         {
-            _userService = userService;
+            _accountService = accountService;
         }
 
         [HttpGet("{id:long}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<AccountResponse>> GetUserByIdAsync(long id, CancellationToken token)
+        public async Task<ActionResult<AccountResponse>> GetAccountByIdAsync(long id, CancellationToken token)
         {
-            var result = await _userService.GetUserByIdAsync(id, token);
+            var result = await _accountService.GetAccountByIdAsync(id, token);
 
             return result.Match<ActionResult<AccountResponse>>(
                 onSuccess: () => Ok(result.Value),
                 onFailure: error => NotFound(error));
         }
 
-        [HttpGet("email/{email}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<AccountResponse>> GetUserByEmailAsync(string email, CancellationToken token)
+        public async Task<ActionResult<List<AccountResponse>>> GetAccountsAsync( CancellationToken token)
         {
-            var result = await _userService.GetUserByEmailAsync(email, token);
+            var result = await _accountService.GetAccountsAsync(token);
 
-            return result.Match<ActionResult<AccountResponse>>(
+            return result.Match<ActionResult<List<AccountResponse>>>(
                 onSuccess: () => Ok(result.Value),
                 onFailure: error => NotFound(error));
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateUserAsync(CreateAccountRequest createUserRequest, CancellationToken token)
+        public async Task<IActionResult> CreateAccountAsync(CreateAccountRequest createAccountRequest, CancellationToken token)
         {
-            var result = await _userService.CreateUserAsync(createUserRequest, token);
+            var result = await _accountService.CreateAccountAsync(createAccountRequest, token);
 
             if (result.IsSuccess)
-                return CreatedAtAction(nameof(GetUserByIdAsync), new { id = result.Value.Id }, result.Value);
+                return Ok(result.Value);
 
             return BadRequest(result.Error);
         }
@@ -59,10 +60,10 @@ namespace CaregoryAccountService.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AccountResponse>> UpdateUserAsync(UpdateAccountRequest updateUserRequest,
+        public async Task<ActionResult<AccountResponse>> UpdateAccountAsync(UpdateAccountRequest updateAccountRequest,
             CancellationToken token)
         {
-            var result = await _userService.UpdateUserAsync(updateUserRequest, token);
+            var result = await _accountService.UpdateAccountAsync(updateAccountRequest, token);
 
             return result.Match<ActionResult<AccountResponse>>(
                 onSuccess: () => Ok(result.Value),
@@ -72,11 +73,50 @@ namespace CaregoryAccountService.Controllers
         [HttpDelete("{id:long}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteUserAsync(long id, CancellationToken token)
+        public async Task<IActionResult> DeleteAccountAsync(long id, CancellationToken token)
         {
-            var isDeleted = await _userService.DeleteUserAsync(id, token);
+            var isDeleted = await _accountService.DeleteAccountAsync(id, token);
 
             return isDeleted ? NoContent() : BadRequest();
+        }
+
+        [HttpPut("transfer")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> TransferBetweenAccountsAsync([FromBody] TransferRequest transferRequest, CancellationToken token)
+        {
+            var result = await _accountService.TransferBetweenAccountsAsync(transferRequest, token);
+
+            return result.Match<IActionResult>(
+                onSuccess: () => Ok(result.Value),
+                onFailure: error => BadRequest(error)
+            );
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<int>> GetAccountBalanceAsync(long id, CancellationToken token)
+        {
+            var result = await _accountService.GetBalanceAsync(id, token);
+
+            return result.Match<ActionResult<int>>(
+                onSuccess: () => Ok(result.Value),
+                onFailure: error => BadRequest(error)
+            );
+        }
+
+        [HttpPut("reconcile")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> TransferBetweenAccountsAsync([FromBody] TransferRequest transferRequest, CancellationToken token)
+        {
+            var result = await _accountService.TransferBetweenAccountsAsync(transferRequest, token);
+
+            return result.Match<IActionResult>(
+                onSuccess: () => Ok(result.Value),
+                onFailure: error => BadRequest(error)
+            );
         }
     }
 }

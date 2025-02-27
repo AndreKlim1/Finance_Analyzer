@@ -6,10 +6,14 @@ namespace CaregoryAccountService.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task<Result<AccountResponse>> GetUserByIdAsync(long id, CancellationToken token);
-        Task<Result<AccountResponse>> GetUserByEmailAsync(string email, CancellationToken token);
-        Task<Result<AccountResponse>> CreateUserAsync(CreateAccountRequest createUserRequest, CancellationToken token);
-        Task<Result<AccountResponse>> UpdateUserAsync(UpdateAccountRequest updateUserRequest, CancellationToken token);
-        Task<bool> DeleteUserAsync(long id, CancellationToken token);
+        Task<Result<AccountResponse>> GetAccountByIdAsync(long id, CancellationToken token);
+        Task<Result<AccountResponse>> CreateAccountAsync(CreateAccountRequest createUserRequest, CancellationToken token);
+        Task<Result<AccountResponse>> UpdateAccountAsync(UpdateAccountRequest updateUserRequest, CancellationToken token);
+        Task<Result<List<AccountResponse>>> GetAccountsAsync(CancellationToken token);
+        Task<bool> DeleteAccountAsync(long id, CancellationToken token);
+        Task<Result<int>> GetBalanceAsync(CancellationToken token);
+        Task<Result<int>> GetBalanceByIdAsync(long id, CancellationToken token);
+        Task<Result<bool>> ReconcileAccount(long id, CancellationToken token);
+        
     }
 }

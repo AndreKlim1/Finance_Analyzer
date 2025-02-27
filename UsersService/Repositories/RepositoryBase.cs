@@ -37,7 +37,7 @@ namespace UsersService.Repositories
         {
             var ent = await usersServiceDbContext.FindAsync<T>(entity.Id, token);
             if (ent == null) return null;
-            usersServiceDbContext.Update(entity);
+            usersServiceDbContext.Entry(ent).CurrentValues.SetValues(entity);
             await usersServiceDbContext.SaveChangesAsync(token);
             return entity;
         }

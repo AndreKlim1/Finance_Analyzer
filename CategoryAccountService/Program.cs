@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using CaregoryAccountService.Extensions;
 using CaregoryAccountService.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,8 +48,12 @@ builder.Services.ConfigureServiceManager();
 //builder.Services.AddControllers().AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
 
 #endregion
-
-builder.Services.AddDbContext<CategoryAccountServiceDbContext>();
+var dbContextOptions = new DbContextOptionsBuilder<CategoryAccountServiceDbContext>()
+                .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).Options;
+var context = new CategoryAccountServiceDbContext(dbContextOptions);
+context.Database.Migrate();
+builder.Services.AddDbContext<CategoryAccountServiceDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+context.Dispose();
 
 var app = builder.Build();
 
@@ -72,10 +77,6 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.All
 });
 app.UseRouting();
-
-app.UseHttpsRedirection();
-
-
 
 app.UseAuthentication();
 

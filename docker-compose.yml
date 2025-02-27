@@ -13,6 +13,45 @@ services:
       - "24110:8080"
     depends_on:
       - postgres
+ 
+  budgetingservice:
+    image: ${DOCKER_REGISTRY-}budgetingservice
+    container_name: budgetingservice
+    build:
+      context: .
+      dockerfile: BudgetingService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - "24116:8080"
+    depends_on:
+      - postgres
+
+  categoryaccountservice:
+    image: ${DOCKER_REGISTRY-}categoryaccountservice
+    container_name: categoryaccountservice
+    build:
+      context: .
+      dockerfile: CategoryAccountService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - "24114:8080"
+    depends_on:
+      - postgres
+
+  transactionsservice:
+    image: ${DOCKER_REGISTRY-}transactionsservice
+    container_name: transactionsservice
+    build:
+      context: .
+      dockerfile: TransactionsService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - "24112:8080"
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:alpine3.17
@@ -22,7 +61,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: users
+      POSTGRES_DB: finance_analyzerdb
       POSTGRES_AUTH_METHOD: TRUST
       PGDATA: /data/postgres
     ports:

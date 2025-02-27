@@ -7,7 +7,7 @@ namespace TransactionsService.Models.DTO.Responses
         long Value,
         string Currency,
         long CategoryId,
-        long AccountId,
+        long? AccountId,
         long UserId,
         string? Description,
         string? Image,

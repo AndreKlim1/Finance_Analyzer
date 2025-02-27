@@ -4,7 +4,7 @@
         int Value,
         string Currency,
         long CategoryId,
-        long AccountId,
+        long? AccountId,
         long UserId,
         string? Description,
         string? Image,

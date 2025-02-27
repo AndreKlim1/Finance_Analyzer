@@ -22,10 +22,9 @@ namespace UsersService.Services.Validators
             RuleFor(u => u.ProfileId)
                 .GreaterThan(0).WithMessage("ProfileId must be greater than 0.");
 
-            RuleFor(u => u.Password)
-                .NotEmpty().WithMessage("Password is required.")
-                .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
-                .MaximumLength(100).WithMessage("Password must not exceed 100 characters.");
+            RuleFor(u => u.PasswordHash)
+                .NotEmpty().WithMessage("Password is required.");
+                
         }
     }
 }

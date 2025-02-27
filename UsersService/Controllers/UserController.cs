@@ -9,7 +9,7 @@ namespace UsersService.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/users")]
+    [Route("api/v1.0" +/*{version:apiVersion}*/"/users")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -31,6 +31,18 @@ namespace UsersService.Controllers
                 onFailure: error => NotFound(error));
         }
 
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<UserResponse>>> GetUsersAsync(CancellationToken token)
+        {
+            var result = await _userService.GetUsersAsync(token);
+
+            return result.Match<ActionResult<List<UserResponse>>>(
+                onSuccess: () => Ok(result.Value),
+                onFailure: error => NotFound(error));
+        }
+
         [HttpGet("email/{email}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -44,14 +56,14 @@ namespace UsersService.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUserAsync(CreateUserRequest createUserRequest, CancellationToken token)
         {
             var result = await _userService.CreateUserAsync(createUserRequest, token);
 
             if (result.IsSuccess)
-                return CreatedAtAction(nameof(GetUserByIdAsync), new { id = result.Value.Id }, result.Value);
+                return Ok(result.Value);
 
             return BadRequest(result.Error);
         }
@@ -80,3 +92,54 @@ namespace UsersService.Controllers
         }
     }
 }
+/*usersservice:
+    image: ${DOCKER_REGISTRY-}usersservice
+    container_name: usersservice
+    build:
+      context: .
+      dockerfile: UsersService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - "24110:8080"
+    depends_on:
+      - postgres
+  
+  budgetingservice:
+    image: ${DOCKER_REGISTRY-}budgetingservice
+    container_name: budgetingservice
+    build:
+      context: .
+      dockerfile: BudgetingService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - "24116:8080"
+    depends_on:
+      - postgres
+
+  categoryaccountservice:
+    image: ${DOCKER_REGISTRY-}categoryaccountservice
+    container_name: categoryaccountservice
+    build:
+      context: .
+      dockerfile: CategoryAccountService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - "24114:8080"
+    depends_on:
+      - postgres
+
+  transactionsservice:
+    image: ${DOCKER_REGISTRY-}transactionsservice
+    container_name: transactionsservice
+    build:
+      context: .
+      dockerfile: TransactionsService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - "24112:8080"
+    depends_on:
+      - postgres*/

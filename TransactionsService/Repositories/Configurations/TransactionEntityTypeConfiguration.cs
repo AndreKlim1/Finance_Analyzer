@@ -23,8 +23,7 @@ namespace TransactionsService.Repositories.Configurations
             builder.Property(t => t.CategoryId)
                 .IsRequired();
 
-            builder.Property(t => t.AccountId)
-                .IsRequired();
+            builder.Property(t => t.AccountId);
 
             builder.Property(t => t.UserId)
                 .IsRequired();
@@ -59,8 +58,8 @@ namespace TransactionsService.Repositories.Configurations
                     UserId = 1,
                     Description = "Test transaction 1",
                     Image = null,
-                    TransactionDate = new DateTime(2025, 2, 1),
-                    CreationDate = new DateTime(2025, 2, 1),
+                    TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
+                    CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
                     PaymentMethod = PaymentMethod.CARD,
                     Merchant = "Amazon"
                 },
@@ -74,8 +73,8 @@ namespace TransactionsService.Repositories.Configurations
                     UserId = 2,
                     Description = "Test transaction 2",
                     Image = null,
-                    TransactionDate = new DateTime(2025, 2, 1),
-                    CreationDate = new DateTime(2025, 2, 1),
+                    TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
+                    CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
                     PaymentMethod = PaymentMethod.CASH,
                     Merchant = "Local Store"
                 }
