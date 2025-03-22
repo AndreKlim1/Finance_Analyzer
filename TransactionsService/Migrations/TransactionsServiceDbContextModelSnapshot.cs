@@ -31,7 +31,7 @@ namespace TransactionsService.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("AccountId")
+                    b.Property<long>("AccountId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("CategoryId")
@@ -55,11 +55,16 @@ namespace TransactionsService.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<int>("PaymentMethod")
-                        .HasColumnType("integer");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("integer");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -81,8 +86,9 @@ namespace TransactionsService.Migrations
                             Currency = 1,
                             Description = "Test transaction 1",
                             Merchant = "Amazon",
-                            PaymentMethod = 0,
+                            Title = "First transaction",
                             TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 0,
                             UserId = 1L,
                             Value = 100
                         },
@@ -95,8 +101,9 @@ namespace TransactionsService.Migrations
                             Currency = 0,
                             Description = "Test transaction 2",
                             Merchant = "Local Store",
-                            PaymentMethod = 1,
+                            Title = "Second transaction",
                             TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 1,
                             UserId = 2L,
                             Value = 200
                         });

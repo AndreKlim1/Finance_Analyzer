@@ -15,6 +15,9 @@ namespace UsersService.Services.Validators
                 .GreaterThan(0)
                 .WithMessage("Value must be a positive number.");
 
+            RuleFor(t => t.Title)
+                .MaximumLength(128).WithMessage("Title must not exceed 128 characters");
+
             RuleFor(t => t.Currency)
                 .NotEmpty()
                 .WithMessage("Currency must not be empty.")
@@ -53,7 +56,7 @@ namespace UsersService.Services.Validators
                 .LessThanOrEqualTo(DateTime.UtcNow)
                 .WithMessage("CreationDate cannot be in the future.");
 
-            RuleFor(t => t.PaymentMethod)
+            RuleFor(t => t.TransactionType)
                 .NotEmpty()
                 .WithMessage("PaymentMethod must not be empty.")
                 .MaximumLength(64)

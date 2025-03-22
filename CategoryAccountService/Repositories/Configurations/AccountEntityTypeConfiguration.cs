@@ -30,6 +30,9 @@ namespace CaregoryAccountService.Repositories.Configurations
             builder.Property(a => a.Balance)
                 .IsRequired();
 
+            builder.Property(a => a.TransactionsCount)
+                .IsRequired();
+
             builder.Property(a => a.Description)
                 .HasMaxLength(512);
 
@@ -38,20 +41,22 @@ namespace CaregoryAccountService.Repositories.Configurations
                 {
                     Id = 1,
                     UserId = 1,
-                    AccountName = "Checking Account",
+                    AccountName = "Bank",
                     AccountType = AccountType.CREDIT_CARD,
                     Currency = Currency.USD,
                     Balance = 1500,
+                    TransactionsCount = 0,
                     Description = "Primary checking account"
                 },
                 new Account
                 {
                     Id = 2,
                     UserId = 2,
-                    AccountName = "Savings Account",
+                    AccountName = "Cash",
                     AccountType = AccountType.CASH,
                     Currency = Currency.EUR,
                     Balance = 5000,
+                    TransactionsCount = 0,
                     Description = "Long-term savings account"
                 }
             );

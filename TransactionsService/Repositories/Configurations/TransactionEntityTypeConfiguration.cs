@@ -16,6 +16,9 @@ namespace TransactionsService.Repositories.Configurations
             builder.Property(t => t.Value)
                 .IsRequired();
 
+            builder.Property(t => t.Title)
+                .HasMaxLength(128);
+
             builder.Property(t => t.Currency)
                 .IsRequired()
                 .HasConversion<int>();
@@ -23,7 +26,8 @@ namespace TransactionsService.Repositories.Configurations
             builder.Property(t => t.CategoryId)
                 .IsRequired();
 
-            builder.Property(t => t.AccountId);
+            builder.Property(t => t.AccountId)
+                .IsRequired();
 
             builder.Property(t => t.UserId)
                 .IsRequired();
@@ -40,7 +44,7 @@ namespace TransactionsService.Repositories.Configurations
             builder.Property(t => t.CreationDate)
                 .IsRequired();
 
-            builder.Property(t => t.PaymentMethod)
+            builder.Property(t => t.TransactionType)
                 .IsRequired()
                 .HasConversion<int>();
 
@@ -52,6 +56,7 @@ namespace TransactionsService.Repositories.Configurations
                 {
                     Id = 1,
                     Value = 100,
+                    Title = "First transaction",
                     Currency = Currency.USD,
                     CategoryId = 1,
                     AccountId = 1,
@@ -60,13 +65,14 @@ namespace TransactionsService.Repositories.Configurations
                     Image = null,
                     TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
                     CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
-                    PaymentMethod = PaymentMethod.CARD,
+                    TransactionType = TransactionType.INCOME,
                     Merchant = "Amazon"
                 },
                 new Transaction
                 {
                     Id = 2,
                     Value = 200,
+                    Title = "Second transaction",
                     Currency = Currency.EUR,
                     CategoryId = 2,
                     AccountId = 2,
@@ -75,7 +81,7 @@ namespace TransactionsService.Repositories.Configurations
                     Image = null,
                     TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
                     CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
-                    PaymentMethod = PaymentMethod.CASH,
+                    TransactionType = TransactionType.EXPENSE,
                     Merchant = "Local Store"
                 }
             );

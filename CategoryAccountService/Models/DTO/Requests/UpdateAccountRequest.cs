@@ -9,5 +9,6 @@ namespace CaregoryAccountService.Models.DTO.Requests
         string AccountType,
         string Currency,
         int Balance,
+        int TransactionsCount,
         string Description);
 }

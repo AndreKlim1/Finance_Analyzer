@@ -11,9 +11,9 @@ namespace CaregoryAccountService.Services.Interfaces
         Task<Result<AccountResponse>> UpdateAccountAsync(UpdateAccountRequest updateUserRequest, CancellationToken token);
         Task<Result<List<AccountResponse>>> GetAccountsAsync(CancellationToken token);
         Task<bool> DeleteAccountAsync(long id, CancellationToken token);
-        Task<Result<int>> GetBalanceAsync(CancellationToken token);
-        Task<Result<int>> GetBalanceByIdAsync(long id, CancellationToken token);
-        Task<Result<bool>> ReconcileAccount(long id, CancellationToken token);
+        //Task<Result<int>> GetBalanceAsync(CancellationToken token);
+        //Task<Result<int>> GetBalanceByIdAsync(long id, CancellationToken token);
+        //Task<Result<bool>> ReconcileAccount(long id, CancellationToken token);
         
     }
 }

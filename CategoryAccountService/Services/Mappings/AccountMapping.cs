@@ -18,6 +18,7 @@ namespace CaregoryAccountService.Services.Mappings
                 account.AccountType.ToString(),
                 account.Currency.ToString(),
                 account.Balance,
+                account.TransactionsCount,
                 account.Description
             );
         }
@@ -31,6 +32,7 @@ namespace CaregoryAccountService.Services.Mappings
                 AccountType = Enum.Parse<AccountType>(request.AccountType),
                 Currency = Enum.Parse<Currency>(request.Currency),
                 Balance = request.Balance,
+                TransactionsCount = request.TransactionsCount,
                 Description = request.Description
             };
         }
@@ -45,6 +47,7 @@ namespace CaregoryAccountService.Services.Mappings
                 AccountType = Enum.Parse<AccountType>(request.AccountType),
                 Currency = Enum.Parse<Currency>(request.Currency),
                 Balance = request.Balance,
+                TransactionsCount = request.TransactionsCount,
                 Description = request.Description
             };
         }

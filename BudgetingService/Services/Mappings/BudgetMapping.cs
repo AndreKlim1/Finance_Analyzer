@@ -16,15 +16,18 @@ namespace BudgetingService.Services.Mappings
                 budget.Id,
                 budget.UserId,
                 budget.CategoryId,
+                budget.AccountId,
                 budget.BudgetName,
                 budget.Description,
                 budget.PlannedAmount,
+                budget.CurrValue,
                 budget.Currency.ToString(),
                 budget.PeriodStart,
                 budget.PeriodEnd,
                 budget.BudgetStatus.ToString(),
                 budget.BudgetType.ToString(),
-                budget.WarningThreshold
+                budget.WarningThreshold,
+                budget.WarningShowed
             );
         }
 
@@ -34,15 +37,18 @@ namespace BudgetingService.Services.Mappings
             {
                 UserId = request.UserId,
                 CategoryId = request.CategoryId,
+                AccountId = request.AccountId,
                 BudgetName = request.BudgetName,
                 Description = request.Description,
                 PlannedAmount = request.PlannedAmount,
+                CurrValue = request.CurrValue,
                 Currency = Enum.Parse<Currency>(request.Currency),
                 PeriodStart = request.PeriodStart,
                 PeriodEnd = request.PeriodEnd,
                 BudgetStatus = Enum.Parse<BudgetStatus>(request.BudgetStatus),
                 BudgetType = Enum.Parse<BudgetType>(request.BudgetType),
-                WarningThreshold = request.WarningThreshold
+                WarningThreshold = request.WarningThreshold,
+                WarningShowed = request.WarningShowed
             };
         }
 
@@ -53,15 +59,18 @@ namespace BudgetingService.Services.Mappings
                 Id = request.Id,
                 UserId = request.UserId,
                 CategoryId = request.CategoryId,
+                AccountId = request.AccountId,
                 BudgetName = request.BudgetName,
                 Description = request.Description,
                 PlannedAmount = request.PlannedAmount,
+                CurrValue = request.CurrValue,
                 Currency = Enum.Parse<Currency>(request.Currency),
                 PeriodStart = request.PeriodStart,
                 PeriodEnd = request.PeriodEnd,
                 BudgetStatus = Enum.Parse<BudgetStatus>(request.BudgetStatus),
                 BudgetType = Enum.Parse<BudgetType>(request.BudgetType),
-                WarningThreshold = request.WarningThreshold
+                WarningThreshold = request.WarningThreshold,
+                WarningShowed = request.WarningShowed
             };
         }
     }

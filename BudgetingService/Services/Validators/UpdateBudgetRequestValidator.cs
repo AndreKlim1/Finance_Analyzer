@@ -18,6 +18,9 @@ namespace BudgetingService.Services.Validators
             RuleFor(b => b.CategoryId)
                 .GreaterThan(0).When(b => b.CategoryId.HasValue).WithMessage("CategoryId must be greater than 0 if provided.");
 
+            RuleFor(b => b.AccountId)
+               .GreaterThan(0).When(b => b.AccountId.HasValue).WithMessage("AccountId must be greater than 0 if provided.");
+
             RuleFor(b => b.BudgetName)
                 .NotEmpty().WithMessage("Budget name is required.")
                 .MaximumLength(100).WithMessage("Budget name must not exceed 100 characters.");
@@ -27,6 +30,9 @@ namespace BudgetingService.Services.Validators
 
             RuleFor(b => b.PlannedAmount)
                 .GreaterThan(0).WithMessage("Planned amount must be greater than 0.");
+            
+            RuleFor(b => b.CurrValue)
+                .GreaterThanOrEqualTo(0).WithMessage("Current value must be grater or equal to zero");
 
             RuleFor(b => b.Currency)
                 .NotEmpty().WithMessage("Currency is required.")
@@ -48,6 +54,9 @@ namespace BudgetingService.Services.Validators
 
             RuleFor(b => b.WarningThreshold)
                 .InclusiveBetween(0, 100).WithMessage("Warning threshold must be between 0 and 100.");
+
+            RuleFor(b => b.WarningShowed)
+                .NotEmpty();
         }
     }
 

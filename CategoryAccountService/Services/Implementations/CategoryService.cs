@@ -71,8 +71,8 @@ namespace CaregoryAccountService.Services.Implementations
             var category = await _categoryRepository.GetByIdAsync(id, token);
 
             return category is null
-                ? Result<CategoryResponse>.Success(category.ToCategoryResponse())
-                : Result<CategoryResponse>.Failure(CategoryErrors.ProfileNotFound);
+                ? Result<CategoryResponse>.Failure(CategoryErrors.ProfileNotFound)
+                : Result<CategoryResponse>.Success(category.ToCategoryResponse());
         }
 
         public async Task<Result<CategoryResponse>> UpdateCategoryAsync(UpdateCategoryRequest updateCategoryRequest, CancellationToken token)

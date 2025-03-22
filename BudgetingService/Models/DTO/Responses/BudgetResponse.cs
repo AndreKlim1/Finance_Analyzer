@@ -6,13 +6,16 @@ namespace BudgetingService.Models.DTO.Responses
         long Id,
         long UserId,
         long? CategoryId,
+        long? AccountId,
         string BudgetName,
         string Description,
         int PlannedAmount,
+        int CurrValue,
         string Currency,
         DateTime PeriodStart,
         DateTime PeriodEnd,
         string BudgetStatus,
         string BudgetType,
-        int WarningThreshold);
+        int WarningThreshold,
+        bool WarningShowed);
 }

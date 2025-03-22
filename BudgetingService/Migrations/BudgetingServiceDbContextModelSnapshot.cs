@@ -31,6 +31,9 @@ namespace BudgetingService.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long?>("AccountId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("BudgetName")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -44,6 +47,9 @@ namespace BudgetingService.Migrations
 
                     b.Property<long?>("CategoryId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("CurrValue")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Currency")
                         .HasColumnType("integer");
@@ -65,6 +71,9 @@ namespace BudgetingService.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("WarningShowed")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("WarningThreshold")
                         .HasColumnType("integer");
 
@@ -76,31 +85,37 @@ namespace BudgetingService.Migrations
                         new
                         {
                             Id = 1L,
+                            AccountId = 1L,
                             BudgetName = "Monthly Groceries",
                             BudgetStatus = 0,
                             BudgetType = 1,
                             CategoryId = 1L,
+                            CurrValue = 100,
                             Currency = 1,
                             Description = "Budget for monthly grocery shopping",
                             PeriodEnd = new DateTime(2025, 3, 31, 0, 0, 0, 0, DateTimeKind.Utc),
                             PeriodStart = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             PlannedAmount = 500,
                             UserId = 1L,
+                            WarningShowed = false,
                             WarningThreshold = 80
                         },
                         new
                         {
                             Id = 2L,
+                            AccountId = 2L,
                             BudgetName = "Vacation Savings",
                             BudgetStatus = 2,
                             BudgetType = 0,
                             CategoryId = 2L,
+                            CurrValue = 200,
                             Currency = 0,
                             Description = "Saving up for a summer vacation",
                             PeriodEnd = new DateTime(2025, 12, 31, 0, 0, 0, 0, DateTimeKind.Utc),
                             PeriodStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             PlannedAmount = 2000,
                             UserId = 2L,
+                            WarningShowed = false,
                             WarningThreshold = 90
                         });
                 });

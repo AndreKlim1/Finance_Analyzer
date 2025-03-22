@@ -49,6 +49,9 @@ namespace CategoryAccountService.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
+                    b.Property<int>("TransactionsCount")
+                        .HasColumnType("integer");
+
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -60,21 +63,23 @@ namespace CategoryAccountService.Migrations
                         new
                         {
                             Id = 1L,
-                            AccountName = "Checking Account",
+                            AccountName = "Bank",
                             AccountType = 0,
                             Balance = 1500,
                             Currency = 1,
                             Description = "Primary checking account",
+                            TransactionsCount = 0,
                             UserId = 1L
                         },
                         new
                         {
                             Id = 2L,
-                            AccountName = "Savings Account",
+                            AccountName = "Cash",
                             AccountType = 1,
                             Balance = 5000,
                             Currency = 0,
                             Description = "Long-term savings account",
+                            TransactionsCount = 0,
                             UserId = 2L
                         });
                 });

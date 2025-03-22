@@ -10,6 +10,7 @@ namespace CaregoryAccountService.Models
         public AccountType AccountType { get; set; }
         public Currency Currency { get; set; }
         public int Balance { get; set; }
+        public int TransactionsCount { get; set; }
         public string Description { get; set; }
     }
 }

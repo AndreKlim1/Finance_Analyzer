@@ -15,6 +15,7 @@ namespace TransactionsService.Services.Mappings
             (
                 transaction.Id,
                 transaction.Value,
+                transaction.Title,
                 transaction.Currency.ToString(),
                 transaction.CategoryId,
                 transaction.AccountId,
@@ -23,7 +24,7 @@ namespace TransactionsService.Services.Mappings
                 transaction.Image,
                 transaction.TransactionDate,
                 transaction.CreationDate,
-                transaction.PaymentMethod.ToString(),
+                transaction.TransactionType.ToString(),
                 transaction.Merchant
             );
         }
@@ -33,6 +34,7 @@ namespace TransactionsService.Services.Mappings
             return new Transaction
             {
                 Value = request.Value,
+                Title = request.Title,
                 Currency = Enum.Parse<Currency>(request.Currency),
                 CategoryId = request.CategoryId,
                 AccountId = request.AccountId,
@@ -41,7 +43,7 @@ namespace TransactionsService.Services.Mappings
                 Image = request.Image,
                 TransactionDate = request.TransactionDate,
                 CreationDate = request.CreationDate,
-                PaymentMethod = Enum.Parse<PaymentMethod>(request.PaymentMethod),
+                TransactionType = Enum.Parse<TransactionType>(request.TransactionType),
                 Merchant = request.Merchant
             };
         }
@@ -52,6 +54,7 @@ namespace TransactionsService.Services.Mappings
             {
                 Id = request.Id,
                 Value = request.Value,
+                Title = request.Title,
                 Currency = Enum.Parse<Currency>(request.Currency),
                 CategoryId = request.CategoryId,
                 AccountId = request.AccountId,
@@ -60,7 +63,7 @@ namespace TransactionsService.Services.Mappings
                 Image = request.Image,
                 TransactionDate = request.TransactionDate,
                 CreationDate = request.CreationDate,
-                PaymentMethod = Enum.Parse<PaymentMethod>(request.PaymentMethod),
+                TransactionType = Enum.Parse<TransactionType>(request.TransactionType),
                 Merchant = request.Merchant
             };
         }

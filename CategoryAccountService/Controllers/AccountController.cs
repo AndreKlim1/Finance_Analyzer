@@ -5,6 +5,7 @@ using CaregoryAccountService.Models.DTO.Responses;
 using CaregoryAccountService.Services.Implementations;
 using CaregoryAccountService.Models.Errors;
 using CaregoryAccountService.Models.DTO.Requests;
+using CategoryAccountService.Models.DTO;
 
 namespace CaregoryAccountService.Controllers
 {
@@ -80,7 +81,7 @@ namespace CaregoryAccountService.Controllers
             return isDeleted ? NoContent() : BadRequest();
         }
 
-        [HttpPut("transfer")]
+        /*[HttpPut("transfer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> TransferBetweenAccountsAsync([FromBody] TransferRequest transferRequest, CancellationToken token)
@@ -93,7 +94,7 @@ namespace CaregoryAccountService.Controllers
             );
         }
 
-        [HttpGet]
+        [HttpGet("{id:long}/balance")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<int>> GetAccountBalanceAsync(long id, CancellationToken token)
@@ -106,17 +107,32 @@ namespace CaregoryAccountService.Controllers
             );
         }
 
-        [HttpPut("reconcile")]
+        [HttpPut("{id:long}/reconcile")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> TransferBetweenAccountsAsync([FromBody] TransferRequest transferRequest, CancellationToken token)
+        public async Task<IActionResult> ReconcileAsync(long id, CancellationToken token)
         {
-            var result = await _accountService.TransferBetweenAccountsAsync(transferRequest, token);
+            var result = await _accountService.ReconcileAsync(id, token);
 
             return result.Match<IActionResult>(
                 onSuccess: () => Ok(result.Value),
                 onFailure: error => BadRequest(error)
             );
         }
+
+        [HttpGet("{id:long}/statement")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<int>> GetStatementAsync(long id, [FromQuery] DateRange dateRange, CancellationToken token)
+        {
+            var result = await _accountService.GetStatementAsync(id, dateRange, token);
+
+            return result.Match<ActionResult<int>>(
+                onSuccess: () => Ok(result.Value),
+                onFailure: error => BadRequest(error)
+            );
+        }
+        */
+
     }
 }

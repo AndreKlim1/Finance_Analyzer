@@ -10,6 +10,9 @@ namespace TransactionsService.Services.Validators
             RuleFor(t => t.Value)
                 .GreaterThan(0).WithMessage("Transaction value must be greater than 0.");
 
+            RuleFor(t => t.Title)
+                .MaximumLength(128).WithMessage("Title must not exceed 128 characters");
+
             RuleFor(t => t.Currency)
                 .NotEmpty().WithMessage("Currency is required.")
                 .MaximumLength(3).WithMessage("Currency code must be at most 3 characters long.");
@@ -35,9 +38,9 @@ namespace TransactionsService.Services.Validators
             RuleFor(t => t.CreationDate)
                 .LessThanOrEqualTo(DateTime.UtcNow).WithMessage("Creation date cannot be in the future.");
 
-            RuleFor(t => t.PaymentMethod)
+            RuleFor(t => t.TransactionType)
                 .NotEmpty().WithMessage("Payment method is required.")
-                .MaximumLength(50).WithMessage("Payment method must not exceed 50 characters.");
+                .MaximumLength(64).WithMessage("Payment method must not exceed 50 characters.");
 
             RuleFor(t => t.Merchant)
                 .MaximumLength(128).WithMessage("Merchant name must not exceed 128 characters.");
