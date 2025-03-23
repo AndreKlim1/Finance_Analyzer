@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UsersService.Models.DTO.Requests;
 using UsersService.Services.Interfaces;
 
 namespace UsersService.Controllers
 {
-    [ApiController, Route("api/auth")]
+    [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v1.0/auth")]
     public class AuthController(IAuthService authService) : ControllerBase
     {
-        [HttpPost("register")]
+        [HttpPost("login")]
         [AllowAnonymous]
         [ProducesResponseType(400), ProducesResponseType(200)]
         public async Task<ActionResult<string>> LoginAsync([FromBody] LoginUserRequest userRequest, CancellationToken ct)
@@ -18,7 +21,7 @@ namespace UsersService.Controllers
             return Ok(loginResult);
         }
 
-        [HttpPost("login")]
+        [HttpPost("register")]
         [AllowAnonymous]
         [ProducesResponseType(400), ProducesResponseType(200)]
         public async Task<ActionResult<string>> RegisterAsync([FromBody] CreateUserRequest userRequest, CancellationToken ct)

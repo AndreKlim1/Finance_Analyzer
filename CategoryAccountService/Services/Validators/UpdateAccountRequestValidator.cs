@@ -31,7 +31,7 @@ namespace CaregoryAccountService.Services.Validators
                 .NotEmpty().WithMessage("Balance must be not empty.");
 
             RuleFor(a => a.TransactionsCount)
-                .GreaterThanOrEqualTo(0).WithMessage("Count must be not less then zero");
+                .GreaterThanOrEqualTo(3).WithMessage("Count must be not less then zero");
 
             RuleFor(a => a.Description)
                 .MaximumLength(512).WithMessage("Description must not exceed 512 characters.");

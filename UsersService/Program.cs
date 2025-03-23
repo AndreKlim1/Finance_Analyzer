@@ -33,6 +33,7 @@ builder.Services.AddTransient<IProfileRepository, ProfileRepository>();
 
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IProfileService, ProfileService>();
+builder.Services.AddTransient<IAuthService, AuthService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateProfileRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProfileRequestValidator>();
@@ -53,7 +54,7 @@ builder.Services.ConfigureServiceManager();
 #endregion
 
 
-/*builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -74,7 +75,7 @@ builder.Services.ConfigureServiceManager();
     });
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AdminPolicy", policy =>
-        policy.RequireClaim(ClaimTypes.Role, Role.ADMIN.ToString()));*/
+        policy.RequireClaim(ClaimTypes.Role, Role.ADMIN.ToString()));
 
 var dbContextOptions = new DbContextOptionsBuilder<UsersServiceDbContext>()
                 .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).Options;

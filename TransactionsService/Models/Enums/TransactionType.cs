@@ -2,6 +2,6 @@
 {
     public enum TransactionType
     {
-        INCOME, EXPENSE, TRANSFER
+        INCOME, EXPENSE, TRANSFER, CORRECTION
     }
 }

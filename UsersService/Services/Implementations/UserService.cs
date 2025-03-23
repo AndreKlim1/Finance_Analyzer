@@ -12,15 +12,11 @@ namespace UsersService.Services.Implementations
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IValidator<CreateUserRequest> _createUserRequestValidator;
-        private readonly IValidator<UpdateUserRequest> _updateUserRequestValidator;
+        
 
-        public UserService(IUserRepository userRepository, IValidator<CreateUserRequest> createUserRequestValidator,
-            IValidator<UpdateUserRequest> updateUserRequestValidator)
+        public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _createUserRequestValidator = createUserRequestValidator;
-            _updateUserRequestValidator = updateUserRequestValidator;
         }
 
         public async Task<Result<UserResponse>> GetUserByIdAsync(long id, CancellationToken token)
@@ -44,10 +40,6 @@ namespace UsersService.Services.Implementations
         public async Task<Result<UserResponse>> CreateUserAsync(CreateUserRequest createUserRequest,
             CancellationToken token)
         {
-            var validationResult = await _createUserRequestValidator.ValidateAsync(createUserRequest, token);
-
-            if (!validationResult.IsValid)
-                return Result<UserResponse>.Failure(UserErrors.InvalidCredentials);
 
             var user = createUserRequest.ToUser();
 
@@ -59,11 +51,7 @@ namespace UsersService.Services.Implementations
         public async Task<Result<UserResponse>> UpdateUserAsync(UpdateUserRequest updateUserRequest,
             CancellationToken token)
         {
-            var validationResult = await _updateUserRequestValidator.ValidateAsync(updateUserRequest, token);
-
-            if (!validationResult.IsValid)
-                return Result<UserResponse>.Failure(UserErrors.InvalidCredentials);
-
+            
             var user = updateUserRequest.ToUser();
             user = await _userRepository.UpdateAsync(user, token);
 

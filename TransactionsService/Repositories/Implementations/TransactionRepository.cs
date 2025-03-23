@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TransactionsService.Models;
+using TransactionsService.Models.Enums;
 using TransactionsService.Repositories;
 using TransactionsService.Repositories.Interfaces;
 
@@ -14,5 +15,30 @@ namespace TransactionsService.Repositories.Implementations
             _context = context;
         }
 
+        public async Task<int?> GetValueByIdAsync(long id, CancellationToken token)
+        {
+            var transaction = await _context.Transactions.FirstOrDefaultAsync(x => x.Id == id, token);
+            if (transaction != null) 
+            {
+                return transaction.Value;
+            }
+            else
+            {
+                return null;    
+            }
+        }
+
+        public async Task<Currency?> GetCurrencyByIdAsync(long id, CancellationToken token)
+        {
+            var transaction = await _context.Transactions.FirstOrDefaultAsync(x => x.Id == id, token);
+            if (transaction != null)
+            {
+                return transaction.Currency;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

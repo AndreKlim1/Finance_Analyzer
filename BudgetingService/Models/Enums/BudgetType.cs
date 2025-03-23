@@ -2,6 +2,6 @@
 {
     public enum BudgetType
     {
-        SAVINGS, EXPENSE 
+        SAVINGS, EXPENSES 
     }
 }

@@ -72,7 +72,7 @@ namespace BudgetingService.Repositories.Configurations
                     PeriodStart = new DateTime(2025, 3, 1, 0, 0, 0, DateTimeKind.Utc),
                     PeriodEnd = new DateTime(2025, 3, 31, 0, 0, 0, DateTimeKind.Utc),
                     BudgetStatus = BudgetStatus.ACTIVE,
-                    BudgetType = BudgetType.EXPENSE,
+                    BudgetType = BudgetType.EXPENSES,
                     WarningThreshold = 80,
                     WarningShowed = false
                 },

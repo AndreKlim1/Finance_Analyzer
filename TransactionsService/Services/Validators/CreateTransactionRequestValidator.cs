@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using TransactionsService.Models.DTO.Requests;
+using TransactionsService.Models.Enums;
 
 namespace TransactionsService.Services.Validators
 {
@@ -8,7 +9,15 @@ namespace TransactionsService.Services.Validators
         public CreateTransactionRequestValidator()
         {
             RuleFor(t => t.Value)
-                .GreaterThan(0).WithMessage("Transaction value must be greater than 0.");
+                .NotEmpty().WithMessage("Transaction value must not be empty.");
+
+            RuleFor(t => t.Value)
+                .GreaterThan(0).WithMessage("Value must be greater than 0")
+                .When(t => t.TransactionType == TransactionType.INCOME.ToString());
+
+            RuleFor(t => t.Value)
+                .LessThan(0).WithMessage("Value must be less than 0")
+                .When(t => t.TransactionType == TransactionType.EXPENSE.ToString());
 
             RuleFor(t => t.Title)
                 .MaximumLength(128).WithMessage("Title must not exceed 128 characters");

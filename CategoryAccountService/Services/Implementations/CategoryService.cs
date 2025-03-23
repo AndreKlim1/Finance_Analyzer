@@ -10,29 +10,25 @@ using CaregoryAccountService.Services.Validators;
 using UsersService.Services.Mappings;
 using CaregoryAccountService.Models;
 using Microsoft.EntityFrameworkCore;
+using CategoryAccountService.Messaging.Events;
+using CategoryAccountService.Messaging;
 
 namespace CaregoryAccountService.Services.Implementations
 {
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IValidator<CreateCategoryRequest> _createCategoryRequestValidator;
-        private readonly IValidator<UpdateCategoryRequest> _updateCategoryRequestValidator;
+        private readonly IKafkaProducer _kafkaProducer;
 
-        public CategoryService(ICategoryRepository categoryRepository, IValidator<CreateCategoryRequest> createCategoryRequestValidator,
-            IValidator<UpdateCategoryRequest> updateCategoryRequestValidator)
+        public CategoryService(ICategoryRepository categoryRepository, IKafkaProducer kafkaProducer)
         {
             _categoryRepository = categoryRepository;
-            _createCategoryRequestValidator = createCategoryRequestValidator;
-            _updateCategoryRequestValidator = updateCategoryRequestValidator;
+            _kafkaProducer = kafkaProducer;
         }
 
         public async Task<Result<CategoryResponse>> CreateCategoryAsync(CreateCategoryRequest createCategoryRequest, CancellationToken token)
         {
-            var validationResult = await _createCategoryRequestValidator.ValidateAsync(createCategoryRequest, token);
 
-            if (!validationResult.IsValid)
-                return Result<CategoryResponse>.Failure(CategoryErrors.InvalidCredentials);
             var category = createCategoryRequest.ToCategory();
 
             await _categoryRepository.AddAsync(category, token);
@@ -42,9 +38,18 @@ namespace CaregoryAccountService.Services.Implementations
 
         public async Task<bool> DeleteCategoryAsync(long id, CancellationToken token)
         {
-            await _categoryRepository.DeleteAsync(id, token);
-
-            return true;
+            var category = await _categoryRepository.GetByIdAsync(id, token);
+            if (category != null && category.UserId!=null)
+            {
+                await _categoryRepository.DeleteAsync(id, token);
+                var deletionEvent = new DeletionEvent("category-deleted", id);
+                await _kafkaProducer.ProduceAsync("deletion-events", id.ToString(), deletionEvent);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public async Task<Result<List<CategoryResponse>>> GetCategoriesAsync(CancellationToken token)
@@ -77,10 +82,6 @@ namespace CaregoryAccountService.Services.Implementations
 
         public async Task<Result<CategoryResponse>> UpdateCategoryAsync(UpdateCategoryRequest updateCategoryRequest, CancellationToken token)
         {
-            var validationResult = await _updateCategoryRequestValidator.ValidateAsync(updateCategoryRequest, token);
-
-            if (!validationResult.IsValid)
-                return Result<CategoryResponse>.Failure(CategoryErrors.InvalidCredentials);
 
             var category = updateCategoryRequest.ToCategory();
             category = await _categoryRepository.UpdateAsync(category, token);

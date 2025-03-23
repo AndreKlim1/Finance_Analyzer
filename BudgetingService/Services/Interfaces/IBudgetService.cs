@@ -9,8 +9,9 @@ namespace BudgetingService.Services.Interfaces
     {
         Task<Result<BudgetResponse>> GetBudgetByIdAsync(long id, CancellationToken token);
         Task<Result<List<BudgetResponse>>> GetBudgetsAsync(CancellationToken token);
-        Task<Result<BudgetResponse>> CreateBudgetAsync(CreateBudgetRequest createTransactionRequest, CancellationToken token);
-        Task<Result<BudgetResponse>> UpdateBudgetAsync(UpdateBudgetRequest updateTransactionRequest, CancellationToken token);
+        Task<Result<BudgetResponse>> CreateBudgetAsync(CreateBudgetRequest createBudgetRequest, CancellationToken token);
+        Task<Result<BudgetResponse>> UpdateBudgetAsync(UpdateBudgetRequest updateBudgetRequest, CancellationToken token);
         Task<bool> DeleteBudgetAsync(long id, CancellationToken token);
+        Task<Result<List<BudgetResponse>>> GetBudgetsByUserIdAsync(long userId, CancellationToken token);
     }
 }

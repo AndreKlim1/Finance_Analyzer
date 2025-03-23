@@ -13,8 +13,8 @@ namespace UsersService.Services.Implementations
         public async Task<string?> RegisterAsync(CreateUserRequest userRequest, CancellationToken token)
         {
             var result = await repository.GetByEmailAsync(userRequest.Email, token);
-            if (result == null) return null;
-            await repository.AddAsync(userRequest.ToUser(), token);
+            if (result != null) return null;
+            await repository.AddAsync(userRequest.ToUser(), token);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             return TokenGenerator.GenerateToken(userRequest.Email, Enum.Parse<Role>(userRequest.Role), config);
         }
 

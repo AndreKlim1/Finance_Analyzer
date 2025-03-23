@@ -14,23 +14,16 @@ namespace UsersService.Services.Implementations
     public class ProfileService : IProfileService
     {
         private readonly IProfileRepository _profileRepository;
-        private readonly IValidator<CreateProfileRequest> _createProfileRequestValidator;
-        private readonly IValidator<UpdateProfileRequest> _updateProfileRequestValidator;
 
-        public ProfileService(IProfileRepository profileRepository, IValidator<CreateProfileRequest> createProfileRequestValidator,
-            IValidator<UpdateProfileRequest> updateProfileRequestValidator)
+        public ProfileService(IProfileRepository profileRepository)
         {
             _profileRepository = profileRepository;
-            _createProfileRequestValidator = createProfileRequestValidator;
-            _updateProfileRequestValidator = updateProfileRequestValidator;
+            
         }
 
         public async Task<Result<ProfileResponse>> CreateProfileAsync(CreateProfileRequest createProfileRequest, CancellationToken token)
         {
-            var validationResult = await _createProfileRequestValidator.ValidateAsync(createProfileRequest, token);
 
-            if (!validationResult.IsValid)
-                return Result<ProfileResponse>.Failure(ProfileErrors.InvalidCredentials);
             var profile = createProfileRequest.ToProfile();
 
             await _profileRepository.AddAsync(profile, token);
@@ -75,11 +68,6 @@ namespace UsersService.Services.Implementations
 
         public async Task<Result<ProfileResponse>> UpdateProfileAsync(UpdateProfileRequest updateProfileRequest, CancellationToken token)
         {
-            var validationResult = await _updateProfileRequestValidator.ValidateAsync(updateProfileRequest, token);
-
-            if (!validationResult.IsValid)
-                return Result<ProfileResponse>.Failure(ProfileErrors.InvalidCredentials);
-
             var profile = updateProfileRequest.ToProfile();
             profile = await _profileRepository.UpdateAsync(profile, token);
 

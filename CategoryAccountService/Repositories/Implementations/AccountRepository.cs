@@ -12,5 +12,18 @@ namespace CaregoryAccountService.Repositories.Implementations
         {
             _context = context;
         }
+
+        public async Task<int?> GetBalanceByIdAsync(long id, CancellationToken token)
+        {
+            var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == id, token);
+            if (account != null)
+            {
+                return account.Balance;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

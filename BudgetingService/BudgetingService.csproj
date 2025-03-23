@@ -25,10 +25,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Messaging\Events\" />
-    <Folder Include="Messaging\BackgroundServices\" />
-    <Folder Include="Services\BackgroundServices\" />
-  </ItemGroup>
-
 </Project>

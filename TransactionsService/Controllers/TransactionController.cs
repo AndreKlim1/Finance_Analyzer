@@ -57,6 +57,32 @@ namespace TransactionsService.Controllers
             return BadRequest(result.Error);
         }
 
+        [HttpPost("{fromAcc:long}/{toAcc:long}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> TransferAsync(CreateTransactionRequest txData, long fromAcc, long toAcc, CancellationToken token)
+        {
+            var result = await _transactionService.CreateTransactionAsync(txData, token);
+
+            if (result.IsSuccess) 
+            {
+                var toRequest = new CreateTransactionRequest(txData.Value, txData.Title, txData.Currency, txData.CategoryId,
+                                                             toAcc, txData.UserId, txData.Description, txData.Image, txData.TransactionDate,
+                                                             txData.CreationDate, txData.TransactionType, txData.Merchant);
+
+                result = await _transactionService.CreateTransactionAsync(toRequest, token);
+
+                if (result.IsSuccess)
+                    return Ok(result.Value);
+
+                return BadRequest(result.Error);
+            }
+            else 
+            {
+                return BadRequest(result.Error);
+            }
+        }
+
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

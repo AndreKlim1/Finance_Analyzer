@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using CaregoryAccountService.Extensions;
 using CaregoryAccountService.Repositories;
 using Microsoft.EntityFrameworkCore;
+using CategoryAccountService.Messaging;
+using CategoryAccountService.Messaging.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,12 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateAccountRequestValidat
 
 builder.Services.AddFluentValidationAutoValidation();
 
+builder.Services.Configure<KafkaSettings>(
+    builder.Configuration.GetSection("KafkaSettings"));
+
+builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
+builder.Services.AddSingleton<KafkaConsumer<string, string>>();
+builder.Services.AddHostedService<TransactionEventConsumerService>();
 #region
 
 builder.Services.ConfigureCors();

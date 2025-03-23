@@ -12,6 +12,7 @@ using TransactionsService.Services.Interfaces;
 using TransactionsService.Services.Implementations;
 using TransactionsService.Services.Validators;
 using Microsoft.EntityFrameworkCore;
+using TransactionsService.Messaging;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,12 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateTransactionRequestVal
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateTransactionRequestValidator>();
 
 builder.Services.AddFluentValidationAutoValidation();
+
+builder.Services.Configure<KafkaSettings>(
+    builder.Configuration.GetSection("KafkaSettings"));
+
+builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
+builder.Services.AddSingleton<KafkaConsumer<string, string>>();
 
 #region
 

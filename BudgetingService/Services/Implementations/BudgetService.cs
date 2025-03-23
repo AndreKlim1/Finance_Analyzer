@@ -13,15 +13,10 @@ namespace BudgetingService.Services.Implementations
     public class BudgetService : IBudgetService
     {
         private readonly IBudgetRepository _budgetRepository;
-        private readonly IValidator<CreateBudgetRequest> _createBudgetRequestValidator;
-        private readonly IValidator<UpdateBudgetRequest> _updateBudgetRequestValidator;
 
-        public BudgetService(IBudgetRepository budgetRepository, IValidator<CreateBudgetRequest> createBudgetRequestValidator,
-            IValidator<UpdateBudgetRequest> updateBudgetRequestValidator)
+        public BudgetService(IBudgetRepository budgetRepository)
         {
             _budgetRepository = budgetRepository;
-            _createBudgetRequestValidator = createBudgetRequestValidator;
-            _updateBudgetRequestValidator = updateBudgetRequestValidator;
         }
 
         public async Task<Result<BudgetResponse>> GetBudgetByIdAsync(long id, CancellationToken token)
@@ -36,10 +31,6 @@ namespace BudgetingService.Services.Implementations
         public async Task<Result<BudgetResponse>> CreateBudgetAsync(CreateBudgetRequest createBudgetRequest,
             CancellationToken token)
         {
-            var validationResult = await _createBudgetRequestValidator.ValidateAsync(createBudgetRequest, token);
-
-            if (!validationResult.IsValid)
-                return Result<BudgetResponse>.Failure(BudgetErrors.InvalidCredentials);
 
             var budget = createBudgetRequest.ToBudget();
 
@@ -51,10 +42,6 @@ namespace BudgetingService.Services.Implementations
         public async Task<Result<BudgetResponse>> UpdateBudgetAsync(UpdateBudgetRequest updateBudgetRequest,
             CancellationToken token)
         {
-            var validationResult = await _updateBudgetRequestValidator.ValidateAsync(updateBudgetRequest, token);
-
-            if (!validationResult.IsValid)
-                return Result<BudgetResponse>.Failure(BudgetErrors.InvalidCredentials);
 
             var budget = updateBudgetRequest.ToBudget();
             budget = await _budgetRepository.UpdateAsync(budget, token);
@@ -74,6 +61,24 @@ namespace BudgetingService.Services.Implementations
         public async Task<Result<List<BudgetResponse>>> GetBudgetsAsync(CancellationToken token)
         {
             var budgets = await _budgetRepository.FindAll(true).ToListAsync();
+            if (budgets is null)
+            {
+                return Result<List<BudgetResponse>>.Failure(BudgetErrors.TransactionNotFound);
+            }
+            else
+            {
+                var responses = new List<BudgetResponse>();
+                foreach (var budget in budgets)
+                {
+                    responses.Add(budget.ToBudgetResponse());
+                }
+                return Result<List<BudgetResponse>>.Success(responses);
+            }
+        }
+
+        public async Task<Result<List<BudgetResponse>>> GetBudgetsByUserIdAsync(long userId, CancellationToken token)
+        {
+            var budgets = await _budgetRepository.FindByCondition(l => l.UserId==userId, true).ToListAsync();
             if (budgets is null)
             {
                 return Result<List<BudgetResponse>>.Failure(BudgetErrors.TransactionNotFound);
