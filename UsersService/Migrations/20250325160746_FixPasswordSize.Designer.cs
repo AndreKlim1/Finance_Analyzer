@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UsersService.Repositories;
@@ -11,9 +12,11 @@ using UsersService.Repositories;
 namespace UsersService.Migrations
 {
     [DbContext(typeof(UsersServiceDbContext))]
-    partial class UsersServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250325160746_FixPasswordSize")]
+    partial class FixPasswordSize
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,8 +78,8 @@ namespace UsersService.Migrations
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("character(60)")
+                        .HasMaxLength(256)
+                        .HasColumnType("character(256)")
                         .IsFixedLength();
 
                     b.Property<long>("ProfileId")

@@ -23,7 +23,6 @@ namespace UsersService.Services.Implementations
 
         public async Task<Result<ProfileResponse>> CreateProfileAsync(CreateProfileRequest createProfileRequest, CancellationToken token)
         {
-
             var profile = createProfileRequest.ToProfile();
 
             await _profileRepository.AddAsync(profile, token);

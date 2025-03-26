@@ -57,6 +57,10 @@ namespace BudgetingService.Services.Validators
 
             RuleFor(b => b.WarningShowed)
                 .NotEmpty();
+
+            RuleFor(b => b.Color)
+                .NotEmpty().WithMessage("Color is required.")
+                .MaximumLength(32).WithMessage("Color must not exceed 32 characters.");
         }
     }
 

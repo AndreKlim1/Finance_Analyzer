@@ -42,7 +42,8 @@ namespace UsersService.Services.Implementations
         {
 
             var user = createUserRequest.ToUser();
-
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+            user.PasswordHash = hashedPassword;
             await _userRepository.AddAsync(user, token);
 
             return Result<UserResponse>.Success(user.ToUserResponse());

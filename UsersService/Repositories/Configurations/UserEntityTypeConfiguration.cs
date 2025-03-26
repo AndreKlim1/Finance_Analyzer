@@ -17,7 +17,7 @@ namespace UsersService.Repositories.Configurations
                 .HasMaxLength(64);
             builder.Property(u => u.PasswordHash)
                 .IsRequired()
-                .HasMaxLength(64)
+                .HasMaxLength(60)
                 .IsFixedLength();
             builder.Property(u => u.RegistrationDate)
                 .IsRequired();

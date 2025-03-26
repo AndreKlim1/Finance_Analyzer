@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -8,12 +9,13 @@ namespace UsersService.Services.Implementations
 {
     public static class TokenGenerator
     {
-        public static string GenerateToken(string email, Role role, IConfiguration config)
+        public static string GenerateToken(string email, Role role, long userId, IConfiguration config)
         {
             var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.Role, role.ToString())
+            new Claim(ClaimTypes.Role, role.ToString()),
+            new Claim("UserId", userId.ToString())
         };
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Secret"]));
             var tokenDescriptor = new SecurityTokenDescriptor

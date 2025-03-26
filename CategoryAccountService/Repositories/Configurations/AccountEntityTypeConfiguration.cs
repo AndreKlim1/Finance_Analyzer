@@ -36,6 +36,9 @@ namespace CaregoryAccountService.Repositories.Configurations
             builder.Property(a => a.Description)
                 .HasMaxLength(512);
 
+            builder.Property(a => a.Color)
+                .HasMaxLength(32);
+
             builder.HasData(
                 new Account
                 {
@@ -46,7 +49,8 @@ namespace CaregoryAccountService.Repositories.Configurations
                     Currency = Currency.USD,
                     Balance = 1500,
                     TransactionsCount = 0,
-                    Description = "Primary checking account"
+                    Description = "Primary checking account",
+                    Color = "#b14242"
                 },
                 new Account
                 {
@@ -57,7 +61,8 @@ namespace CaregoryAccountService.Repositories.Configurations
                     Currency = Currency.EUR,
                     Balance = 5000,
                     TransactionsCount = 0,
-                    Description = "Long-term savings account"
+                    Description = "Long-term savings account",
+                    Color = "#33cf5a"
                 }
             );
         }

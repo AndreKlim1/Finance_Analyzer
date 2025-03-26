@@ -17,6 +17,9 @@ namespace CaregoryAccountService.Services.Validators
             RuleFor(c => c.CategoryType)
                 .NotEmpty().WithMessage("Category type is required.")
                 .MaximumLength(50).WithMessage("Category type must not exceed 50 characters.");
+
+            RuleFor(a => a.Icon)
+                .NotEmpty().WithMessage("Icon must not be empty");
         }
     }
 }

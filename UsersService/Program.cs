@@ -72,6 +72,18 @@ builder.Services.AddAuthentication(options =>
             ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
         };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Cookies.ContainsKey("token"))
+                {
+                    context.Token = context.Request.Cookies["token"];
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AdminPolicy", policy =>
@@ -99,13 +111,14 @@ else
 }
 
 app.ConfigureExceptionHandler();
+app.UseRouting();
 
 app.UseCors("CorsPolicy");
+
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.All
 });
-app.UseRouting();
 
 app.UseAuthentication();
 

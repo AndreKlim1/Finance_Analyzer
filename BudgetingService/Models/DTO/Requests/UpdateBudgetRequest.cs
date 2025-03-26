@@ -15,5 +15,6 @@
         string BudgetStatus,
         string BudgetType,
         int WarningThreshold,
-        bool WarningShowed);
+        bool WarningShowed,
+        string Color);
 }

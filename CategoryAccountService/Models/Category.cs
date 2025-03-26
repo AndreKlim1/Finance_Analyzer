@@ -7,6 +7,6 @@ namespace CaregoryAccountService.Models
         public long? UserId { get; set; }
         public string CategoryName { get; set; }
         public CategoryType CategoryType { get; set; }
-       
+        public string Icon { get; set; }
     }
 }

@@ -13,6 +13,7 @@ using TransactionsService.Services.Implementations;
 using TransactionsService.Services.Validators;
 using Microsoft.EntityFrameworkCore;
 using TransactionsService.Messaging;
+using TransactionsService.Messaging.BackgroundServices;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +40,8 @@ builder.Services.Configure<KafkaSettings>(
 
 builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
 builder.Services.AddSingleton<KafkaConsumer<string, string>>();
+builder.Services.AddHostedService<AccountUpdateEventConsumer>();
+builder.Services.AddHostedService<DeletionEventConsumerService>();
 
 #region
 

@@ -6,5 +6,6 @@ namespace CaregoryAccountService.Models.DTO.Responses
         long Id,
         long? UserId,
         string CategoryName,
-        string CategoryType);
+        string CategoryType,
+        string Icon);
 }

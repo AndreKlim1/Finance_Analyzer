@@ -57,6 +57,10 @@ namespace BudgetingService.Repositories.Configurations
             builder.Property(b => b.WarningShowed)
                 .IsRequired();
 
+            builder.Property(b => b.Color)
+                .HasMaxLength(32)
+                .IsRequired();
+
             builder.HasData(
                 new Budget
                 {
@@ -74,7 +78,8 @@ namespace BudgetingService.Repositories.Configurations
                     BudgetStatus = BudgetStatus.ACTIVE,
                     BudgetType = BudgetType.EXPENSES,
                     WarningThreshold = 80,
-                    WarningShowed = false
+                    WarningShowed = false,
+                    Color = "#cad6f6"
                 },
                 new Budget
                 {
@@ -92,7 +97,8 @@ namespace BudgetingService.Repositories.Configurations
                     BudgetStatus = BudgetStatus.FINISHED,
                     BudgetType = BudgetType.SAVINGS,
                     WarningThreshold = 90,
-                    WarningShowed = false
+                    WarningShowed = false,
+                    Color = "#b8a345"
                 }
             );
         }

@@ -9,5 +9,6 @@ namespace CaregoryAccountService.Models.DTO.Responses
         string Currency,
         int Balance,
         int TransactionsCounts,
-        string Description);
+        string Description,
+        string Color);
 }

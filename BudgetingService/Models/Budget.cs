@@ -20,6 +20,6 @@ namespace BudgetingService.Models
         public BudgetType BudgetType { get; set; }
         public int WarningThreshold { get; set; } 
         public bool WarningShowed { get; set; }
-
+        public string Color { get; set; }
     }
 }

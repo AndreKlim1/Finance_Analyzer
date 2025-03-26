@@ -22,20 +22,25 @@ namespace CaregoryAccountService.Repositories.Configurations
                 .IsRequired()
                 .HasConversion<int>();
 
+            builder.Property(c => c.Icon)
+                .IsRequired();
+
             builder.HasData(
                 new Category
                 {
                     Id = 1,
                     UserId = 1,
                     CategoryName = "Groceries",
-                    CategoryType = CategoryType.EXPENSE
+                    CategoryType = CategoryType.EXPENSE,
+                    Icon = ""
                 },
                 new Category
                 {
                     Id = 2,
                     UserId = 2,
                     CategoryName = "Salary",
-                    CategoryType = CategoryType.INCOME
+                    CategoryType = CategoryType.INCOME,
+                    Icon = ""
                 }
             );
         }

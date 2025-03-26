@@ -27,7 +27,8 @@ namespace BudgetingService.Services.Mappings
                 budget.BudgetStatus.ToString(),
                 budget.BudgetType.ToString(),
                 budget.WarningThreshold,
-                budget.WarningShowed
+                budget.WarningShowed,
+                budget.Color
             );
         }
 
@@ -48,7 +49,8 @@ namespace BudgetingService.Services.Mappings
                 BudgetStatus = Enum.Parse<BudgetStatus>(request.BudgetStatus),
                 BudgetType = Enum.Parse<BudgetType>(request.BudgetType),
                 WarningThreshold = request.WarningThreshold,
-                WarningShowed = request.WarningShowed
+                WarningShowed = request.WarningShowed,
+                Color = request.Color
             };
         }
 
@@ -70,7 +72,8 @@ namespace BudgetingService.Services.Mappings
                 BudgetStatus = Enum.Parse<BudgetStatus>(request.BudgetStatus),
                 BudgetType = Enum.Parse<BudgetType>(request.BudgetType),
                 WarningThreshold = request.WarningThreshold,
-                WarningShowed = request.WarningShowed
+                WarningShowed = request.WarningShowed,
+                Color = request.Color
             };
         }
     }

@@ -2,6 +2,7 @@
 using CaregoryAccountService.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CategoryAccountService.Migrations
 {
     [DbContext(typeof(CategoryAccountServiceDbContext))]
-    partial class CategoryAccountServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250326010004_ColorIconChange")]
+    partial class ColorIconChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

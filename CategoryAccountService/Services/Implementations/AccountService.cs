@@ -57,8 +57,11 @@ namespace CaregoryAccountService.Services.Implementations
             else
             {
                 var value = account.Balance - prevBalance;
-                var updateEvent = new AccountUpdateEvent(account, value.Value);
-                await _kafkaProducer.ProduceAsync("account-events", account.Id.ToString(), updateEvent);
+                if (value != 0)
+                {
+                    var updateEvent = new AccountUpdateEvent(account, value.Value);
+                    await _kafkaProducer.ProduceAsync("account-events", account.Id.ToString(), updateEvent);
+                }
                 return Result<AccountResponse>.Success(account.ToAccountResponse());
             }
         }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using UsersService.Models;
 using UsersService.Models.DTO.Requests;
 using UsersService.Models.Enums;
 using UsersService.Repositories.Interfaces;
@@ -7,22 +8,32 @@ using UsersService.Services.Mappings;
 
 namespace UsersService.Services.Implementations
 {
-    public class AuthService(IConfiguration config, IUserRepository repository, IValidator<CreateUserRequest> validator) : IAuthService
+    public class AuthService(IConfiguration config, IUserRepository userRepository, IProfileRepository profileRepository) : IAuthService
     {
 
-        public async Task<string?> RegisterAsync(CreateUserRequest userRequest, CancellationToken token)
+        public async Task<string?> RegisterAsync(CreateUserRequest userRequest, CreateProfileRequest profileRequest, CancellationToken token)
         {
-            var result = await repository.GetByEmailAsync(userRequest.Email, token);
+            var result = await userRepository.GetByEmailAsync(userRequest.Email, token);
             if (result != null) return null;
-            await repository.AddAsync(userRequest.ToUser(), token);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            return TokenGenerator.GenerateToken(userRequest.Email, Enum.Parse<Role>(userRequest.Role), config);
+            var profile = profileRequest.ToProfile();
+            await profileRepository.AddAsync(profile, token);
+
+            var user = userRequest.ToUser();
+            user.ProfileId = profile.Id;
+
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+            user.PasswordHash = hashedPassword;
+            await userRepository.AddAsync(user, token);
+            return TokenGenerator.GenerateToken(userRequest.Email, Enum.Parse<Role>(userRequest.Role), user.Id, config);
         }
 
         public async Task<string?> LoginAsync(string email, string passwordHash, CancellationToken token)
         {
-            var result = await repository.GetByEmailAsync(email, token);
-            if (result == null || result.PasswordHash != passwordHash) return null;
-            return TokenGenerator.GenerateToken(email, result.Role, config);
+            var result = await userRepository.GetByEmailAsync(email, token);
+            result.PasswordHash = result.PasswordHash.Substring(0, 60);
+            if (result == null || !BCrypt.Net.BCrypt.Verify(passwordHash, result.PasswordHash)) return null;
+            return TokenGenerator.GenerateToken(email, result.Role, result.Id, config);
         }
+
     }
 }

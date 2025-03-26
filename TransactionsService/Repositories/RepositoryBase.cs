@@ -35,11 +35,13 @@ namespace TransactionsService.Repositories
 
         public virtual async Task<T?> UpdateAsync(T entity, CancellationToken token)
         {
+
             var ent = await DbContext.FindAsync<T>(entity.Id, token);
             if (ent == null) return null;
             DbContext.Entry(ent).CurrentValues.SetValues(entity);
             await DbContext.SaveChangesAsync(token);
             return entity;
+
         }
 
         public IQueryable<T> FindAll(bool trackChanges) => !trackChanges ? DbContext.Set<T>().AsNoTracking() : DbContext.Set<T>();

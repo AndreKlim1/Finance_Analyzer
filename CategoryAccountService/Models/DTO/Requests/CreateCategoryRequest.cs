@@ -5,5 +5,6 @@ namespace CaregoryAccountService.Models.DTO.Requests
     public record CreateCategoryRequest(
         long? UserId,
         string CategoryName,
-        string CategoryType);
+        string CategoryType,
+        string Icon);
 }

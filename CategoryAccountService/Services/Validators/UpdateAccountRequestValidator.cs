@@ -31,10 +31,13 @@ namespace CaregoryAccountService.Services.Validators
                 .NotEmpty().WithMessage("Balance must be not empty.");
 
             RuleFor(a => a.TransactionsCount)
-                .GreaterThanOrEqualTo(3).WithMessage("Count must be not less then zero");
+                .GreaterThanOrEqualTo(0).WithMessage("Count must be not less then zero");
 
             RuleFor(a => a.Description)
                 .MaximumLength(512).WithMessage("Description must not exceed 512 characters.");
+
+            RuleFor(a => a.Color)
+                .MaximumLength(32).WithMessage("Color must not exceed 32 characters");
         }
     }
 }

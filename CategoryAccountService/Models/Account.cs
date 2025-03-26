@@ -12,5 +12,6 @@ namespace CaregoryAccountService.Models
         public int Balance { get; set; }
         public int TransactionsCount { get; set; }
         public string Description { get; set; }
+        public string Color { get; set; }
     }
 }

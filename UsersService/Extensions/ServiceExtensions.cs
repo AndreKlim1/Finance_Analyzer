@@ -15,9 +15,10 @@ namespace UsersService.Extensions
           services.AddCors(options =>
           {
               options.AddPolicy("CorsPolicy", builder =>
-              builder.AllowAnyOrigin()
+              builder.WithOrigins("http://localhost:3000")
                      .AllowAnyMethod() //.WithMethods("GET", "POST")
-                     .AllowAnyHeader());
+                     .AllowAnyHeader()
+                     .AllowCredentials());
           });
 
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>

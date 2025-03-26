@@ -15,7 +15,8 @@ namespace UsersService.Services.Mappings
                 category.Id,
                 category.UserId,
                 category.CategoryName,
-                category.CategoryType.ToString()
+                category.CategoryType.ToString(),
+                category.Icon
             );
         }
 
@@ -25,7 +26,8 @@ namespace UsersService.Services.Mappings
             {
                 UserId = request.UserId,
                 CategoryName = request.CategoryName,
-                CategoryType = Enum.Parse<CategoryType>(request.CategoryType)
+                CategoryType = Enum.Parse<CategoryType>(request.CategoryType),
+                Icon = request.Icon
             };
         }
 
@@ -36,7 +38,8 @@ namespace UsersService.Services.Mappings
                 Id = request.Id,
                 UserId = request.UserId,
                 CategoryName = request.CategoryName,
-                CategoryType = Enum.Parse<CategoryType>(request.CategoryType)
+                CategoryType = Enum.Parse<CategoryType>(request.CategoryType),
+                Icon = request.Icon
             };
         }
     }

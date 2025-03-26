@@ -30,6 +30,9 @@ namespace CaregoryAccountService.Services.Validators
 
             RuleFor(a => a.Description)
                 .MaximumLength(512).WithMessage("Description must not exceed 512 characters.");
+
+            RuleFor(a => a.Color)
+                .MaximumLength(32).WithMessage("Color must not exceed 32 characters");
         }
     }
 }

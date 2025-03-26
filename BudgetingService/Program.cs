@@ -11,6 +11,9 @@ using BudgetingService.Services.Interfaces;
 using BudgetingService.Services.Implementations;
 using BudgetingService.Services.Validators;
 using Microsoft.EntityFrameworkCore;
+using BudgetingService.Messaging;
+using BudgetingService.Messaging.BackgroundServices;
+using BudgetingService.Messaging.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,12 +28,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IBudgetRepository, BudgetRepository>();
 
 builder.Services.AddTransient<IBudgetService, BudgetService>();
+builder.Services.AddTransient<IKafkaBudgetService, KafkaBudgetService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetRequestValidator>();
 
 builder.Services.AddFluentValidationAutoValidation();
 
+builder.Services.Configure<KafkaSettings>(
+    builder.Configuration.GetSection("KafkaSettings"));
+
+builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
+builder.Services.AddSingleton<KafkaConsumer<string, string>>();
+builder.Services.AddHostedService<TransactionEventConsumerService>();
 #region
 
 builder.Services.ConfigureCors();

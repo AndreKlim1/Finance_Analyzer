@@ -17,5 +17,6 @@ namespace BudgetingService.Models.DTO.Responses
         string BudgetStatus,
         string BudgetType,
         int WarningThreshold,
-        bool WarningShowed);
+        bool WarningShowed,
+        string Color);
 }
