@@ -66,7 +66,7 @@ namespace BudgetingService.Repositories.Configurations
                 {
                     Id = 1,
                     UserId = 1,
-                    CategoryId = 1,
+                    CategoryId = 4,
                     AccountId = 1,
                     BudgetName = "Monthly Groceries",
                     Description = "Budget for monthly grocery shopping",
@@ -79,13 +79,13 @@ namespace BudgetingService.Repositories.Configurations
                     BudgetType = BudgetType.EXPENSES,
                     WarningThreshold = 80,
                     WarningShowed = false,
-                    Color = "#cad6f6"
+                    Color = "#3f3dbf"
                 },
                 new Budget
                 {
                     Id = 2,
                     UserId = 2,
-                    CategoryId = 2,
+                    CategoryId = 5,
                     AccountId = 2,
                     BudgetName = "Vacation Savings",
                     Description = "Saving up for a summer vacation",
@@ -94,11 +94,11 @@ namespace BudgetingService.Repositories.Configurations
                     Currency = Currency.EUR,
                     PeriodStart = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     PeriodEnd = new DateTime(2025, 12, 31, 0, 0, 0, DateTimeKind.Utc),
-                    BudgetStatus = BudgetStatus.FINISHED,
+                    BudgetStatus = BudgetStatus.ACTIVE,
                     BudgetType = BudgetType.SAVINGS,
                     WarningThreshold = 90,
                     WarningShowed = false,
-                    Color = "#b8a345"
+                    Color = "#34bbb7"
                 }
             );
         }

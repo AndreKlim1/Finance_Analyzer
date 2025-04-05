@@ -14,8 +14,8 @@ using Microsoft.Extensions.Logging;
 using CaregoryAccountService.Extensions;
 using CaregoryAccountService.Repositories;
 using Microsoft.EntityFrameworkCore;
-using CategoryAccountService.Messaging;
 using CategoryAccountService.Messaging.BackgroundServices;
+using CategoryAccountService.Messaging.Kafka;
 
 var builder = WebApplication.CreateBuilder(args);
 

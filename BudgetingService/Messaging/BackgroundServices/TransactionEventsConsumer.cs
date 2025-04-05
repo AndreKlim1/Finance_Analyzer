@@ -1,4 +1,5 @@
-﻿using BudgetingService.Messaging.Events;
+﻿using BudgetingService.Messaging.DTO;
+using BudgetingService.Messaging.Http;
 using BudgetingService.Messaging.Services;
 using BudgetingService.Models.Enums;
 using BudgetingService.Services.Implementations;
@@ -45,7 +46,7 @@ namespace BudgetingService.Messaging.BackgroundServices
                         using (var scope = _serviceProvider.CreateScope())
                         {
                             var budgetService = scope.ServiceProvider.GetRequiredService<IKafkaBudgetService>();
-
+                            var conversionService = scope.ServiceProvider.GetRequiredService<ICurrencyConversionClient>();
                             var transactionEvent = JsonSerializer.Deserialize<TransactionEvent>(consumeResult.Message.Value);
                             if (transactionEvent != null)
                             {
@@ -54,13 +55,10 @@ namespace BudgetingService.Messaging.BackgroundServices
                                 switch (transactionEvent.EventType)
                                 {
                                     case "transaction-created":
-                                        await HandleTransactionCreatedAsync(transactionEvent.Data, budgetService, stoppingToken);
+                                        await HandleTransactionCreatedAsync(transactionEvent.Data, budgetService, conversionService, stoppingToken);
                                         break;
                                     case "transaction-deleted":
-                                        await HandleTransactionDeletedAsync(transactionEvent.Data, budgetService, stoppingToken);
-                                        break;
-                                    case "transaction-updated":
-                                        await HandleTransactionUpdatedAsync(transactionEvent.Data, budgetService, stoppingToken);
+                                        await HandleTransactionDeletedAsync(transactionEvent.Data, budgetService, conversionService, stoppingToken);
                                         break;
                                     default:
                                         _logger.LogWarning($"Неизвестный тип события: {transactionEvent.EventType}");
@@ -81,7 +79,7 @@ namespace BudgetingService.Messaging.BackgroundServices
             }, stoppingToken);
         }
 
-        private async Task HandleTransactionCreatedAsync(TransactionData data, IKafkaBudgetService budgetService, CancellationToken token)
+        private async Task HandleTransactionCreatedAsync(TransactionData data, IKafkaBudgetService budgetService, ICurrencyConversionClient conversionClient, CancellationToken token)
         {
             _logger.LogInformation($"Обработка создания транзакции {data.TransactionId} для бюджетов");
             var budgets = await budgetService.GetBudgetsByUserIdAsync(data.UserId, token);
@@ -89,45 +87,23 @@ namespace BudgetingService.Messaging.BackgroundServices
             {
                 foreach (var budget in budgets.Value)
                 {
-                    if ((((budget.BudgetType == BudgetType.SAVINGS && data.TransactionType == "INCOME") || 
-                          (budget.BudgetType == BudgetType.EXPENSES && data.TransactionType == "EXPENSE")) && 
-                           budget.CategoryId == null) || budget.CategoryId == data.CategoryId)
+                    if (((((budget.BudgetType == BudgetType.SAVINGS && data.TransactionType == "INCOME") ||
+                           (budget.BudgetType == BudgetType.EXPENSES && data.TransactionType == "EXPENSE")) &&
+                            budget.CategoryId is null) || budget.CategoryId == data.CategoryId) &&
+                           (budget.AccountId is null || budget.AccountId == data.AccountId) &&
+                            data.TransactionDate < budget.PeriodEnd && data.TransactionDate > budget.PeriodStart)
                     {
+                        var updateValue = 0m;
                         if (budget.Currency.ToString() != data.Currency)
                         {
-                            //отправка restApi запроса в IntegrationService для перевода значений в одну транзакцию, передавая (budgetCurrency, transactionCurrency, transactionValue) и получение нового transactionValue
+                            updateValue = Math.Abs(await conversionClient.ConvertTransactionValueAsync(budget.Currency.ToString(), data.Currency, data.Value));
                         }
-                        budget.CurrValue += data.Value;
-                        var percent = budget.CurrValue / budget.PlannedAmount * 100;
-                        if(percent > budget.WarningThreshold && !budget.WarningShowed)
+                        else
                         {
-                            budget.WarningShowed = true;
-                            //отправка запроса в NotificationService для вывода уведомления пользователю
+                            updateValue = Math.Abs(data.Value);
                         }
-                        await budgetService.UpdateBudgetAsync(budget, token);
-                    }
-                }
-            }
-        }
 
-        private async Task HandleTransactionUpdatedAsync(TransactionData data, IKafkaBudgetService budgetService, CancellationToken token)
-        {
-
-            _logger.LogInformation($"Обработка обновления транзакции {data.TransactionId} для бюджетов");
-            var budgets = await budgetService.GetBudgetsByUserIdAsync(data.UserId, token);
-            if (budgets.IsSuccess)
-            {
-                foreach (var budget in budgets.Value)
-                {
-                    if ((((budget.BudgetType == BudgetType.SAVINGS && data.TransactionType == "INCOME") ||
-                          (budget.BudgetType == BudgetType.EXPENSES && data.TransactionType == "EXPENSE")) &&
-                           budget.CategoryId == null) || budget.CategoryId == data.CategoryId)
-                    {
-                        if (budget.Currency.ToString() != data.Currency)
-                        {
-                            //отправка restApi запроса в IntegrationService для перевода значений в одну транзакцию, передавая (budgetCurrency, transactionCurrency, transactionValue) и получение нового transactionValue
-                        }
-                        budget.CurrValue += data.Value;
+                        budget.CurrValue += updateValue;
                         var percent = budget.CurrValue / budget.PlannedAmount * 100;
                         if (percent > budget.WarningThreshold && !budget.WarningShowed)
                         {
@@ -136,11 +112,12 @@ namespace BudgetingService.Messaging.BackgroundServices
                         }
                         await budgetService.UpdateBudgetAsync(budget, token);
                     }
+                    
                 }
             }
         }
 
-        private async Task HandleTransactionDeletedAsync(TransactionData data, IKafkaBudgetService budgetService, CancellationToken token)
+        private async Task HandleTransactionDeletedAsync(TransactionData data, IKafkaBudgetService budgetService, ICurrencyConversionClient conversionClient, CancellationToken token)
         {
             _logger.LogInformation($"Обработка удаления транзакции {data.TransactionId}");
             var budgets = await budgetService.GetBudgetsByUserIdAsync(data.UserId, token);
@@ -148,15 +125,29 @@ namespace BudgetingService.Messaging.BackgroundServices
             {
                 foreach (var budget in budgets.Value)
                 {
-                    if ((((budget.BudgetType == BudgetType.SAVINGS && data.TransactionType == "INCOME") ||
-                          (budget.BudgetType == BudgetType.EXPENSES && data.TransactionType == "EXPENSE")) &&
-                           budget.CategoryId == null) || budget.CategoryId == data.CategoryId)
+                    if (((((budget.BudgetType == BudgetType.SAVINGS && data.TransactionType == "INCOME") ||
+                           (budget.BudgetType == BudgetType.EXPENSES && data.TransactionType == "EXPENSE")) &&
+                            budget.CategoryId is null) || budget.CategoryId == data.CategoryId) &&
+                           (budget.AccountId is null || budget.AccountId == data.AccountId) &&
+                            data.TransactionDate < budget.PeriodEnd && data.TransactionDate > budget.PeriodStart)
                     {
+                        var updateValue = 0m;
                         if (budget.Currency.ToString() != data.Currency)
                         {
-                            //отправка restApi запроса в IntegrationService для перевода значений в одну транзакцию, передавая (budgetCurrency, transactionCurrency, transactionValue) и получение нового transactionValue
+                            updateValue = Math.Abs(await conversionClient.ConvertTransactionValueAsync(budget.Currency.ToString(), data.Currency, data.Value));
                         }
-                        budget.CurrValue += data.Value;
+                        else
+                        {
+                            updateValue = Math.Abs(data.Value);
+                        }
+
+                        budget.CurrValue -= updateValue;
+                        var percent = budget.CurrValue / budget.PlannedAmount * 100;
+                        if (budget.WarningShowed && percent < budget.WarningThreshold)
+                        {
+                            budget.WarningShowed = false;
+                            //отправка запроса в NotificationService для вывода уведомления пользователю
+                        }
                         await budgetService.UpdateBudgetAsync(budget, token);
                     }
                 }

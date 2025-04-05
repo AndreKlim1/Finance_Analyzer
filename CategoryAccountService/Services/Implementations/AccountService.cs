@@ -7,8 +7,8 @@ using CaregoryAccountService.Models.Errors;
 using CaregoryAccountService.Repositories.Interfaces;
 using CaregoryAccountService.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
-using CategoryAccountService.Messaging;
-using CategoryAccountService.Messaging.Events;
+using CategoryAccountService.Messaging.Kafka;
+using CategoryAccountService.Messaging.DTO;
 
 namespace CaregoryAccountService.Services.Implementations
 {
@@ -28,7 +28,7 @@ namespace CaregoryAccountService.Services.Implementations
             var account = await _accountRepository.GetByIdAsync(id, token);
 
             return account is null
-                ? Result<AccountResponse>.Failure(AccountErrors.UserNotFound)
+                ? Result<AccountResponse>.Failure(AccountErrors.AccountNotFound)
                 : Result<AccountResponse>.Success(account.ToAccountResponse());
         }
 
@@ -52,7 +52,7 @@ namespace CaregoryAccountService.Services.Implementations
 
             if (account is null)
             {
-                return Result<AccountResponse>.Failure(AccountErrors.UserNotFound);
+                return Result<AccountResponse>.Failure(AccountErrors.AccountNotFound);
             }
             else
             {
@@ -79,7 +79,7 @@ namespace CaregoryAccountService.Services.Implementations
             var accounts = await _accountRepository.FindAll(true).ToListAsync();
             if (accounts is null)
             {
-                return Result<List<AccountResponse>>.Failure(AccountErrors.UserNotFound);
+                return Result<List<AccountResponse>>.Failure(AccountErrors.AccountNotFound);
             }
             else
             {
@@ -92,7 +92,7 @@ namespace CaregoryAccountService.Services.Implementations
             }
         }
 
-        public async Task<Result<AccountResponse>> UpdateBalanceAsync(long id, int value, int trCountChange, CancellationToken token)
+        public async Task<Result<AccountResponse>> UpdateBalanceAsync(long id, decimal value, int trCountChange, CancellationToken token)
         {
             
             var account = await _accountRepository.GetByIdAsync(id, token);
@@ -101,8 +101,16 @@ namespace CaregoryAccountService.Services.Implementations
             account = await _accountRepository.UpdateAsync(account, token);
 
             return account is null
-                ? Result<AccountResponse>.Failure(AccountErrors.UserNotFound)
+                ? Result<AccountResponse>.Failure(AccountErrors.AccountNotFound)
                 : Result<AccountResponse>.Success(account.ToAccountResponse());
+        }
+
+        public async Task<Result<string>> GetCurrencyByIdAsync(long id, CancellationToken token)
+        {
+            var currency = await _accountRepository.GetCurrencyByIdAsync(id, token);
+            return currency is null
+                ? Result<string>.Failure(AccountErrors.AccountNotFound)
+                : Result<string>.Success(currency.ToString());
         }
     }
 }

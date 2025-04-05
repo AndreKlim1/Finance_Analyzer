@@ -1,4 +1,4 @@
-﻿namespace CategoryAccountService.Messaging
+﻿namespace CategoryAccountService.Messaging.Kafka
 {
     public interface IKafkaProducer
     {

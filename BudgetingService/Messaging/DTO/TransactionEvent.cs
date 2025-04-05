@@ -1,8 +1,8 @@
-﻿namespace CategoryAccountService.Messaging.Events
+﻿namespace BudgetingService.Messaging.DTO
 {
     public class TransactionEvent
     {
-        public string EventType { get; set; } 
+        public string EventType { get; set; }
         public TransactionData Data { get; set; }
     }
 
@@ -10,7 +10,7 @@
     {
         public long TransactionId { get; set; }
         public long UserId { get; set; }
-        public int Value { get; set; }
+        public decimal Value { get; set; }
         public string TransactionType { get; set; }
         public string Currency { get; set; }
         public long AccountId { get; set; }

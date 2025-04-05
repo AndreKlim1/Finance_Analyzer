@@ -53,17 +53,13 @@ namespace TransactionsService.Services.Implementations
             CancellationToken token)
         {
             var transaction = updateTransactionRequest.ToTransaction();
-            var prevValue = await _transactionRepository.GetValueByIdAsync(transaction.Id, token);
-            var prevCurrency = await _transactionRepository.GetCurrencyByIdAsync(transaction.Id, token);
+            var prevTransaction = await _transactionRepository.GetByIdAsync(transaction.Id, token);
+            var prevTransactionData = new TransactionData(prevTransaction);
             transaction = await _transactionRepository.UpdateAsync(transaction, token);
-
-            if(transaction != null && prevValue!=null && prevCurrency!=null)
+            if(transaction != null)
             {
-                var transactionUpdatedEvent = new TransactionEvent("transaction-updated", new TransactionData(transaction));
-                //сверка currency у 2 транзакций и работа с IntegrationService
-                transactionUpdatedEvent.Data.Value = transactionUpdatedEvent.Data.Value - prevValue.Value;
-                await _kafkaProducer.ProduceAsync("transaction-events", transaction.Id.ToString(), transactionUpdatedEvent);
-
+                var transactionUpdatedEvent = new TransactionUpdateEvent(prevTransactionData, new TransactionData(transaction));
+                await _kafkaProducer.ProduceAsync("transaction-update-events", transaction.Id.ToString(), transactionUpdatedEvent);
                 return Result<TransactionResponse>.Success(transaction.ToTransactionResponse());
             }
 

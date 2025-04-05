@@ -28,7 +28,7 @@ namespace TransactionsService.Messaging.Events
         }
         public long TransactionId { get; set; }
         public long UserId { get; set; }
-        public int Value { get; set; }
+        public decimal Value { get; set; }
         public string Currency { get; set; }
         public string TransactionType { get; set; }
         public long AccountId { get; set; }

@@ -11,8 +11,8 @@ namespace BudgetingService.Models
         public long? AccountId { get; set; }
         public string BudgetName { get; set; }
         public string Description { get; set; }
-        public int PlannedAmount { get; set; }
-        public int CurrValue { get; set; }
+        public decimal PlannedAmount { get; set; }
+        public decimal CurrValue { get; set; }
         public Currency Currency { get; set; }
         public DateTime PeriodStart { get; set; }
         public DateTime PeriodEnd { get; set; }

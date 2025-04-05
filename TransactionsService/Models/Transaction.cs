@@ -6,7 +6,7 @@ namespace TransactionsService.Models
 {
     public class Transaction : BaseModel<long>
     {
-        public int Value { get; set; }
+        public decimal Value { get; set; }
         public string Title { get; set; }
         public Currency Currency { get; set; }
         public long CategoryId { get; set; }

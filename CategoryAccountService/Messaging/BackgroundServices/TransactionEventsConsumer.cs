@@ -1,5 +1,7 @@
 ﻿using CaregoryAccountService.Services.Interfaces;
-using CategoryAccountService.Messaging.Events;
+using CategoryAccountService.Messaging.DTO;
+using CategoryAccountService.Messaging.Http;
+using CategoryAccountService.Messaging.Kafka;
 using Confluent.Kafka;
 using Microsoft.Extensions.Options;
 using System.Runtime.CompilerServices;
@@ -41,6 +43,7 @@ namespace CategoryAccountService.Messaging.BackgroundServices
                         using (var scope = _serviceProvider.CreateScope())
                         {
                             var accountService = scope.ServiceProvider.GetRequiredService<IAccountService>();
+                            var conversionService = scope.ServiceProvider.GetRequiredService<ICurrencyConversionClient>();
                             var transactionEvent = JsonSerializer.Deserialize<TransactionEvent>(consumeResult.Message.Value);
                             if (transactionEvent != null)
                             {
@@ -49,14 +52,11 @@ namespace CategoryAccountService.Messaging.BackgroundServices
                                 switch (transactionEvent.EventType)
                                 {
                                     case "transaction-created":
-                                        await HandleTransactionCreatedAsync(transactionEvent.Data, accountService, stoppingToken);
+                                        await HandleTransactionCreatedAsync(transactionEvent.Data, accountService, conversionService, stoppingToken);
                                         break;
                                     case "transaction-deleted":
-                                        await HandleTransactionDeletedAsync(transactionEvent.Data, accountService, stoppingToken);
-                                        break;
-                                    case "transaction-updated":
-                                        await HandleTransactionUpdatedAsync(transactionEvent.Data, accountService, stoppingToken);
-                                        break;
+                                        await HandleTransactionDeletedAsync(transactionEvent.Data, accountService, conversionService, stoppingToken);
+                                        break;                                   
                                     default:
                                         _logger.LogWarning($"Неизвестный тип события: {transactionEvent.EventType}");
                                         break;
@@ -76,28 +76,33 @@ namespace CategoryAccountService.Messaging.BackgroundServices
             }, stoppingToken);
         }
 
-        private async Task HandleTransactionCreatedAsync(TransactionData data, IAccountService accountService, CancellationToken token)
+        private async Task HandleTransactionCreatedAsync(TransactionData data, IAccountService accountService, ICurrencyConversionClient conversionClient, CancellationToken token)
         {
             _logger.LogInformation($"Обработка создания транзакции {data.TransactionId} для счета {data.AccountId}");
-            //проверка соответствия валют
-            await accountService.UpdateBalanceAsync(data.AccountId, data.Value, 1, token);
+            var accountCurrency = await accountService.GetCurrencyByIdAsync(data.AccountId, token);
+            if (accountCurrency.IsSuccess) {
+                var createValue = await conversionClient.ConvertTransactionValueAsync(accountCurrency.Value, data.Currency, data.Value);
+                await accountService.UpdateBalanceAsync(data.AccountId, createValue, 1, token);
+            }
+            else
+            {
+                throw new Exception("Ошибка получения валюты счёта");
+            }
         }
 
-        private async Task HandleTransactionUpdatedAsync(TransactionData data, IAccountService accountService, CancellationToken token)
-        {
-
-            _logger.LogInformation($"Обработка обновления транзакции {data.TransactionId} для счета {data.AccountId}");
-            //проверка соответствия валют
-
-            await accountService.UpdateBalanceAsync(data.AccountId, data.Value, 0, token);
-
-        }
-
-        private async Task HandleTransactionDeletedAsync(TransactionData data, IAccountService accountService, CancellationToken token)
+        private async Task HandleTransactionDeletedAsync(TransactionData data, IAccountService accountService, ICurrencyConversionClient conversionClient, CancellationToken token)
         {
             _logger.LogInformation($"Обработка удаления транзакции {data.TransactionId}");
-            //проверка соответствия валют
-            await accountService.UpdateBalanceAsync(data.AccountId, data.Value, -1, token);
+            var accountCurrency = await accountService.GetCurrencyByIdAsync(data.AccountId, token);
+            if (accountCurrency.IsSuccess)
+            {
+                var deleteValue = await conversionClient.ConvertTransactionValueAsync(accountCurrency.Value, data.Currency, data.Value);
+                await accountService.UpdateBalanceAsync(data.AccountId, deleteValue, -1, token);
+            }
+            else
+            {
+                throw new Exception("Ошибка получения валюты счёта");
+            }
         }
     }
 }

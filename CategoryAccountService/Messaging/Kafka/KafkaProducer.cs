@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
-namespace CategoryAccountService.Messaging
+namespace CategoryAccountService.Messaging.Kafka
 {
     public class KafkaProducer : IKafkaProducer, IDisposable
     {

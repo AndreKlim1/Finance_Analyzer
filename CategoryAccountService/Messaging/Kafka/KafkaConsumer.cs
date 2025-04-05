@@ -1,7 +1,7 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Options;
 
-namespace CategoryAccountService.Messaging
+namespace CategoryAccountService.Messaging.Kafka
 {
     public class KafkaConsumer<TKey, TValue>
     {

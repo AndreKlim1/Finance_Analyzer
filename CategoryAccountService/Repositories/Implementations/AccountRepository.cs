@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CaregoryAccountService.Models;
 using CaregoryAccountService.Repositories.Interfaces;
+using CaregoryAccountService.Models.Enums;
 
 namespace CaregoryAccountService.Repositories.Implementations
 {
@@ -13,12 +14,25 @@ namespace CaregoryAccountService.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<int?> GetBalanceByIdAsync(long id, CancellationToken token)
+        public async Task<decimal?> GetBalanceByIdAsync(long id, CancellationToken token)
         {
             var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == id, token);
             if (account != null)
             {
                 return account.Balance;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<Currency?> GetCurrencyByIdAsync(long id, CancellationToken token)
+        {
+            var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == id, token);
+            if (account != null)
+            {
+                return account.Currency;
             }
             else
             {

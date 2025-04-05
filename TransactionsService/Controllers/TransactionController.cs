@@ -66,7 +66,7 @@ namespace TransactionsService.Controllers
 
             if (result.IsSuccess) 
             {
-                var toRequest = new CreateTransactionRequest(txData.Value, txData.Title, txData.Currency, txData.CategoryId,
+                var toRequest = new CreateTransactionRequest(-txData.Value, txData.Title, txData.Currency, txData.CategoryId,
                                                              toAcc, txData.UserId, txData.Description, txData.Image, txData.TransactionDate,
                                                              txData.CreationDate, txData.TransactionType, txData.Merchant);
 

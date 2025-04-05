@@ -6,7 +6,7 @@ namespace TransactionsService.Messaging.Events
     {
         public long Id { get; set; }
         public long UserId { get; set; }
-        public int Value { get; set; }
+        public decimal Value { get; set; }
         public string Currency { get; set; }
         public string AccountName { get; set; }
 

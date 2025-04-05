@@ -58,23 +58,39 @@ namespace TransactionsService.Repositories.Configurations
                     Value = 100,
                     Title = "First transaction",
                     Currency = Currency.USD,
-                    CategoryId = 1,
+                    CategoryId = 3,
                     AccountId = 1,
                     UserId = 1,
                     Description = "Test transaction 1",
                     Image = null,
-                    TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
-                    CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
+                    TransactionDate = new DateTime(2025, 2, 7, 0, 0, 0, DateTimeKind.Utc),
+                    CreationDate = new DateTime(2025, 2, 7, 0, 0, 0, DateTimeKind.Utc),
                     TransactionType = TransactionType.INCOME,
                     Merchant = "Amazon"
                 },
                 new Transaction
                 {
                     Id = 2,
-                    Value = 200,
-                    Title = "Second transaction",
+                    Value = -200,
+                    Title = "ABOBA for home",
                     Currency = Currency.EUR,
-                    CategoryId = 2,
+                    CategoryId = 4,
+                    AccountId = 2,
+                    UserId = 2,
+                    Description = "Test transaction 2",
+                    Image = null,
+                    TransactionDate = new DateTime(2025, 3, 1, 0, 0, 0, DateTimeKind.Utc),
+                    CreationDate = new DateTime(2025, 3, 1, 0, 0, 0, DateTimeKind.Utc),
+                    TransactionType = TransactionType.EXPENSE,
+                    Merchant = "Local Store"
+                },
+                new Transaction
+                {
+                    Id = 3,
+                    Value = -400,
+                    Title = "Cheeeeese",
+                    Currency = Currency.EUR,
+                    CategoryId = 6,
                     AccountId = 2,
                     UserId = 2,
                     Description = "Test transaction 2",
@@ -82,6 +98,22 @@ namespace TransactionsService.Repositories.Configurations
                     TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
                     CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
                     TransactionType = TransactionType.EXPENSE,
+                    Merchant = "Local Store"
+                },
+                new Transaction
+                {
+                    Id = 4,
+                    Value = 100,
+                    Title = "Coins from fountain",
+                    Currency = Currency.USD,
+                    CategoryId = 5,
+                    AccountId = 2,
+                    UserId = 2,
+                    Description = "Test transaction 2",
+                    Image = null,
+                    TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
+                    CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
+                    TransactionType = TransactionType.INCOME,
                     Merchant = "Local Store"
                 }
             );

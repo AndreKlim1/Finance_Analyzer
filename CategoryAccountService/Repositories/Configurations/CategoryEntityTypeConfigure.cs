@@ -29,18 +29,50 @@ namespace CaregoryAccountService.Repositories.Configurations
                 new Category
                 {
                     Id = 1,
-                    UserId = 1,
-                    CategoryName = "Groceries",
-                    CategoryType = CategoryType.EXPENSE,
-                    Icon = ""
+                    UserId = null,
+                    CategoryName = "Transfer",
+                    CategoryType = CategoryType.TRANSFER,
+                    Icon = "/assets/exchange-arrows.png"
                 },
                 new Category
                 {
                     Id = 2,
-                    UserId = 2,
+                    UserId = null,
+                    CategoryName = "Correction",
+                    CategoryType = CategoryType.CORRECTION,
+                    Icon = "/assets/increase.png"
+                },
+                new Category
+                {
+                    Id = 3,
+                    UserId = null,
                     CategoryName = "Salary",
                     CategoryType = CategoryType.INCOME,
-                    Icon = ""
+                    Icon = "/assets/categories/bills.png"
+                },
+                new Category
+                {
+                    Id = 4,
+                    UserId = null,
+                    CategoryName = "Shopping",
+                    CategoryType = CategoryType.EXPENSE,
+                    Icon = "/assets/categories/shopping.png"
+                },
+                new Category
+                {
+                    Id = 5,
+                    UserId = null,
+                    CategoryName = "Random money",
+                    CategoryType = CategoryType.INCOME,
+                    Icon = "/assets/categories/wallet.png"
+                },
+                new Category
+                {
+                    Id = 6,
+                    UserId = null,
+                    CategoryName = "Food",
+                    CategoryType = CategoryType.EXPENSE,
+                    Icon = "/assets/categories/curry.png"
                 }
             );
         }

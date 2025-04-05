@@ -4,7 +4,7 @@ namespace TransactionsService.Models.DTO.Responses
 {
     public record TransactionResponse(
         long Id,
-        long Value,
+        decimal Value,
         string Title,
         string Currency,
         long CategoryId,

@@ -6,7 +6,7 @@ namespace CaregoryAccountService.Models.DTO.Requests
         string AccountName,
         string AccountType,
         string Currency,
-        int Balance,
+        decimal Balance,
         int TransactionsCount,
         string Description,
         string Color);

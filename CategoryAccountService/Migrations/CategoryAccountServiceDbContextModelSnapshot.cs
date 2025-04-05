@@ -71,7 +71,7 @@ namespace CategoryAccountService.Migrations
                             AccountName = "Bank",
                             AccountType = 0,
                             Balance = 1500,
-                            Color = "#b14242",
+                            Color = "#be6464",
                             Currency = 1,
                             Description = "Primary checking account",
                             TransactionsCount = 0,
@@ -83,11 +83,23 @@ namespace CategoryAccountService.Migrations
                             AccountName = "Cash",
                             AccountType = 1,
                             Balance = 5000,
-                            Color = "#33cf5a",
+                            Color = "#187547",
                             Currency = 0,
                             Description = "Long-term savings account",
                             TransactionsCount = 0,
                             UserId = 2L
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            AccountName = "Second Cash",
+                            AccountType = 1,
+                            Balance = 3000,
+                            Color = "#6572bd",
+                            Currency = 0,
+                            Description = "Long-term savings account",
+                            TransactionsCount = 0,
+                            UserId = 1L
                         });
                 });
 
@@ -122,18 +134,44 @@ namespace CategoryAccountService.Migrations
                         new
                         {
                             Id = 1L,
-                            CategoryName = "Groceries",
-                            CategoryType = 1,
-                            Icon = "",
-                            UserId = 1L
+                            CategoryName = "Transfer",
+                            CategoryType = 2,
+                            Icon = "/assets/exchange-arrows.png"
                         },
                         new
                         {
                             Id = 2L,
+                            CategoryName = "Correction",
+                            CategoryType = 3,
+                            Icon = "/assets/increase.png"
+                        },
+                        new
+                        {
+                            Id = 3L,
                             CategoryName = "Salary",
                             CategoryType = 0,
-                            Icon = "",
-                            UserId = 2L
+                            Icon = "/assets/categories/bills.png"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            CategoryName = "Shopping",
+                            CategoryType = 1,
+                            Icon = "/assets/categories/shopping.png"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            CategoryName = "Random money",
+                            CategoryType = 0,
+                            Icon = "/assets/categories/wallet.png"
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            CategoryName = "Food",
+                            CategoryType = 1,
+                            Icon = "/assets/categories/curry.png"
                         });
                 });
 #pragma warning restore 612, 618

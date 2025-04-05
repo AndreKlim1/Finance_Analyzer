@@ -50,7 +50,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                     Balance = 1500,
                     TransactionsCount = 0,
                     Description = "Primary checking account",
-                    Color = "#b14242"
+                    Color = "#be6464"
                 },
                 new Account
                 {
@@ -62,7 +62,19 @@ namespace CaregoryAccountService.Repositories.Configurations
                     Balance = 5000,
                     TransactionsCount = 0,
                     Description = "Long-term savings account",
-                    Color = "#33cf5a"
+                    Color = "#187547"
+                },
+                new Account
+                {
+                    Id = 3,
+                    UserId = 1,
+                    AccountName = "Second Cash",
+                    AccountType = AccountType.CASH,
+                    Currency = Currency.EUR,
+                    Balance = 3000,
+                    TransactionsCount = 0,
+                    Description = "Long-term savings account",
+                    Color = "#6572bd"
                 }
             );
         }

@@ -1,6 +1,6 @@
 ﻿using Confluent.Kafka;
 
-namespace CategoryAccountService.Messaging
+namespace CategoryAccountService.Messaging.Kafka
 {
     public class KafkaSettings
     {

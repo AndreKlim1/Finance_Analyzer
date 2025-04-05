@@ -81,13 +81,13 @@ namespace TransactionsService.Migrations
                         {
                             Id = 1L,
                             AccountId = 1L,
-                            CategoryId = 1L,
-                            CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CategoryId = 3L,
+                            CreationDate = new DateTime(2025, 2, 7, 0, 0, 0, 0, DateTimeKind.Utc),
                             Currency = 1,
                             Description = "Test transaction 1",
                             Merchant = "Amazon",
                             Title = "First transaction",
-                            TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionDate = new DateTime(2025, 2, 7, 0, 0, 0, 0, DateTimeKind.Utc),
                             TransactionType = 0,
                             UserId = 1L,
                             Value = 100
@@ -96,16 +96,46 @@ namespace TransactionsService.Migrations
                         {
                             Id = 2L,
                             AccountId = 2L,
-                            CategoryId = 2L,
+                            CategoryId = 4L,
+                            CreationDate = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 0,
+                            Description = "Test transaction 2",
+                            Merchant = "Local Store",
+                            Title = "ABOBA for home",
+                            TransactionDate = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 1,
+                            UserId = 2L,
+                            Value = -200
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            AccountId = 2L,
+                            CategoryId = 6L,
                             CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Currency = 0,
                             Description = "Test transaction 2",
                             Merchant = "Local Store",
-                            Title = "Second transaction",
+                            Title = "Cheeeeese",
                             TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             TransactionType = 1,
                             UserId = 2L,
-                            Value = 200
+                            Value = -400
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            AccountId = 2L,
+                            CategoryId = 5L,
+                            CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 2",
+                            Merchant = "Local Store",
+                            Title = "Coins from fountain",
+                            TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 0,
+                            UserId = 2L,
+                            Value = 100
                         });
                 });
 #pragma warning restore 612, 618

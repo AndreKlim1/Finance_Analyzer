@@ -2,7 +2,7 @@
 {
     public record UpdateTransactionRequest(
         long Id,
-        int Value,
+        decimal Value,
         string Title,
         string Currency,
         long CategoryId,

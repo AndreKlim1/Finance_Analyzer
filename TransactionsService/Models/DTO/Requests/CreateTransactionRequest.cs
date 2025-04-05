@@ -1,7 +1,7 @@
 ﻿namespace TransactionsService.Models.DTO.Requests
 {
     public record CreateTransactionRequest(
-        int Value,
+        decimal Value,
         string Title,
         string Currency,
         long CategoryId,

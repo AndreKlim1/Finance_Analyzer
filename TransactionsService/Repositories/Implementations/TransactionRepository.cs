@@ -15,7 +15,7 @@ namespace TransactionsService.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<int?> GetValueByIdAsync(long id, CancellationToken token)
+        public async Task<decimal?> GetValueByIdAsync(long id, CancellationToken token)
         {
             var transaction = await _context.Transactions.FirstOrDefaultAsync(x => x.Id == id, token);
             if (transaction != null) 
@@ -34,6 +34,19 @@ namespace TransactionsService.Repositories.Implementations
             if (transaction != null)
             {
                 return transaction.Currency;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<TransactionType?> GetTypeByIdAsync(long id, CancellationToken token)
+        {
+            var transaction = await _context.Transactions.FirstOrDefaultAsync(x => x.Id == id, token);
+            if (transaction != null)
+            {
+                return transaction.TransactionType;
             }
             else
             {

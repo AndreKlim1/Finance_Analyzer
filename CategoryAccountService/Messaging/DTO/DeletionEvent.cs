@@ -1,8 +1,8 @@
-﻿namespace CategoryAccountService.Messaging.Events
+﻿namespace CategoryAccountService.Messaging.DTO
 {
     public class DeletionEvent
     {
-        public DeletionEvent(string eventType, long id) 
+        public DeletionEvent(string eventType, long id)
         {
             EventType = eventType;
             Id = id;

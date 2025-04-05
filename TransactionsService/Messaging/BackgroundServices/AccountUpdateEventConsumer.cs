@@ -51,7 +51,7 @@ namespace TransactionsService.Messaging.BackgroundServices
                                 _logger.LogInformation($"Получено событие типа: AccountUpdateEvent");
 
                                 var transaction = new CreateTransactionRequest(accEvent.Value, "Account correction",
-                                                                               accEvent.Currency, /*Добавить номер нужной категории*/1,
+                                                                               accEvent.Currency, 2,
                                                                                accEvent.Id, accEvent.UserId, $"correction of {accEvent.AccountName} account", "",
                                                                                DateTime.UtcNow, DateTime.UtcNow, TransactionType.CORRECTION.ToString(), "");
 

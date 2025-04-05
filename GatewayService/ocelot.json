@@ -73,6 +73,30 @@
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
+      "DownstreamPathTemplate": "/api/v1.0/conversion/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "integrationservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/conversion/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1.0/import/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "integrationservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/import/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/v1.0/transactions/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

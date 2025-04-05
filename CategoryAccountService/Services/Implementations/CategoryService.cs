@@ -10,8 +10,8 @@ using CaregoryAccountService.Services.Validators;
 using UsersService.Services.Mappings;
 using CaregoryAccountService.Models;
 using Microsoft.EntityFrameworkCore;
-using CategoryAccountService.Messaging.Events;
-using CategoryAccountService.Messaging;
+using CategoryAccountService.Messaging.Kafka;
+using CategoryAccountService.Messaging.DTO;
 
 namespace CaregoryAccountService.Services.Implementations
 {
@@ -57,7 +57,7 @@ namespace CaregoryAccountService.Services.Implementations
             var categories = await _categoryRepository.FindAll(true).ToListAsync();
             if(categories is null)
             {
-                return Result<List<CategoryResponse>>.Failure(CategoryErrors.ProfileNotFound);
+                return Result<List<CategoryResponse>>.Failure(CategoryErrors.CategoryNotFound);
             }
             else
             {
@@ -76,7 +76,7 @@ namespace CaregoryAccountService.Services.Implementations
             var category = await _categoryRepository.GetByIdAsync(id, token);
 
             return category is null
-                ? Result<CategoryResponse>.Failure(CategoryErrors.ProfileNotFound)
+                ? Result<CategoryResponse>.Failure(CategoryErrors.CategoryNotFound)
                 : Result<CategoryResponse>.Success(category.ToCategoryResponse());
         }
 
@@ -87,7 +87,7 @@ namespace CaregoryAccountService.Services.Implementations
             category = await _categoryRepository.UpdateAsync(category, token);
 
             return category is null
-                ? Result<CategoryResponse>.Failure(CategoryErrors.ProfileNotFound)
+                ? Result<CategoryResponse>.Failure(CategoryErrors.CategoryNotFound)
                 : Result<CategoryResponse>.Success(category.ToCategoryResponse());
         }
 
