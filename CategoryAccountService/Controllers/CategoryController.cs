@@ -45,6 +45,19 @@ namespace CaregoryAccountService.Controllers
 
         }
 
+        [HttpGet("user/{userId:long}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<CategoryResponse>>> GetCategoriesByUserIdAsync(long userId, CancellationToken token)
+        {
+            var result = await _categoryService.GetCategoriesByUserIdAsync(userId, token);
+
+            return result.Match<ActionResult<List<CategoryResponse>>>(
+                onSuccess: () => Ok(result.Value),
+                onFailure: error => NotFound(error));
+
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

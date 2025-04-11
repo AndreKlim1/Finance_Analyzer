@@ -4,6 +4,7 @@ using TransactionsService.Models.DTO.Responses;
 using TransactionsService.Models.DTO.Requests;
 using TransactionsService.Services.Interfaces;
 using TransactionsService.Models.Errors;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 
 namespace TransactionsService.Controllers
@@ -23,11 +24,11 @@ namespace TransactionsService.Controllers
         [HttpGet("{id:long}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<List<TransactionResponse>>> GetTransactionByIdAsync(long id, CancellationToken token)
+        public async Task<ActionResult<TransactionResponse>> GetTransactionByIdAsync(long id, CancellationToken token)
         {
             var result = await _transactionService.GetTransactionByIdAsync(id, token);
 
-            return result.Match<ActionResult<List<TransactionResponse>>>(
+            return result.Match<ActionResult<TransactionResponse>>(
                 onSuccess: () => Ok(result.Value),
                 onFailure: error => NotFound(error));
         }
@@ -35,12 +36,16 @@ namespace TransactionsService.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TransactionResponse>> GetTransactionsAsync(CancellationToken token)
+        public async Task<ActionResult<PagedResponse<TransactionResponse>>> GetTransactionsAsync( [FromQuery] TransactionFilterParameters filterParameters, CancellationToken token)
         {
-            var result = await _transactionService.GetTransactionsAsync(token);
+            var result = await _transactionService.GetTransactionsAsync(filterParameters, token);
 
-            return result.Match<ActionResult<TransactionResponse>>(
-                onSuccess: () => Ok(result.Value),
+            return result.Match<ActionResult<PagedResponse<TransactionResponse>>>(
+                onSuccess: () => Ok(new
+                {
+                    items = result.Value.Items,
+                    totalPages = result.Value.TotalPages
+                }),
                 onFailure: error => NotFound(error));
         }
 

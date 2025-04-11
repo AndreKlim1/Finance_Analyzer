@@ -16,6 +16,7 @@ using CaregoryAccountService.Repositories;
 using Microsoft.EntityFrameworkCore;
 using CategoryAccountService.Messaging.BackgroundServices;
 using CategoryAccountService.Messaging.Kafka;
+using CategoryAccountService.Messaging.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,8 @@ builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddHttpClient<ICurrencyConversionClient, CurrencyConversionClient>();
+
 
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateCategoryRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryRequestValidator>();
@@ -46,6 +49,8 @@ builder.Services.Configure<KafkaSettings>(
 builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
 builder.Services.AddSingleton<KafkaConsumer<string, string>>();
 builder.Services.AddHostedService<TransactionEventConsumerService>();
+builder.Services.AddHostedService<TransactionUpdateEventsConsumer>();
+
 #region
 
 builder.Services.ConfigureCors();

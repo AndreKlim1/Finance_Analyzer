@@ -92,6 +92,24 @@ namespace CaregoryAccountService.Services.Implementations
             }
         }
 
+        public async Task<Result<List<AccountResponse>>> GetAccountsByUserIdAsync(long userId, CancellationToken token)
+        {
+            var accounts = await _accountRepository.FindByCondition(l => l.UserId == userId, true).ToListAsync();
+            if (accounts is null)
+            {
+                return Result<List<AccountResponse>>.Failure(AccountErrors.AccountNotFound);
+            }
+            else
+            {
+                var responses = new List<AccountResponse>();
+                foreach (var account in accounts)
+                {
+                    responses.Add(account.ToAccountResponse());
+                }
+                return Result<List<AccountResponse>>.Success(responses);
+            }
+        }
+
         public async Task<Result<AccountResponse>> UpdateBalanceAsync(long id, decimal value, int trCountChange, CancellationToken token)
         {
             

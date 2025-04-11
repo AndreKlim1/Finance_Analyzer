@@ -45,6 +45,18 @@ namespace CaregoryAccountService.Controllers
                 onFailure: error => NotFound(error));
         }
 
+        [HttpGet("user/{userId:long}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<AccountResponse>>> GetAccountsByUserIdAsync(long userId, CancellationToken token)
+        {
+            var result = await _accountService.GetAccountsByUserIdAsync(userId, token);
+
+            return result.Match<ActionResult<List<AccountResponse>>>(
+                onSuccess: () => Ok(result.Value),
+                onFailure: error => NotFound(error));
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

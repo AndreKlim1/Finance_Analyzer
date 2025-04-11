@@ -38,8 +38,8 @@ namespace CategoryAccountService.Migrations
                     b.Property<int>("AccountType")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Balance")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -70,7 +70,7 @@ namespace CategoryAccountService.Migrations
                             Id = 1L,
                             AccountName = "Bank",
                             AccountType = 0,
-                            Balance = 1500,
+                            Balance = 1500m,
                             Color = "#be6464",
                             Currency = 1,
                             Description = "Primary checking account",
@@ -82,7 +82,7 @@ namespace CategoryAccountService.Migrations
                             Id = 2L,
                             AccountName = "Cash",
                             AccountType = 1,
-                            Balance = 5000,
+                            Balance = 5000m,
                             Color = "#187547",
                             Currency = 0,
                             Description = "Long-term savings account",
@@ -94,7 +94,7 @@ namespace CategoryAccountService.Migrations
                             Id = 3L,
                             AccountName = "Second Cash",
                             AccountType = 1,
-                            Balance = 3000,
+                            Balance = 3000m,
                             Color = "#6572bd",
                             Currency = 0,
                             Description = "Long-term savings account",

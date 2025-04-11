@@ -69,8 +69,8 @@ namespace TransactionsService.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Value")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("Value")
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -90,7 +90,7 @@ namespace TransactionsService.Migrations
                             TransactionDate = new DateTime(2025, 2, 7, 0, 0, 0, 0, DateTimeKind.Utc),
                             TransactionType = 0,
                             UserId = 1L,
-                            Value = 100
+                            Value = 100m
                         },
                         new
                         {
@@ -105,7 +105,7 @@ namespace TransactionsService.Migrations
                             TransactionDate = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             TransactionType = 1,
                             UserId = 2L,
-                            Value = -200
+                            Value = -200m
                         },
                         new
                         {
@@ -120,7 +120,7 @@ namespace TransactionsService.Migrations
                             TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             TransactionType = 1,
                             UserId = 2L,
-                            Value = -400
+                            Value = -400m
                         },
                         new
                         {
@@ -135,7 +135,7 @@ namespace TransactionsService.Migrations
                             TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             TransactionType = 0,
                             UserId = 2L,
-                            Value = 100
+                            Value = 100m
                         });
                 });
 #pragma warning restore 612, 618

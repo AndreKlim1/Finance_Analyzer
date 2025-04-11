@@ -1,5 +1,4 @@
-﻿using CaregoryAccountService.Models.DTO.Requests;
-using IntegrationService.DTO;
+﻿using IntegrationService.DTO;
 
 namespace IntegrationService.Messaging.Http
 {

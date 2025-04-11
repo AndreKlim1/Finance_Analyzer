@@ -71,6 +71,25 @@ namespace CaregoryAccountService.Services.Implementations
             
         }
 
+        public async Task<Result<List<CategoryResponse>>> GetCategoriesByUserIdAsync(long userId, CancellationToken token)
+        {
+            var categories = await _categoryRepository.FindByCondition(l => l.UserId == userId, true).ToListAsync();
+            if (categories is null)
+            {
+                return Result<List<CategoryResponse>>.Failure(CategoryErrors.CategoryNotFound);
+            }
+            else
+            {
+                var responses = new List<CategoryResponse>();
+                foreach (var category in categories)
+                {
+                    responses.Add(category.ToCategoryResponse());
+                }
+                return Result<List<CategoryResponse>>.Success(responses);
+            }
+
+        }
+
         public async Task<Result<CategoryResponse>> GetCategoryByIdAsync(long id, CancellationToken token)
         {
             var category = await _categoryRepository.GetByIdAsync(id, token);

@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using BudgetingService.Messaging;
 using BudgetingService.Messaging.BackgroundServices;
 using BudgetingService.Messaging.Services;
+using BudgetingService.Messaging.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,7 @@ builder.Services.AddTransient<IBudgetRepository, BudgetRepository>();
 
 builder.Services.AddTransient<IBudgetService, BudgetService>();
 builder.Services.AddTransient<IKafkaBudgetService, KafkaBudgetService>();
+builder.Services.AddHttpClient<ICurrencyConversionClient, CurrencyConversionClient>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetRequestValidator>();
@@ -41,6 +43,7 @@ builder.Services.Configure<KafkaSettings>(
 builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
 builder.Services.AddSingleton<KafkaConsumer<string, string>>();
 builder.Services.AddHostedService<TransactionEventConsumerService>();
+builder.Services.AddHostedService<TransactionUpdateEventsConsumer>();
 #region
 
 builder.Services.ConfigureCors();

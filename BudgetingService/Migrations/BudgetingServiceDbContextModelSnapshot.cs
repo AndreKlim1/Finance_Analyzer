@@ -53,8 +53,8 @@ namespace BudgetingService.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
-                    b.Property<int>("CurrValue")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("CurrValue")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("Currency")
                         .HasColumnType("integer");
@@ -70,8 +70,8 @@ namespace BudgetingService.Migrations
                     b.Property<DateTime>("PeriodStart")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("PlannedAmount")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("PlannedAmount")
+                        .HasColumnType("numeric");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -96,12 +96,12 @@ namespace BudgetingService.Migrations
                             BudgetType = 1,
                             CategoryId = 4L,
                             Color = "#3f3dbf",
-                            CurrValue = 100,
+                            CurrValue = 100m,
                             Currency = 1,
                             Description = "Budget for monthly grocery shopping",
                             PeriodEnd = new DateTime(2025, 3, 31, 0, 0, 0, 0, DateTimeKind.Utc),
                             PeriodStart = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            PlannedAmount = 500,
+                            PlannedAmount = 500m,
                             UserId = 1L,
                             WarningShowed = false,
                             WarningThreshold = 80
@@ -115,12 +115,12 @@ namespace BudgetingService.Migrations
                             BudgetType = 0,
                             CategoryId = 5L,
                             Color = "#34bbb7",
-                            CurrValue = 200,
+                            CurrValue = 200m,
                             Currency = 0,
                             Description = "Saving up for a summer vacation",
                             PeriodEnd = new DateTime(2025, 12, 31, 0, 0, 0, 0, DateTimeKind.Utc),
                             PeriodStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            PlannedAmount = 2000,
+                            PlannedAmount = 2000m,
                             UserId = 2L,
                             WarningShowed = false,
                             WarningThreshold = 90
