@@ -7,16 +7,21 @@ using BudgetingService.Models.Errors;
 using BudgetingService.Services.Mappings;
 using BudgetingService.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
+using BudgetingService.Models;
+using BudgetingService.Messaging.Http;
+using BudgetingService.Messaging.DTO;
 
 namespace BudgetingService.Services.Implementations
 {
     public class BudgetService : IBudgetService
     {
         private readonly IBudgetRepository _budgetRepository;
+        private readonly ITransactionsClient _transactionsClient;
 
-        public BudgetService(IBudgetRepository budgetRepository)
+        public BudgetService(IBudgetRepository budgetRepository, ITransactionsClient transactionsClient)
         {
             _budgetRepository = budgetRepository;
+            _transactionsClient = transactionsClient;
         }
 
         public async Task<Result<BudgetResponse>> GetBudgetByIdAsync(long id, CancellationToken token)
@@ -31,9 +36,10 @@ namespace BudgetingService.Services.Implementations
         public async Task<Result<BudgetResponse>> CreateBudgetAsync(CreateBudgetRequest createBudgetRequest,
             CancellationToken token)
         {
-
             var budget = createBudgetRequest.ToBudget();
+            var currValue = await CountCurrValueByTransactionsAsync(budget, token);
 
+            budget.CurrValue = currValue;
             await _budgetRepository.AddAsync(budget, token);
 
             return Result<BudgetResponse>.Success(budget.ToBudgetResponse());
@@ -44,6 +50,9 @@ namespace BudgetingService.Services.Implementations
         {
 
             var budget = updateBudgetRequest.ToBudget();
+            var currValue = await CountCurrValueByTransactionsAsync(budget, token);
+
+            budget.CurrValue = currValue;
             budget = await _budgetRepository.UpdateAsync(budget, token);
 
             return budget is null
@@ -92,6 +101,21 @@ namespace BudgetingService.Services.Implementations
                 }
                 return Result<List<BudgetResponse>>.Success(responses);
             }
+        }
+
+        private async Task<decimal> CountCurrValueByTransactionsAsync(Budget budget, CancellationToken token)
+        {
+            TransactionFilterParameters filter = new TransactionFilterParameters(0, budget.UserId, null, budget.PeriodStart, 
+                                                                                 budget.PeriodEnd, budget.CategoryId.ToString(), 
+                                                                                 budget.BudgetType.ToString() == "EXPENSES" ? "EXPENSE" : "INCOME",
+                                                                                 null, null, budget.AccountId.ToString());
+            var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
+            var result = 0m;
+            foreach(var transaction in transactions)
+            {
+                result += Math.Abs(transaction.Value);
+            }
+            return result;
         }
     }
 }

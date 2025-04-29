@@ -1,4 +1,8 @@
 using AnalyticsService.Extensions;
+using AnalyticsService.Messaging.Http.Implementations;
+using AnalyticsService.Messaging.Http.Interfaces;
+using AnalyticsService.Services.Implementations;
+using AnalyticsService.Services.Interfaces;
 using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,11 +17,13 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigureCors();
 
-builder.Services.AddTransient<ICurrencyConversionService, CurrencyConversionService>();
-builder.Services.AddTransient<IImportService, ImportService>();
+builder.Services.AddTransient<IAccountAnalyticsService, AccountAnalyticsService>();
+builder.Services.AddTransient<IAnalyticsDashboardService, AnalyticsDashboardService>();
 
-builder.Services.AddHttpClient<ICategoryAccountClient, CategoryAccountClient>();
-builder.Services.AddHttpClient<ITransactionClient, TransactionClient>();
+builder.Services.AddHttpClient<IAccountsClient, AccountsClient>();
+builder.Services.AddHttpClient<ITransactionsClient, TransactionsClient>();
+builder.Services.AddHttpClient<ICurrencyConversionClient, CurrencyConversionClient>();
+
 
 
 var app = builder.Build();

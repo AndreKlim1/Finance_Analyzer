@@ -25,6 +25,30 @@
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
+      "DownstreamPathTemplate": "/api/v1.0/analytics/dashboard/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "analyticsservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/analytics/dashboard/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1.0/analytics/account/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "analyticsservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/analytics/account/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/v1.0/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

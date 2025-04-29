@@ -57,6 +57,20 @@ services:
       - postgres
       - kafka
 
+  analyticsservice:
+    image: ${DOCKER_REGISTRY-}analyticsservice
+    container_name: analyticsservice
+    build:
+      context: .
+      dockerfile: AnalyticsService/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - "24120:8080"
+    depends_on:
+      - postgres
+      - kafka
+
   integrationservice:
     image: ${DOCKER_REGISTRY-}integrationservice
     container_name: integrationservice
@@ -82,6 +96,7 @@ services:
       - categoryaccountservice
       - transactionsservice
       - integrationservice
+      - analyticsservice
 
   zookeeper:
     image: wurstmeister/zookeeper:latest

@@ -10,6 +10,7 @@ namespace TransactionsService.Services.Interfaces
     {
         Task<Result<TransactionResponse>> GetTransactionByIdAsync(long id, CancellationToken token);
         Task<Result<PagedResponse<TransactionResponse>>> GetTransactionsAsync(TransactionFilterParameters filter, CancellationToken token);
+        Task<Result<List<TransactionResponse>>> GetTransactionsAnalyticsAsync(TransactionFilterParameters filter, CancellationToken token);
         Task<Result<List<TransactionResponse>>> GetTransactionsByUserIdAsync(long userId, CancellationToken token);
         Task<Result<TransactionResponse>> CreateTransactionAsync(CreateTransactionRequest createTransactionRequest, CancellationToken token);
         Task<Result<TransactionResponse>> CreateTransactionFromAccountAsync(CreateTransactionRequest createTransactionRequest, CancellationToken token);

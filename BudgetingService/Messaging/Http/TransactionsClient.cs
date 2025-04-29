@@ -1,12 +1,12 @@
-﻿using AnalyticsService.Messaging.DTO;
-using AnalyticsService.Messaging.Http.Interfaces;
-using AnalyticsService.Models.Errors;
+﻿using BudgetingService.Messaging.DTO;
+using BudgetingService.Messaging.Http;
+using BudgetingService.Models.Errors;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Globalization;
 using System.Net.Http;
 
-namespace AnalyticsService.Messaging.Http.Implementations
+namespace BudgetingService.Messaging.Http
 {
     public class TransactionsClient : ITransactionsClient
     {

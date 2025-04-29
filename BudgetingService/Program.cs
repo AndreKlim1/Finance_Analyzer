@@ -31,6 +31,7 @@ builder.Services.AddTransient<IBudgetRepository, BudgetRepository>();
 builder.Services.AddTransient<IBudgetService, BudgetService>();
 builder.Services.AddTransient<IKafkaBudgetService, KafkaBudgetService>();
 builder.Services.AddHttpClient<ICurrencyConversionClient, CurrencyConversionClient>();
+builder.Services.AddHttpClient<ITransactionsClient, TransactionsClient>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateBudgetRequestValidator>();

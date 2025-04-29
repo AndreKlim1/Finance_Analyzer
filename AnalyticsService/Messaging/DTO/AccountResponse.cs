@@ -1,5 +1,4 @@
-﻿
-namespace CaregoryAccountService.Models.DTO.Responses
+﻿namespace AnalyticsService.Messaging.DTO
 {
     public record AccountResponse(
         long Id,
@@ -8,7 +7,7 @@ namespace CaregoryAccountService.Models.DTO.Responses
         string AccountType,
         string Currency,
         decimal Balance,
-        int TransactionsCount,
+        int TransactionsCounts,
         string Description,
         string Color);
 }

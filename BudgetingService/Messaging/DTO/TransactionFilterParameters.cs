@@ -1,8 +1,8 @@
-﻿namespace TransactionsService.Models.DTO.Requests
+﻿namespace BudgetingService.Messaging.DTO
 {
     public record TransactionFilterParameters(
         int Page,
-        long UsertId,
+        long UserId,
         string? SearchTerm,
         DateTime? StartDate,
         DateTime? EndDate,
@@ -11,5 +11,4 @@
         decimal? MinValue,
         decimal? MaxValue,
         string? Accounts);
-
 }

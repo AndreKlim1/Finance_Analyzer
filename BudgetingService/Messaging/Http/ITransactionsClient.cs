@@ -1,6 +1,6 @@
-﻿using AnalyticsService.Messaging.DTO;
+﻿using BudgetingService.Messaging.DTO;
 
-namespace AnalyticsService.Messaging.Http.Interfaces
+namespace BudgetingService.Messaging.Http
 {
     public interface ITransactionsClient
     {

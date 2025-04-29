@@ -91,6 +91,7 @@ namespace TransactionsService.Services.Implementations
         {
             Expression<Func<Transaction, bool>> expression = t => true;
 
+            //expression = expression.And(t => t.UserId == filter.UsertId);
             if (filter.StartDate.HasValue)
                 expression = expression.And(t => t.TransactionDate >= filter.StartDate.Value);
             if (filter.EndDate.HasValue)
@@ -158,6 +159,75 @@ namespace TransactionsService.Services.Implementations
                 }
                 var responses = new PagedResponse<TransactionResponse>(transactionResponses, totalCount, filter.Page, pageSize);
                 return Result<PagedResponse<TransactionResponse>>.Success(responses);
+            }
+        }
+
+        public async Task<Result<List<TransactionResponse>>> GetTransactionsAnalyticsAsync(TransactionFilterParameters filter, CancellationToken token)
+        {
+            Expression<Func<Transaction, bool>> expression = t => true;
+
+            //expression = expression.And(t => t.UserId == filter.UsertId);
+            if (filter.StartDate.HasValue)
+                expression = expression.And(t => t.TransactionDate >= filter.StartDate.Value);
+            if (filter.EndDate.HasValue)
+                expression = expression.And(t => t.TransactionDate <= filter.EndDate.Value);
+
+            if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+            {
+                var term = filter.SearchTerm.Trim();
+                expression = expression.And(t =>
+                    t.Title.Contains(term) ||
+                    t.Description.Contains(term) ||
+                    t.Merchant.Contains(term));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.Categories))
+            {
+                var cats = filter.Categories.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                            .Select(long.Parse)
+                                            .ToList();
+                expression = expression.And(t => cats.Contains(t.CategoryId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.Types))
+            {
+                var types = filter.Types.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                        .ToList();
+                expression = expression.And(t => types.Contains(t.TransactionType.ToString()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.Accounts))
+            {
+                var accs = filter.Accounts.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                          .Select(long.Parse)
+                                          .ToList();
+                expression = expression.And(t => accs.Contains(t.AccountId));
+            }
+
+
+            if (filter.MinValue != default)
+                expression = expression.And(t => t.Value >= filter.MinValue);
+            if (filter.MaxValue != default)
+                expression = expression.And(t => t.Value <= filter.MaxValue);
+
+            var query = _transactionRepository.FindByCondition(expression, trackChanges: false);
+
+            var transactions = await query
+                .OrderByDescending(t => t.TransactionDate)
+                .ToListAsync(token);
+
+            if (transactions is null)
+            {
+                return Result<List<TransactionResponse>>.Failure(TransactionErrors.TransactionNotFound);
+            }
+            else
+            {
+                var transactionResponses = new List<TransactionResponse>();
+                foreach (var transaction in transactions)
+                {
+                    transactionResponses.Add(transaction.ToTransactionResponse());
+                }
+                return Result<List<TransactionResponse>>.Success(transactionResponses);
             }
         }
 
