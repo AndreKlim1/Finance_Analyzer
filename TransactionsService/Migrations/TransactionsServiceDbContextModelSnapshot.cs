@@ -82,29 +82,29 @@ namespace TransactionsService.Migrations
                             Id = 1L,
                             AccountId = 1L,
                             CategoryId = 3L,
-                            CreationDate = new DateTime(2025, 2, 7, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreationDate = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc),
                             Currency = 1,
                             Description = "Test transaction 1",
                             Merchant = "Amazon",
                             Title = "First transaction",
-                            TransactionDate = new DateTime(2025, 2, 7, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionDate = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc),
                             TransactionType = 0,
                             UserId = 1L,
-                            Value = 100m
+                            Value = 400m
                         },
                         new
                         {
                             Id = 2L,
                             AccountId = 2L,
                             CategoryId = 4L,
-                            CreationDate = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreationDate = new DateTime(2025, 4, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             Currency = 0,
                             Description = "Test transaction 2",
                             Merchant = "Local Store",
-                            Title = "ABOBA for home",
-                            TransactionDate = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Title = "Something for home",
+                            TransactionDate = new DateTime(2025, 4, 8, 0, 0, 0, 0, DateTimeKind.Utc),
                             TransactionType = 1,
-                            UserId = 2L,
+                            UserId = 1L,
                             Value = -200m
                         },
                         new
@@ -112,14 +112,14 @@ namespace TransactionsService.Migrations
                             Id = 3L,
                             AccountId = 2L,
                             CategoryId = 6L,
-                            CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreationDate = new DateTime(2025, 4, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             Currency = 0,
                             Description = "Test transaction 2",
                             Merchant = "Local Store",
                             Title = "Cheeeeese",
-                            TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionDate = new DateTime(2025, 4, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             TransactionType = 1,
-                            UserId = 2L,
+                            UserId = 1L,
                             Value = -400m
                         },
                         new
@@ -127,15 +127,195 @@ namespace TransactionsService.Migrations
                             Id = 4L,
                             AccountId = 2L,
                             CategoryId = 5L,
-                            CreationDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreationDate = new DateTime(2025, 4, 12, 0, 0, 0, 0, DateTimeKind.Utc),
                             Currency = 1,
                             Description = "Test transaction 2",
                             Merchant = "Local Store",
                             Title = "Coins from fountain",
-                            TransactionDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionDate = new DateTime(2025, 4, 12, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 0,
+                            UserId = 1L,
+                            Value = 100m
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            AccountId = 7L,
+                            CategoryId = 3L,
+                            CreationDate = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "Another USER transaction",
+                            TransactionDate = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc),
                             TransactionType = 0,
                             UserId = 2L,
                             Value = 100m
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            AccountId = 1L,
+                            CategoryId = 3L,
+                            CreationDate = new DateTime(2025, 4, 14, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "Finally Salary",
+                            TransactionDate = new DateTime(2025, 4, 14, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 0,
+                            UserId = 1L,
+                            Value = 1100m
+                        },
+                        new
+                        {
+                            Id = 7L,
+                            AccountId = 4L,
+                            CategoryId = 9L,
+                            CreationDate = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "New Tshirt",
+                            TransactionDate = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 1,
+                            UserId = 1L,
+                            Value = -200m
+                        },
+                        new
+                        {
+                            Id = 8L,
+                            AccountId = 3L,
+                            CategoryId = 10L,
+                            CreationDate = new DateTime(2025, 4, 28, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "Movie tickets",
+                            TransactionDate = new DateTime(2025, 4, 28, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 1,
+                            UserId = 1L,
+                            Value = -400m
+                        },
+                        new
+                        {
+                            Id = 9L,
+                            AccountId = 6L,
+                            CategoryId = 8L,
+                            CreationDate = new DateTime(2025, 4, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 0,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "Parents help",
+                            TransactionDate = new DateTime(2025, 4, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 0,
+                            UserId = 1L,
+                            Value = 600m
+                        },
+                        new
+                        {
+                            Id = 10L,
+                            AccountId = 2L,
+                            CategoryId = 11L,
+                            CreationDate = new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "Food from market",
+                            TransactionDate = new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 1,
+                            UserId = 1L,
+                            Value = -100m
+                        },
+                        new
+                        {
+                            Id = 11L,
+                            AccountId = 1L,
+                            CategoryId = 6L,
+                            CreationDate = new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "Cafe breakfast",
+                            TransactionDate = new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 1,
+                            UserId = 1L,
+                            Value = -200m
+                        },
+                        new
+                        {
+                            Id = 12L,
+                            AccountId = 5L,
+                            CategoryId = 5L,
+                            CreationDate = new DateTime(2025, 4, 4, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "Some money for helping",
+                            TransactionDate = new DateTime(2025, 4, 4, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 0,
+                            UserId = 1L,
+                            Value = 200m
+                        },
+                        new
+                        {
+                            Id = 13L,
+                            AccountId = 1L,
+                            CategoryId = 4L,
+                            CreationDate = new DateTime(2025, 4, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "Some new dishes",
+                            TransactionDate = new DateTime(2025, 4, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 1,
+                            UserId = 1L,
+                            Value = -300m
+                        },
+                        new
+                        {
+                            Id = 14L,
+                            AccountId = 4L,
+                            CategoryId = 3L,
+                            CreationDate = new DateTime(2025, 4, 28, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "Salary again",
+                            TransactionDate = new DateTime(2025, 4, 28, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 0,
+                            UserId = 1L,
+                            Value = 1100m
+                        },
+                        new
+                        {
+                            Id = 15L,
+                            AccountId = 4L,
+                            CategoryId = 12L,
+                            CreationDate = new DateTime(2025, 4, 29, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "Flat rent",
+                            TransactionDate = new DateTime(2025, 4, 29, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 1,
+                            UserId = 1L,
+                            Value = -1000m
+                        },
+                        new
+                        {
+                            Id = 16L,
+                            AccountId = 3L,
+                            CategoryId = 6L,
+                            CreationDate = new DateTime(2025, 4, 29, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Currency = 1,
+                            Description = "Test transaction 1",
+                            Merchant = "Amazon",
+                            Title = "Another day, another cafe",
+                            TransactionDate = new DateTime(2025, 4, 29, 0, 0, 0, 0, DateTimeKind.Utc),
+                            TransactionType = 1,
+                            UserId = 1L,
+                            Value = -300m
                         });
                 });
 #pragma warning restore 612, 618

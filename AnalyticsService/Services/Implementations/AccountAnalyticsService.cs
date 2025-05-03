@@ -117,7 +117,7 @@ namespace AnalyticsService.Services.Implementations
 
         public async Task<Result<AccountCategoryBreakdownResponse>> GetAccountCategoryBreakdownAsync(long userId, long accountId, DateTime startDate, DateTime endDate, string type, CancellationToken token)
         {
-            var filter = new TransactionFilterParameters(1, userId, null, startDate, endDate, null, type.ToString(), null, null, accountId.ToString());
+            var filter = new TransactionFilterParameters(1, userId, null, startDate, endDate, null, type, null, null, accountId.ToString());
 
             var allTransactionsResult = await _transactionsClient.GetTransactionsAsync(filter, token);
             var account = await _accountsClient.GetAccountByIdAsync(accountId, token);

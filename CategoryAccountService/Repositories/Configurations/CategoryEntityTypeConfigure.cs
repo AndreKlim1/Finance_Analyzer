@@ -25,6 +25,9 @@ namespace CaregoryAccountService.Repositories.Configurations
             builder.Property(c => c.Icon)
                 .IsRequired();
 
+            builder.Property(c => c.Color)
+                .IsRequired();
+
             builder.HasData(
                 new Category
                 {
@@ -32,7 +35,8 @@ namespace CaregoryAccountService.Repositories.Configurations
                     UserId = null,
                     CategoryName = "Transfer",
                     CategoryType = CategoryType.TRANSFER,
-                    Icon = "/assets/exchange-arrows.png"
+                    Icon = "/assets/exchange-arrows.png",
+                    Color = "#6572bd"
                 },
                 new Category
                 {
@@ -40,7 +44,8 @@ namespace CaregoryAccountService.Repositories.Configurations
                     UserId = null,
                     CategoryName = "Correction",
                     CategoryType = CategoryType.CORRECTION,
-                    Icon = "/assets/increase.png"
+                    Icon = "/assets/categories/settings.png",
+                    Color = "#6572bd"
                 },
                 new Category
                 {
@@ -48,7 +53,8 @@ namespace CaregoryAccountService.Repositories.Configurations
                     UserId = null,
                     CategoryName = "Salary",
                     CategoryType = CategoryType.INCOME,
-                    Icon = "/assets/categories/bills.png"
+                    Icon = "/assets/categories/bills.png",
+                    Color = "#6572bd"
                 },
                 new Category
                 {
@@ -56,7 +62,8 @@ namespace CaregoryAccountService.Repositories.Configurations
                     UserId = null,
                     CategoryName = "Shopping",
                     CategoryType = CategoryType.EXPENSE,
-                    Icon = "/assets/categories/shopping.png"
+                    Icon = "/assets/categories/shopping.png",
+                    Color = "#6572bd"
                 },
                 new Category
                 {
@@ -64,15 +71,71 @@ namespace CaregoryAccountService.Repositories.Configurations
                     UserId = null,
                     CategoryName = "Random money",
                     CategoryType = CategoryType.INCOME,
-                    Icon = "/assets/categories/wallet.png"
+                    Icon = "/assets/categories/wallet.png",
+                    Color = "#6572bd"
                 },
                 new Category
                 {
                     Id = 6,
                     UserId = null,
-                    CategoryName = "Food",
+                    CategoryName = "Restaurants",
                     CategoryType = CategoryType.EXPENSE,
-                    Icon = "/assets/categories/curry.png"
+                    Icon = "/assets/categories/curry.png",
+                    Color = "#6572bd"
+                },
+                new Category
+                {
+                    Id = 7,
+                    UserId = null,
+                    CategoryName = "Passive gain",
+                    CategoryType = CategoryType.INCOME,
+                    Icon = "/assets/increase.png",
+                    Color = "#6572bd"
+                },
+                new Category
+                {
+                    Id = 8,
+                    UserId = null,
+                    CategoryName = "Other sources",
+                    CategoryType = CategoryType.INCOME,
+                    Icon = "/assets/categories/code.png",
+                    Color = "#6572bd"
+                },
+                new Category
+                {
+                    Id = 9,
+                    UserId = null,
+                    CategoryName = "Clothes",
+                    CategoryType = CategoryType.EXPENSE,
+                    Icon = "/assets/categories/tshirt.png",
+                    Color = "#6572bd"
+                },
+                new Category
+                {
+                    Id = 10,
+                    UserId = null,
+                    CategoryName = "Entertainment",
+                    CategoryType = CategoryType.EXPENSE,
+                    Icon = "/assets/categories/popcorn.png",
+                    Color = "#6572bd"
+                },
+                new Category
+                {
+                    Id = 11,
+                    UserId = null,
+                    CategoryName = "Foodstuff",
+                    CategoryType = CategoryType.EXPENSE,
+                    Icon = "/assets/categories/shopping-cart.png",
+                    Color = "#6572bd"
+                },
+                new Category
+                {
+                    Id = 12,
+                    UserId = null,
+                    CategoryName = "Home expenses",
+                    CategoryType = CategoryType.EXPENSE,
+                    Icon = "/assets/categories/house.png",
+                    Color = "#6572bd"
                 }
             );
         }

@@ -8,7 +8,7 @@ namespace AnalyticsService.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v1.0/analytics/account")]
+    [Route("api/v1.0/analytics/budget")]
     public class BudgetAnalyticsController : ControllerBase
     {
         private readonly IBudgetAnalyticsService _analyticsService;
@@ -29,7 +29,7 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime endDate,
             CancellationToken token)
         {
-            if (userId != null)
+            if (userId == null)
             {
                 return BadRequest(new Error("Analytics.Validation", "Параметр 'userId' не может быть пустыми."));
             }

@@ -15,8 +15,8 @@ namespace BudgetingService.Services.Mappings
             (
                 budget.Id,
                 budget.UserId,
-                budget.CategoryId,
-                budget.AccountId,
+                budget.CategoryIds,
+                budget.AccountIds,
                 budget.BudgetName,
                 budget.Description,
                 budget.PlannedAmount,
@@ -37,8 +37,8 @@ namespace BudgetingService.Services.Mappings
             return new Budget
             {
                 UserId = request.UserId,
-                CategoryId = request.CategoryId,
-                AccountId = request.AccountId,
+                CategoryIds = request.CategoryIds,
+                AccountIds = request.AccountIds,
                 BudgetName = request.BudgetName,
                 Description = request.Description,
                 PlannedAmount = request.PlannedAmount,
@@ -60,8 +60,8 @@ namespace BudgetingService.Services.Mappings
             {
                 Id = request.Id,
                 UserId = request.UserId,
-                CategoryId = request.CategoryId,
-                AccountId = request.AccountId,
+                CategoryIds = request.CategoryIds,
+                AccountIds = request.AccountIds,
                 BudgetName = request.BudgetName,
                 Description = request.Description,
                 PlannedAmount = request.PlannedAmount,

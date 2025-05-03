@@ -15,11 +15,11 @@ namespace BudgetingService.Services.Validators
             RuleFor(b => b.UserId)
                 .GreaterThan(0).WithMessage("UserId must be greater than 0.");
 
-            RuleFor(b => b.CategoryId)
-                .GreaterThan(0).When(b => b.CategoryId.HasValue).WithMessage("CategoryId must be greater than 0 if provided.");
+            RuleForEach(b => b.CategoryIds)
+                .GreaterThan(0).When(b => b.CategoryIds != null).WithMessage("CategoryId must be greater than 0 if provided.");
 
-            RuleFor(b => b.AccountId)
-               .GreaterThan(0).When(b => b.AccountId.HasValue).WithMessage("AccountId must be greater than 0 if provided.");
+            RuleForEach(b => b.AccountIds)
+               .GreaterThan(0).When(b => b.AccountIds != null).WithMessage("AccountId must be greater than 0 if provided.");
 
             RuleFor(b => b.BudgetName)
                 .NotEmpty().WithMessage("Budget name is required.")

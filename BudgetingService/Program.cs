@@ -78,7 +78,7 @@ else
 
 app.ConfigureExceptionHandler();
 
-app.UseCors("CorsPolicy");
+app.UseCors("CorsPolicy"); 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.All

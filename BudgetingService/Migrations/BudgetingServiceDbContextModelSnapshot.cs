@@ -31,8 +31,8 @@ namespace BudgetingService.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("AccountId")
-                        .HasColumnType("bigint");
+                    b.Property<long[]>("AccountIds")
+                        .HasColumnType("bigint[]");
 
                     b.Property<string>("BudgetName")
                         .IsRequired()
@@ -45,8 +45,8 @@ namespace BudgetingService.Migrations
                     b.Property<int>("BudgetType")
                         .HasColumnType("integer");
 
-                    b.Property<long?>("CategoryId")
-                        .HasColumnType("bigint");
+                    b.Property<long[]>("CategoryIds")
+                        .HasColumnType("bigint[]");
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -90,11 +90,11 @@ namespace BudgetingService.Migrations
                         new
                         {
                             Id = 1L,
-                            AccountId = 1L,
+                            AccountIds = new[] { 1L },
                             BudgetName = "Monthly Groceries",
                             BudgetStatus = 0,
                             BudgetType = 1,
-                            CategoryId = 4L,
+                            CategoryIds = new[] { 4L, 6L },
                             Color = "#3f3dbf",
                             CurrValue = 100m,
                             Currency = 1,
@@ -109,11 +109,11 @@ namespace BudgetingService.Migrations
                         new
                         {
                             Id = 2L,
-                            AccountId = 2L,
+                            AccountIds = new[] { 2L, 4L },
                             BudgetName = "Vacation Savings",
                             BudgetStatus = 0,
                             BudgetType = 0,
-                            CategoryId = 5L,
+                            CategoryIds = new[] { 3L, 5L },
                             Color = "#34bbb7",
                             CurrValue = 200m,
                             Currency = 0,

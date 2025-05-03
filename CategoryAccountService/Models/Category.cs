@@ -8,5 +8,6 @@ namespace CaregoryAccountService.Models
         public string CategoryName { get; set; }
         public CategoryType CategoryType { get; set; }
         public string Icon { get; set; }
+        public string Color { get; set; }
     }
 }

@@ -84,18 +84,18 @@ namespace BudgetingService.Messaging.BackgroundServices
                     var containsCurr = false;
                     if (((((budget.BudgetType == BudgetType.SAVINGS && data.PrevTransaction.TransactionType == "INCOME") ||
                            (budget.BudgetType == BudgetType.EXPENSES && data.PrevTransaction.TransactionType == "EXPENSE")) &&
-                            budget.CategoryId is null) || budget.CategoryId == data.PrevTransaction.CategoryId) &&
-                           (budget.AccountId is null || budget.AccountId == data.PrevTransaction.AccountId) && 
-                            data.PrevTransaction.TransactionDate < budget.PeriodEnd && data.PrevTransaction.TransactionDate > budget.PeriodStart)
+                            budget.CategoryIds is null) || budget.CategoryIds.Contains(data.PrevTransaction.CategoryId)) &&
+                           (budget.AccountIds is null || budget.AccountIds.Contains(data.PrevTransaction.AccountId)) && 
+                            data.PrevTransaction.TransactionDate <= budget.PeriodEnd && data.PrevTransaction.TransactionDate >= budget.PeriodStart)
                     {
                         containsPrev = true;
                     }
 
                     if (((((budget.BudgetType == BudgetType.SAVINGS && data.CurrTransaction.TransactionType == "INCOME") ||
                            (budget.BudgetType == BudgetType.EXPENSES && data.CurrTransaction.TransactionType == "EXPENSE")) &&
-                            budget.CategoryId is null) || budget.CategoryId == data.CurrTransaction.CategoryId) &&
-                           (budget.AccountId is null || budget.AccountId == data.CurrTransaction.AccountId) &&
-                            data.CurrTransaction.TransactionDate < budget.PeriodEnd && data.CurrTransaction.TransactionDate > budget.PeriodStart)
+                            budget.CategoryIds is null) || budget.CategoryIds.Contains(data.CurrTransaction.CategoryId)) &&
+                           (budget.AccountIds is null || budget.AccountIds.Contains(data.CurrTransaction.AccountId)) &&
+                            data.CurrTransaction.TransactionDate <= budget.PeriodEnd && data.CurrTransaction.TransactionDate >= budget.PeriodStart)
                     {
                         containsCurr = true;
                     }

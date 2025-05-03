@@ -32,11 +32,13 @@ namespace BudgetingService.Repositories
         }
 
         public DbSet<Budget> Budgets { get; set; }
-   
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("budgets");
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BudgetingServiceDbContext).Assembly);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

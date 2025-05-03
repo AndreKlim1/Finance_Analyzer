@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using BudgetingService.Models;
 using BudgetingService.Models.Enums;
+using System.Reflection.Emit;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 
 namespace BudgetingService.Repositories.Configurations
@@ -14,11 +16,28 @@ namespace BudgetingService.Repositories.Configurations
             builder.ToTable("Budgets");
 
             builder.Property(b => b.UserId)
-                .IsRequired();
+            .IsRequired();
 
-            builder.Property(b => b.CategoryId);
+            builder.Property(b => b.AccountIds)
+            .HasConversion(
+            v => v == null ? null : v.ToArray(),
+            v => v == null ? null : v.ToList(),
+            new ValueComparer<List<long>>(
+                (c1, c2) => c1 == null && c2 == null || (c1 != null && c2 != null && c1.SequenceEqual(c2)),
+                c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                c => c == null ? null : c.ToList()) 
 
-            builder.Property(b => b.AccountId);
+            );
+
+            builder.Property(b => b.CategoryIds)
+            .HasConversion(
+            v => v == null ? null : v.ToArray(),
+            v => v == null ? null : v.ToList(),
+            new ValueComparer<List<long>>(
+                (c1, c2) => c1 == null && c2 == null || (c1 != null && c2 != null && c1.SequenceEqual(c2)),
+                c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                c => c == null ? null : c.ToList())
+            );
 
             builder.Property(b => b.BudgetName)
                 .IsRequired()
@@ -66,8 +85,8 @@ namespace BudgetingService.Repositories.Configurations
                 {
                     Id = 1,
                     UserId = 1,
-                    CategoryId = 4,
-                    AccountId = 1,
+                    CategoryIds = new List<long> { 4, 6 },
+                    AccountIds = new List<long> { 1 },
                     BudgetName = "Monthly Groceries",
                     Description = "Budget for monthly grocery shopping",
                     PlannedAmount = 500,
@@ -85,8 +104,8 @@ namespace BudgetingService.Repositories.Configurations
                 {
                     Id = 2,
                     UserId = 2,
-                    CategoryId = 5,
-                    AccountId = 2,
+                    CategoryIds = new List<long> { 3, 5 },
+                    AccountIds = new List<long> { 2, 4 },
                     BudgetName = "Vacation Savings",
                     Description = "Saving up for a summer vacation",
                     PlannedAmount = 2000,

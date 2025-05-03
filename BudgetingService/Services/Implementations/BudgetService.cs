@@ -106,9 +106,9 @@ namespace BudgetingService.Services.Implementations
         private async Task<decimal> CountCurrValueByTransactionsAsync(Budget budget, CancellationToken token)
         {
             TransactionFilterParameters filter = new TransactionFilterParameters(0, budget.UserId, null, budget.PeriodStart, 
-                                                                                 budget.PeriodEnd, budget.CategoryId.ToString(), 
+                                                                                 budget.PeriodEnd, budget.CategoryIds != null ? string.Join(",", budget.CategoryIds) : null, 
                                                                                  budget.BudgetType.ToString() == "EXPENSES" ? "EXPENSE" : "INCOME",
-                                                                                 null, null, budget.AccountId.ToString());
+                                                                                 null, null, budget.AccountIds != null ? string.Join(",", budget.AccountIds) : null);
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
             var result = 0m;
             foreach(var transaction in transactions)

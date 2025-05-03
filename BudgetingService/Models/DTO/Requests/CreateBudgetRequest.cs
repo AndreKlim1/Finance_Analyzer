@@ -2,8 +2,8 @@
 {
     public record CreateBudgetRequest(
         long UserId,
-        long? CategoryId,
-        long? AccountId,
+        List<long>? CategoryIds,
+        List<long>? AccountIds,
         string BudgetName,
         string Description,
         decimal PlannedAmount,

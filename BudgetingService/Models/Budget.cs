@@ -7,8 +7,8 @@ namespace BudgetingService.Models
     public class Budget : BaseModel<long>
     {
         public long UserId { get; set; }
-        public long? CategoryId { get; set; }
-        public long? AccountId { get; set; }
+        public List<long>? CategoryIds { get; set; }
+        public List<long>? AccountIds { get; set; }
         public string BudgetName { get; set; }
         public string Description { get; set; }
         public decimal PlannedAmount { get; set; }

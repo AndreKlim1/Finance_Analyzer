@@ -19,10 +19,14 @@ builder.Services.ConfigureCors();
 
 builder.Services.AddTransient<IAccountAnalyticsService, AccountAnalyticsService>();
 builder.Services.AddTransient<IAnalyticsDashboardService, AnalyticsDashboardService>();
+builder.Services.AddTransient<IBudgetAnalyticsService, BudgetAnalyticsService>();
+builder.Services.AddTransient<ISpendingPatternsReportService, SpendingPatternsReportService>();
+builder.Services.AddTransient<IIncomeExpenseAnalyticsService, IncomeExpenseAnalyticsService>();
 
 builder.Services.AddHttpClient<IAccountsClient, AccountsClient>();
 builder.Services.AddHttpClient<ITransactionsClient, TransactionsClient>();
 builder.Services.AddHttpClient<ICurrencyConversionClient, CurrencyConversionClient>();
+builder.Services.AddHttpClient<IBudgetsClient, BudgetsClient>();
 
 
 

@@ -89,9 +89,9 @@ namespace BudgetingService.Messaging.BackgroundServices
                 {
                     if (((((budget.BudgetType == BudgetType.SAVINGS && data.TransactionType == "INCOME") ||
                            (budget.BudgetType == BudgetType.EXPENSES && data.TransactionType == "EXPENSE")) &&
-                            budget.CategoryId is null) || budget.CategoryId == data.CategoryId) &&
-                           (budget.AccountId is null || budget.AccountId == data.AccountId) &&
-                            data.TransactionDate < budget.PeriodEnd && data.TransactionDate > budget.PeriodStart)
+                            budget.CategoryIds is null) || budget.CategoryIds.Contains(data.CategoryId)) &&
+                           (budget.AccountIds is null || budget.AccountIds.Contains(data.AccountId)) &&
+                            data.TransactionDate <= budget.PeriodEnd && data.TransactionDate >= budget.PeriodStart)
                     {
                         var updateValue = 0m;
                         if (budget.Currency.ToString() != data.Currency)
@@ -127,9 +127,9 @@ namespace BudgetingService.Messaging.BackgroundServices
                 {
                     if (((((budget.BudgetType == BudgetType.SAVINGS && data.TransactionType == "INCOME") ||
                            (budget.BudgetType == BudgetType.EXPENSES && data.TransactionType == "EXPENSE")) &&
-                            budget.CategoryId is null) || budget.CategoryId == data.CategoryId) &&
-                           (budget.AccountId is null || budget.AccountId == data.AccountId) &&
-                            data.TransactionDate < budget.PeriodEnd && data.TransactionDate > budget.PeriodStart)
+                            budget.CategoryIds is null) || budget.CategoryIds.Contains(data.CategoryId)) &&
+                           (budget.AccountIds is null || budget.AccountIds.Contains(data.AccountId)) &&
+                            data.TransactionDate <= budget.PeriodEnd && data.TransactionDate >= budget.PeriodStart)
                     {
                         var updateValue = 0m;
                         if (budget.Currency.ToString() != data.Currency)

@@ -23,7 +23,8 @@ namespace AnalyticsService.Services.Implementations
         {
             //!!!!!!!!!!!!!!!!!!!
             var budget = await _budgetsClient.GetBudgetByIdAsync(budgetId, token);
-            var filter = new TransactionFilterParameters(1, userId, null, startDate, endDate, null, null, null, null, null);
+            var filter = new TransactionFilterParameters(1, budget.UserId, null, budget.PeriodStart, budget.PeriodEnd, budget.CategoryIds == null ? null : string.Join(",", budget.CategoryIds),
+                                                         budget.BudgetType == "EXPENSES" ? "EXPENSE" : "INCOME", null, null, budget.AccountIds == null ? null : string.Join(",", budget.AccountIds));
 
             var allTransactionsResult = await _transactionsClient.GetTransactionsAsync(filter, token);
             
@@ -79,9 +80,9 @@ namespace AnalyticsService.Services.Implementations
 
         public async Task<Result<BudgetTrendResponse>> GetBudgetTrendAsync(long userId, long budgetId, DateTime startDate, DateTime endDate, CancellationToken token)
         {
-            //!!!!!!!!!
             var budget = await _budgetsClient.GetBudgetByIdAsync(budgetId, token);
-            var filter = new TransactionFilterParameters(1, userId, null, startDate, endDate, null, null, null, null, null);
+            var filter = new TransactionFilterParameters(1, budget.UserId, null, budget.PeriodStart, budget.PeriodEnd, budget.CategoryIds == null ? null : string.Join(",", budget.CategoryIds), 
+                                                         budget.BudgetType=="EXPENSES" ? "EXPENSE" : "INCOME", null, null, budget.AccountIds == null ? null : string.Join(",", budget.AccountIds));
 
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
 
@@ -96,13 +97,13 @@ namespace AnalyticsService.Services.Implementations
                 var transactionValue = 0m;
                 if (tx.Currency != budget.Currency)
                 {
-                    transactionValue = await _currencyConversionClient.ConvertTransactionValueAsync(budget.Currency, tx.Currency, tx.Value);
+                    transactionValue = Math.Abs(await _currencyConversionClient.ConvertTransactionValueAsync(budget.Currency, tx.Currency, tx.Value));
                 }
                 else
                 {
-                    transactionValue = tx.Value;
+                    transactionValue = Math.Abs(tx.Value);
                 }
-                startBalance -= transactionValue;
+                
                 convertedValues.Add(transactionValue);
             }
             decimal currentBalance = startBalance;
@@ -118,7 +119,7 @@ namespace AnalyticsService.Services.Implementations
             var values = new List<decimal>();
             var lastKnownBalance = startBalance;
 
-            for (var date = startDate.Date; date <= endDate.Date; date = date.AddDays(1))
+            for (var date = budget.PeriodStart.Date; date <= budget.PeriodEnd.Date; date = date.AddDays(1))
             {
                 labels.Add(date.ToString("yyyy-MM-dd"));
                 values.Add(dailyBalances.TryGetValue(date, out var balanceForDay) ? balanceForDay : 0);

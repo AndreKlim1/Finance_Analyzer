@@ -4,8 +4,8 @@ namespace AnalyticsService.Messaging.DTO
     public record BudgetResponse(
         long Id,
         long UserId,
-        long? CategoryId,
-        long? AccountId,
+        List<long>? CategoryIds,
+        List<long>? AccountIds,
         string BudgetName,
         string Description,
         decimal PlannedAmount,

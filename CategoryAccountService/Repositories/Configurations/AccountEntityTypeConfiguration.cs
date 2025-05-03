@@ -55,7 +55,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                 new Account
                 {
                     Id = 2,
-                    UserId = 2,
+                    UserId = 1,
                     AccountName = "Cash",
                     AccountType = AccountType.CASH,
                     Currency = Currency.EUR,
@@ -75,7 +75,57 @@ namespace CaregoryAccountService.Repositories.Configurations
                     TransactionsCount = 0,
                     Description = "Long-term savings account",
                     Color = "#6572bd"
+                },
+                new Account
+                {
+                    Id = 4,
+                    UserId = 1,
+                    AccountName = "Another bank",
+                    AccountType = AccountType.CREDIT_CARD,
+                    Currency = Currency.EUR,
+                    Balance = 3000,
+                    TransactionsCount = 0,
+                    Description = "Long-term savings account",
+                    Color = "#7d4aad"
+                },
+                new Account
+                {
+                    Id = 5,
+                    UserId = 1,
+                    AccountName = "For black day",
+                    AccountType = AccountType.CASH,
+                    Currency = Currency.USD,
+                    Balance = 400,
+                    TransactionsCount = 0,
+                    Description = "Long-term savings account",
+                    Color = "#ccc670"
+                },
+                new Account
+                {
+                    Id = 6,
+                    UserId = 1,
+                    AccountName = "Free money",
+                    AccountType = AccountType.CREDIT_CARD,
+                    Currency = Currency.EUR,
+                    Balance = 500,
+                    TransactionsCount = 0,
+                    Description = "Long-term savings account",
+                    Color = "#80bed6"
+                },
+                new Account
+                {
+                    Id = 7,
+                    UserId = 2,
+                    AccountName = "Other USER bank",
+                    AccountType = AccountType.CASH,
+                    Currency = Currency.EUR,
+                    Balance = 3000,
+                    TransactionsCount = 0,
+                    Description = "Long-term savings account",
+                    Color = "#7d4aad"
                 }
+
+
             );
         }
     }

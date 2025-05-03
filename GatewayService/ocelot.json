@@ -49,6 +49,42 @@
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
+      "DownstreamPathTemplate": "/api/v1.0/analytics/budget/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "analyticsservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/analytics/budget/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1.0/analytics/income-expense/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "analyticsservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/analytics/income-expense/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1.0/analytics/spending-patterns/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "analyticsservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/analytics/spending-patterns/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/v1.0/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

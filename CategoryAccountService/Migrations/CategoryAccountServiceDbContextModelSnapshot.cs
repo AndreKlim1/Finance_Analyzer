@@ -87,7 +87,7 @@ namespace CategoryAccountService.Migrations
                             Currency = 0,
                             Description = "Long-term savings account",
                             TransactionsCount = 0,
-                            UserId = 2L
+                            UserId = 1L
                         },
                         new
                         {
@@ -100,6 +100,54 @@ namespace CategoryAccountService.Migrations
                             Description = "Long-term savings account",
                             TransactionsCount = 0,
                             UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            AccountName = "Another bank",
+                            AccountType = 0,
+                            Balance = 3000m,
+                            Color = "#7d4aad",
+                            Currency = 0,
+                            Description = "Long-term savings account",
+                            TransactionsCount = 0,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            AccountName = "For black day",
+                            AccountType = 1,
+                            Balance = 400m,
+                            Color = "#ccc670",
+                            Currency = 1,
+                            Description = "Long-term savings account",
+                            TransactionsCount = 0,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            AccountName = "Free money",
+                            AccountType = 0,
+                            Balance = 500m,
+                            Color = "#80bed6",
+                            Currency = 0,
+                            Description = "Long-term savings account",
+                            TransactionsCount = 0,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 7L,
+                            AccountName = "Other USER bank",
+                            AccountType = 1,
+                            Balance = 3000m,
+                            Color = "#7d4aad",
+                            Currency = 0,
+                            Description = "Long-term savings account",
+                            TransactionsCount = 0,
+                            UserId = 2L
                         });
                 });
 
@@ -119,6 +167,10 @@ namespace CategoryAccountService.Migrations
                     b.Property<int>("CategoryType")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Icon")
                         .IsRequired()
                         .HasColumnType("text");
@@ -136,6 +188,7 @@ namespace CategoryAccountService.Migrations
                             Id = 1L,
                             CategoryName = "Transfer",
                             CategoryType = 2,
+                            Color = "#6572bd",
                             Icon = "/assets/exchange-arrows.png"
                         },
                         new
@@ -143,13 +196,15 @@ namespace CategoryAccountService.Migrations
                             Id = 2L,
                             CategoryName = "Correction",
                             CategoryType = 3,
-                            Icon = "/assets/increase.png"
+                            Color = "#6572bd",
+                            Icon = "/assets/categories/settings.png"
                         },
                         new
                         {
                             Id = 3L,
                             CategoryName = "Salary",
                             CategoryType = 0,
+                            Color = "#6572bd",
                             Icon = "/assets/categories/bills.png"
                         },
                         new
@@ -157,6 +212,7 @@ namespace CategoryAccountService.Migrations
                             Id = 4L,
                             CategoryName = "Shopping",
                             CategoryType = 1,
+                            Color = "#6572bd",
                             Icon = "/assets/categories/shopping.png"
                         },
                         new
@@ -164,14 +220,64 @@ namespace CategoryAccountService.Migrations
                             Id = 5L,
                             CategoryName = "Random money",
                             CategoryType = 0,
+                            Color = "#6572bd",
                             Icon = "/assets/categories/wallet.png"
                         },
                         new
                         {
                             Id = 6L,
-                            CategoryName = "Food",
+                            CategoryName = "Restaurants",
                             CategoryType = 1,
+                            Color = "#6572bd",
                             Icon = "/assets/categories/curry.png"
+                        },
+                        new
+                        {
+                            Id = 7L,
+                            CategoryName = "Passive gain",
+                            CategoryType = 0,
+                            Color = "#6572bd",
+                            Icon = "/assets/increase.png"
+                        },
+                        new
+                        {
+                            Id = 8L,
+                            CategoryName = "Other sources",
+                            CategoryType = 0,
+                            Color = "#6572bd",
+                            Icon = "/assets/categories/code.png"
+                        },
+                        new
+                        {
+                            Id = 9L,
+                            CategoryName = "Clothes",
+                            CategoryType = 1,
+                            Color = "#6572bd",
+                            Icon = "/assets/categories/tshirt.png"
+                        },
+                        new
+                        {
+                            Id = 10L,
+                            CategoryName = "Entertainment",
+                            CategoryType = 1,
+                            Color = "#6572bd",
+                            Icon = "/assets/categories/popcorn.png"
+                        },
+                        new
+                        {
+                            Id = 11L,
+                            CategoryName = "Foodstuff",
+                            CategoryType = 1,
+                            Color = "#6572bd",
+                            Icon = "/assets/categories/shopping-cart.png"
+                        },
+                        new
+                        {
+                            Id = 12L,
+                            CategoryName = "Home expenses",
+                            CategoryType = 1,
+                            Color = "#6572bd",
+                            Icon = "/assets/categories/house.png"
                         });
                 });
 #pragma warning restore 612, 618
