@@ -23,8 +23,8 @@ namespace UsersService.Controllers
             var loginResult = await authService.LoginAsync(userRequest.Email, userRequest.PasswordHash, ct);
             if (loginResult == null) 
                 return BadRequest();
-            SetJwtCookie(loginResult);
-            return Ok(loginResult);
+            SetJwtCookie(loginResult.Token);
+            return Ok(loginResult.UserId);
         }
 
         [HttpPost("register")]
@@ -35,8 +35,8 @@ namespace UsersService.Controllers
             var userCreate = new CreateUserRequest(userRequest.Role, userRequest.Email, userRequest.RegistrationDate, 1, userRequest.PasswordHash);
             var registerResult = await authService.RegisterAsync(userCreate, profileCreate, ct);
             if (registerResult == null) return BadRequest();
-            SetJwtCookie(registerResult);
-            return Ok(registerResult);
+            SetJwtCookie(registerResult.Token);
+            return Ok(registerResult.UserId);
         }
 
         [HttpGet("verify")]
@@ -69,7 +69,7 @@ namespace UsersService.Controllers
         }
 
 
-        [Authorize]
+        
         [HttpPost("logout")]
         [ProducesResponseType(200)]
         public IActionResult Logout()
@@ -78,7 +78,8 @@ namespace UsersService.Controllers
             {
                 HttpOnly = true,
                 SameSite = SameSiteMode.None,
-                Secure = false
+                Secure = false,
+                Domain = "localhost"
             });
             return Ok(new { message = "Log out succesfully" });
         }
@@ -90,7 +91,8 @@ namespace UsersService.Controllers
                 HttpOnly = true,
                 Expires = DateTime.UtcNow.AddHours(1),
                 SameSite = SameSiteMode.None,
-                Secure = false 
+                Secure = false,
+                Domain = "localhost"
             };
 
             Response.Cookies.Append("token", token, cookieOptions);

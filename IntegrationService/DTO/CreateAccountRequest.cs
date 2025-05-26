@@ -6,8 +6,9 @@ namespace IntegrationService.DTO
         string AccountName,
         string AccountType,
         string Currency,
-        int Balance,
+        decimal Balance,
         int TransactionsCount,
         string Description,
         string Color);
+
 }

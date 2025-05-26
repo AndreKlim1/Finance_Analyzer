@@ -54,7 +54,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                     CategoryName = "Salary",
                     CategoryType = CategoryType.INCOME,
                     Icon = "/assets/categories/bills.png",
-                    Color = "#6572bd"
+                    Color = "#187547"
                 },
                 new Category
                 {
@@ -63,7 +63,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                     CategoryName = "Shopping",
                     CategoryType = CategoryType.EXPENSE,
                     Icon = "/assets/categories/shopping.png",
-                    Color = "#6572bd"
+                    Color = "#ccc670"
                 },
                 new Category
                 {
@@ -72,7 +72,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                     CategoryName = "Random money",
                     CategoryType = CategoryType.INCOME,
                     Icon = "/assets/categories/wallet.png",
-                    Color = "#6572bd"
+                    Color = "#9ab950"
                 },
                 new Category
                 {
@@ -81,7 +81,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                     CategoryName = "Restaurants",
                     CategoryType = CategoryType.EXPENSE,
                     Icon = "/assets/categories/curry.png",
-                    Color = "#6572bd"
+                    Color = "#be6464"
                 },
                 new Category
                 {
@@ -90,7 +90,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                     CategoryName = "Passive gain",
                     CategoryType = CategoryType.INCOME,
                     Icon = "/assets/increase.png",
-                    Color = "#6572bd"
+                    Color = "#da7c8b"
                 },
                 new Category
                 {
@@ -99,7 +99,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                     CategoryName = "Other sources",
                     CategoryType = CategoryType.INCOME,
                     Icon = "/assets/categories/code.png",
-                    Color = "#6572bd"
+                    Color = "#6d6d7a"
                 },
                 new Category
                 {
@@ -108,7 +108,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                     CategoryName = "Clothes",
                     CategoryType = CategoryType.EXPENSE,
                     Icon = "/assets/categories/tshirt.png",
-                    Color = "#6572bd"
+                    Color = "#7d4aad"
                 },
                 new Category
                 {
@@ -117,7 +117,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                     CategoryName = "Entertainment",
                     CategoryType = CategoryType.EXPENSE,
                     Icon = "/assets/categories/popcorn.png",
-                    Color = "#6572bd"
+                    Color = "#da7c8b"
                 },
                 new Category
                 {
@@ -126,7 +126,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                     CategoryName = "Foodstuff",
                     CategoryType = CategoryType.EXPENSE,
                     Icon = "/assets/categories/shopping-cart.png",
-                    Color = "#6572bd"
+                    Color = "#9ab950"
                 },
                 new Category
                 {
@@ -135,7 +135,7 @@ namespace CaregoryAccountService.Repositories.Configurations
                     CategoryName = "Home expenses",
                     CategoryType = CategoryType.EXPENSE,
                     Icon = "/assets/categories/house.png",
-                    Color = "#6572bd"
+                    Color = "#d6a458"
                 }
             );
         }

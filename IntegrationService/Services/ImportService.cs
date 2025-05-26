@@ -44,6 +44,7 @@
                 { "Value", "TransactionValue" },
                 { "Transaction Value", "TransactionValue" },
                 { "TransactionValue", "TransactionValue" },
+                { "Amount", "TransactionValue"},
 
                 { "Currency", "Currency" },
                 { "Description", "Description" },
@@ -90,7 +91,7 @@
                         var value = columns[i].Trim();
                         switch (indexMapping[i])
                         {
-                            case "TransactionName":
+                            case "Title":
                                 csvTransaction.Title = value;
                                 break;
                             case "TransactionDate":
@@ -126,7 +127,6 @@
 
                     if (string.IsNullOrWhiteSpace(csvTransaction.Title) ||
                         csvTransaction.Value == 0 ||
-                        string.IsNullOrWhiteSpace(csvTransaction.Currency) ||
                         string.IsNullOrWhiteSpace(csvTransaction.AccountName) ||
                         string.IsNullOrWhiteSpace(csvTransaction.CategoryName))
                     {
@@ -173,13 +173,13 @@
             {
                 try
                 {
-                    var categoryDto = new CreateCategoryRequest(userId, categoryName, "EXPENSE", "/assets/categories/settings.png");
+                    var categoryDto = new CreateCategoryRequest(userId, categoryName, "EXPENSE", "/assets/categories/settings.png", "#be6464");
                     var newCategory = await _categoryAccountClient.CreateCategoryAsync(categoryDto, cancellationToken);
                     existingCategories.Add(newCategory);
                 }
                 catch (Exception ex)
                 {
-                    result.ErrorMessages.Add($"Ошибка создания категории '{categoryName}': {ex.Message}");
+                    result.ErrorMessages.Add($"Error while creating category '{categoryName}': {ex.Message}");
                 }
             }
 
@@ -187,13 +187,13 @@
             {
                 try
                 {
-                    var categoryDto = new CreateCategoryRequest(userId, categoryName, "INCOME", "/assets/categories/settings.png");
+                    var categoryDto = new CreateCategoryRequest(userId, categoryName, "INCOME", "/assets/categories/settings.png", "#187547");
                     var newCategory = await _categoryAccountClient.CreateCategoryAsync(categoryDto, cancellationToken);
                     existingCategories.Add(newCategory);
                 }
                 catch (Exception ex)
                 {
-                    result.ErrorMessages.Add($"Ошибка создания категории '{categoryName}': {ex.Message}");
+                    result.ErrorMessages.Add($"Error while creating category '{categoryName}': {ex.Message}");
                 }
             }
 
@@ -207,7 +207,7 @@
                 }
                 catch (Exception ex)
                 {
-                    result.ErrorMessages.Add($"Ошибка создания счета '{accountName}': {ex.Message}");
+                    result.ErrorMessages.Add($"Error while creating account '{accountName}': {ex.Message}");
                 }
             }
 
@@ -223,15 +223,16 @@
                     if (category == null || account == null)
                     {
                         result.FailedCount++;
-                        result.ErrorMessages.Add($"Отсутствует категория или счет для транзакции '{csvTran.Title}'");
+                        result.ErrorMessages.Add($"category or account are missed '{csvTran.Title}'");
                         continue;
                     }
 
                    
                     var tranDate = csvTran.TransactionDate ?? DateTime.UtcNow;
                     var tranType = csvTran.TransactionType ?? (csvTran.Value>0 ? "INCOME" : "EXPENSE");
+                    var tranCurrency = csvTran.Currency ?? "USD";
 
-                    var transactionCreateDto = new CreateTransactionRequest(csvTran.Value, csvTran.Title, csvTran.Currency,
+                    var transactionCreateDto = new CreateTransactionRequest(csvTran.Value, csvTran.Title, tranCurrency,
                                                                             category.Id, account.Id, userId, csvTran.Description ?? "", "",
                                                                             tranDate, DateTime.UtcNow, tranType, csvTran.Merchant ?? ""); 
                                                                            
@@ -242,13 +243,13 @@
                     else
                     {
                         result.FailedCount++;
-                        result.ErrorMessages.Add($"Не удалось создать транзакцию '{csvTran.Title}'");
+                        result.ErrorMessages.Add($"Failed to create transaction '{csvTran.Title}'");
                     }
                 }
                 catch (Exception ex)
                 {
                     result.FailedCount++;
-                    result.ErrorMessages.Add($"Ошибка создания транзакции '{csvTran.Title}': {ex.Message}");
+                    result.ErrorMessages.Add($"Failed to create transaction '{csvTran.Title}': {ex.Message}");
                 }
             }
 

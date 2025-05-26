@@ -28,7 +28,7 @@ namespace CaregoryAccountService.Services.Validators
                 .MaximumLength(3).WithMessage("Currency code must be at most 3 characters long.");
 
             RuleFor(a => a.Balance)
-                .NotEmpty().WithMessage("Balance must be not empty.");
+                .NotNull().WithMessage("Balance must be not empty.");
 
             RuleFor(a => a.TransactionsCount)
                 .GreaterThanOrEqualTo(0).WithMessage("Count must be not less then zero");

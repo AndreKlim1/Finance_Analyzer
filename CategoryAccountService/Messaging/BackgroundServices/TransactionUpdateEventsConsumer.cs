@@ -82,10 +82,10 @@ namespace CategoryAccountService.Messaging.BackgroundServices
                 }
 
                 updateValue = await conversionClient.ConvertTransactionValueAsync(prevAccountCurrency.Value, data.PrevTransaction.Currency, data.PrevTransaction.Value);
-                await accountService.UpdateBalanceAsync(data.PrevTransaction.AccountId, updateValue, -1, token);
+                await accountService.UpdateBalanceAsync(data.PrevTransaction.AccountId, -updateValue, -1, token);
 
                 updateValue = await conversionClient.ConvertTransactionValueAsync(currAccountCurrency.Value, data.CurrTransaction.Currency, data.CurrTransaction.Value);
-                await accountService.UpdateBalanceAsync(data.CurrTransaction.AccountId, updateValue, 1, token);
+                await accountService.UpdateBalanceAsync(data.CurrTransaction.AccountId, -updateValue, 1, token);
 
             }
             else
@@ -93,7 +93,7 @@ namespace CategoryAccountService.Messaging.BackgroundServices
                 var prevConvertedValue = await conversionClient.ConvertTransactionValueAsync(currAccountCurrency.Value, data.PrevTransaction.Currency, data.PrevTransaction.Value);
                 var currConvertedValue = await conversionClient.ConvertTransactionValueAsync(currAccountCurrency.Value, data.CurrTransaction.Currency, data.CurrTransaction.Value);
                 updateValue = currConvertedValue - prevConvertedValue;
-                await accountService.UpdateBalanceAsync(data.CurrTransaction.AccountId, updateValue, 0, token);
+                await accountService.UpdateBalanceAsync(data.CurrTransaction.AccountId, -updateValue, 0, token);
             }
         }
     }

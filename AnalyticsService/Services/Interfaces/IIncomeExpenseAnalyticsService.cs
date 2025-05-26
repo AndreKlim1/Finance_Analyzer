@@ -13,7 +13,9 @@ namespace AnalyticsService.Services.Interfaces
             string? groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token);
+            CancellationToken token,
+            long userId,
+            string currency = "USD");
 
         Task<Result<ComparisonResponse<IncomeExpenseTrendResponse>>> GetTrendAsync(
             DateTime primaryStartDate,
@@ -23,7 +25,9 @@ namespace AnalyticsService.Services.Interfaces
             string groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token);
+            CancellationToken token,
+            long userId,
+            string currency = "USD");
 
         Task<Result<ComparisonResponse<IncomeExpenseBreakdownResponse>>> GetBreakdownAsync(
             DateTime primaryStartDate,
@@ -33,7 +37,9 @@ namespace AnalyticsService.Services.Interfaces
             string? groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token);
+            CancellationToken token,
+            long userId,
+            string currency = "USD");
 
         Task<Result<ComparisonResponse<IEnumerable<TimeTableRowResponse>>>> GetTimeTableAsync(
             DateTime primaryStartDate,
@@ -43,7 +49,9 @@ namespace AnalyticsService.Services.Interfaces
             string groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token);
+            CancellationToken token,
+            long userId,
+            string currency = "USD");
 
         Task<Result<ComparisonResponse<IEnumerable<CategoryAmountDto>>>> GetSourceTableAsync(
             DateTime primaryStartDate,
@@ -53,7 +61,9 @@ namespace AnalyticsService.Services.Interfaces
             string? groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token);
+            CancellationToken token,
+            long userId,
+            string currency = "USD");
 
         Task<Result<ComparisonResponse<IEnumerable<CategoryAmountDto>>>> GetCategoryTableAsync(
             DateTime primaryStartDate,
@@ -63,6 +73,8 @@ namespace AnalyticsService.Services.Interfaces
             string? groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token);
+            CancellationToken token,
+            long userId,
+            string currency = "USD");
     }
 }

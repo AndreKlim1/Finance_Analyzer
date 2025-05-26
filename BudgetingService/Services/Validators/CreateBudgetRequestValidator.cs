@@ -51,7 +51,7 @@ namespace BudgetingService.Services.Validators
                 .InclusiveBetween(0, 100).WithMessage("Warning threshold must be between 0 and 100.");
 
             RuleFor(b => b.WarningShowed)
-                .NotEmpty();
+                .NotNull().WithMessage("Warning showed must not be null");
 
             RuleFor(b => b.Color)
                 .NotEmpty().WithMessage("Color is required.")

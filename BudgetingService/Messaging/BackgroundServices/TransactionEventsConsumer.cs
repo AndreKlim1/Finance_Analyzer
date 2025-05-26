@@ -16,8 +16,9 @@ namespace BudgetingService.Messaging.BackgroundServices
         private readonly IConsumer<string, string> _consumer;
         private readonly ILogger<TransactionEventConsumerService> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IKafkaProducer _kafkaProducer;
 
-        public TransactionEventConsumerService(IOptions<KafkaSettings> options, ILogger<TransactionEventConsumerService> logger, IServiceProvider serviceProvider)
+        public TransactionEventConsumerService(IOptions<KafkaSettings> options, ILogger<TransactionEventConsumerService> logger, IServiceProvider serviceProvider, IKafkaProducer kafkaProducer)
         {
             _serviceProvider = serviceProvider;
             var kafkaSettings = options.Value;
@@ -31,6 +32,7 @@ namespace BudgetingService.Messaging.BackgroundServices
             _consumer = new ConsumerBuilder<string, string>(config).Build();
             _logger = logger;
             _consumer.Subscribe(new List<string> { "transaction-events" });
+            _kafkaProducer = kafkaProducer;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -50,7 +52,7 @@ namespace BudgetingService.Messaging.BackgroundServices
                             var transactionEvent = JsonSerializer.Deserialize<TransactionEvent>(consumeResult.Message.Value);
                             if (transactionEvent != null)
                             {
-                                _logger.LogInformation($"Получено событие типа: {transactionEvent.EventType} для транзакции {transactionEvent.Data.TransactionId}");
+                                _logger.LogInformation($"Event of type: {transactionEvent.EventType} received for transaction {transactionEvent.Data.TransactionId}");
 
                                 switch (transactionEvent.EventType)
                                 {
@@ -61,7 +63,7 @@ namespace BudgetingService.Messaging.BackgroundServices
                                         await HandleTransactionDeletedAsync(transactionEvent.Data, budgetService, conversionService, stoppingToken);
                                         break;
                                     default:
-                                        _logger.LogWarning($"Неизвестный тип события: {transactionEvent.EventType}");
+                                        _logger.LogWarning($"Unknown type of transaction: {transactionEvent.EventType}");
                                         break;
                                 }
                             }
@@ -69,11 +71,11 @@ namespace BudgetingService.Messaging.BackgroundServices
                     }
                     catch (ConsumeException ex)
                     {
-                        _logger.LogError($"Ошибка потребления: {ex.Error.Reason}");
+                        _logger.LogError($"Consuming Error: {ex.Error.Reason}");
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Ошибка обработки сообщения");
+                        _logger.LogError(ex, "Message proccessing error");
                     }
                 }
             }, stoppingToken);
@@ -81,7 +83,7 @@ namespace BudgetingService.Messaging.BackgroundServices
 
         private async Task HandleTransactionCreatedAsync(TransactionData data, IKafkaBudgetService budgetService, ICurrencyConversionClient conversionClient, CancellationToken token)
         {
-            _logger.LogInformation($"Обработка создания транзакции {data.TransactionId} для бюджетов");
+            _logger.LogInformation($"Proccessing of creating transaction {data.TransactionId} for budgets");
             var budgets = await budgetService.GetBudgetsByUserIdAsync(data.UserId, token);
             if (budgets.IsSuccess)
             {
@@ -89,8 +91,8 @@ namespace BudgetingService.Messaging.BackgroundServices
                 {
                     if (((((budget.BudgetType == BudgetType.SAVINGS && data.TransactionType == "INCOME") ||
                            (budget.BudgetType == BudgetType.EXPENSES && data.TransactionType == "EXPENSE")) &&
-                            budget.CategoryIds is null) || budget.CategoryIds.Contains(data.CategoryId)) &&
-                           (budget.AccountIds is null || budget.AccountIds.Contains(data.AccountId)) &&
+                            budget.CategoryIds.Count == 0) || budget.CategoryIds.Contains(data.CategoryId)) &&
+                           (budget.AccountIds.Count == 0 || budget.AccountIds.Contains(data.AccountId)) &&
                             data.TransactionDate <= budget.PeriodEnd && data.TransactionDate >= budget.PeriodStart)
                     {
                         var updateValue = 0m;
@@ -108,7 +110,7 @@ namespace BudgetingService.Messaging.BackgroundServices
                         if (percent > budget.WarningThreshold && !budget.WarningShowed)
                         {
                             budget.WarningShowed = true;
-                            //отправка запроса в NotificationService для вывода уведомления пользователю
+                            await _kafkaProducer.ProduceAsync("notifications-events", budget.UserId.ToString(), new NotificationEvent(budget.UserId.ToString(), $"Бюджет {budget.BudgetName} заполнен больше чем на 80% процентов"));
                         }
                         await budgetService.UpdateBudgetAsync(budget, token);
                     }
@@ -119,7 +121,7 @@ namespace BudgetingService.Messaging.BackgroundServices
 
         private async Task HandleTransactionDeletedAsync(TransactionData data, IKafkaBudgetService budgetService, ICurrencyConversionClient conversionClient, CancellationToken token)
         {
-            _logger.LogInformation($"Обработка удаления транзакции {data.TransactionId}");
+            _logger.LogInformation($"Proccessing of deleting transaction {data.TransactionId}");
             var budgets = await budgetService.GetBudgetsByUserIdAsync(data.UserId, token);
             if (budgets.IsSuccess)
             {
@@ -127,8 +129,8 @@ namespace BudgetingService.Messaging.BackgroundServices
                 {
                     if (((((budget.BudgetType == BudgetType.SAVINGS && data.TransactionType == "INCOME") ||
                            (budget.BudgetType == BudgetType.EXPENSES && data.TransactionType == "EXPENSE")) &&
-                            budget.CategoryIds is null) || budget.CategoryIds.Contains(data.CategoryId)) &&
-                           (budget.AccountIds is null || budget.AccountIds.Contains(data.AccountId)) &&
+                            budget.CategoryIds.Count == 0) || budget.CategoryIds.Contains(data.CategoryId)) &&
+                           (budget.AccountIds.Count == 0 || budget.AccountIds.Contains(data.AccountId)) &&
                             data.TransactionDate <= budget.PeriodEnd && data.TransactionDate >= budget.PeriodStart)
                     {
                         var updateValue = 0m;
@@ -146,7 +148,6 @@ namespace BudgetingService.Messaging.BackgroundServices
                         if (budget.WarningShowed && percent < budget.WarningThreshold)
                         {
                             budget.WarningShowed = false;
-                            //отправка запроса в NotificationService для вывода уведомления пользователю
                         }
                         await budgetService.UpdateBudgetAsync(budget, token);
                     }

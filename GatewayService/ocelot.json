@@ -85,6 +85,58 @@
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
+      "DownstreamPathTemplate": "/notifications",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notificationsservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/notifications",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UseWebSockets": true
+    },
+    {
+      "DownstreamPathTemplate": "/notifications/negotiate",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notificationsservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/notifications/negotiate",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UseWebSockets": false
+    },
+    {
+      "DownstreamPathTemplate": "/accountsupdate",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "categoryaccountservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/accountsupdate",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UseWebSockets": true
+    },
+    {
+      "DownstreamPathTemplate": "/accountsupdate/negotiate",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "categoryaccountservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/accountsupdate/negotiate",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UseWebSockets": false
+    },
+    {
       "DownstreamPathTemplate": "/api/v1.0/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

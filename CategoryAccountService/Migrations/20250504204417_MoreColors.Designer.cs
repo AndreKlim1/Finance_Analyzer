@@ -2,6 +2,7 @@
 using CaregoryAccountService.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CategoryAccountService.Migrations
 {
     [DbContext(typeof(CategoryAccountServiceDbContext))]
-    partial class CategoryAccountServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250504204417_MoreColors")]
+    partial class MoreColors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,6 +139,18 @@ namespace CategoryAccountService.Migrations
                             Description = "Long-term savings account",
                             TransactionsCount = 0,
                             UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 7L,
+                            AccountName = "Other USER bank",
+                            AccountType = 1,
+                            Balance = 3000m,
+                            Color = "#7d4aad",
+                            Currency = 0,
+                            Description = "Long-term savings account",
+                            TransactionsCount = 0,
+                            UserId = 2L
                         });
                 });
 

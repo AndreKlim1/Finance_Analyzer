@@ -61,7 +61,7 @@ namespace AnalyticsService.Controllers
             [FromQuery] string granularity,
             CancellationToken token)
         {
-            if (userId != null || string.IsNullOrWhiteSpace(granularity))
+            if (userId == null || userId<=0 || string.IsNullOrWhiteSpace(granularity))
             {
                 return BadRequest(new Error("Analytics.Validation", "Параметры 'userId' и 'granularity' не могут быть пустыми."));
             }
@@ -95,7 +95,7 @@ namespace AnalyticsService.Controllers
             [FromQuery] long userId,
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate,
-            [FromQuery] string type, // Возможно, лучше использовать enum здесь
+            [FromQuery] string type, 
             CancellationToken token)
         {
             if (accountId <= 0)
@@ -129,7 +129,7 @@ namespace AnalyticsService.Controllers
         [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<SparklineResponse>> GetAccountSparklineAsync(
             long accountId,
-            [FromBody] long userId,
+            [FromQuery] long userId,
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate,
             CancellationToken token)
@@ -144,7 +144,7 @@ namespace AnalyticsService.Controllers
             }
 
 
-            var result = await _analyticsService.GetAccountSparklineAsync(accountId, userId, startDate, endDate, token);
+            var result = await _analyticsService.GetAccountSparklineAsync(userId, accountId, startDate, endDate, token);
 
             return result.Match<ActionResult<SparklineResponse>>(
                 onSuccess: () => Ok(result.Value),

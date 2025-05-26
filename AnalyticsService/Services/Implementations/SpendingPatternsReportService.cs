@@ -29,14 +29,15 @@ namespace AnalyticsService.Services.Implementations
             string targetCurrency,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId)
         {
-            // Получаем транзакции
+            
             var filter = new TransactionFilterParameters(
-                1, /*Вставить нужный userId*/1, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
+                1, userId, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
 
-            // Конвертация и отбор расходов
+            
             var expenses = new List<decimal>();
             foreach (var tx in transactions)
             {
@@ -58,7 +59,6 @@ namespace AnalyticsService.Services.Implementations
             var avgDaily = total / days;
             var avgCheck = expenses.Average();
 
-            // Самый затратный день
             var groupByDay = transactions
                 .Where(tx => tx.Value < 0)
                 .GroupBy(tx => tx.TransactionDate.Date)
@@ -82,10 +82,11 @@ namespace AnalyticsService.Services.Implementations
             string targetCurrency,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId)
         {
             var filter = new TransactionFilterParameters(
-                1, /*Вставить нужный userId*/1, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
+                1, userId, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
 
             var ru = new CultureInfo("ru-RU");
@@ -116,13 +117,14 @@ namespace AnalyticsService.Services.Implementations
             string targetCurrency,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId)
         {
             var filter = new TransactionFilterParameters(
-                1, /*Вставить нужный userId*/1, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
+                1, userId, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
 
-            // Определяем периоды
+            
             var buckets = new[]
             {
                 (Name: "Ночь", From: 0, To: 6),
@@ -153,10 +155,11 @@ namespace AnalyticsService.Services.Implementations
             string targetCurrency,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId)
         {
             var filter = new TransactionFilterParameters(
-                1, /*Вставить нужный userId*/1, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
+                1, userId, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
 
             var values = transactions.Where(tx => tx.Value < 0)
@@ -195,10 +198,11 @@ namespace AnalyticsService.Services.Implementations
             string targetCurrency,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId)
         {
             var filter = new TransactionFilterParameters(
-                1, /*Вставить нужный userId*/1, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
+                1, userId, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
 
             var byDate = transactions.Where(tx => tx.Value < 0)
@@ -229,10 +233,11 @@ namespace AnalyticsService.Services.Implementations
             string targetCurrency,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId)
         {
             var filter = new TransactionFilterParameters(
-                1, /*Вставить нужный userId*/1, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
+                1, userId, null, startDate, endDate, categoryIds, "EXPENSE", null, null, accountIds);
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
 
             var converted = new List<(TransactionResponse Tx, decimal Value)>();

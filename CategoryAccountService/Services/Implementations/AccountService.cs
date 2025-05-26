@@ -9,6 +9,9 @@ using CaregoryAccountService.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
 using CategoryAccountService.Messaging.Kafka;
 using CategoryAccountService.Messaging.DTO;
+using CaregoryAccountService.Messaging.DTO;
+using Microsoft.AspNetCore.SignalR;
+using CategoryAccountService.Messaging.SignalR;
 
 namespace CaregoryAccountService.Services.Implementations
 {
@@ -16,11 +19,12 @@ namespace CaregoryAccountService.Services.Implementations
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IKafkaProducer _kafkaProducer;
-
-        public AccountService(IAccountRepository accountRepository, IKafkaProducer kafkaProducer)
+        private readonly IHubContext<AccountsHub> _hub;
+        public AccountService(IAccountRepository accountRepository, IKafkaProducer kafkaProducer, IHubContext<AccountsHub> hub)
         {
             _accountRepository = accountRepository;
             _kafkaProducer = kafkaProducer;
+            _hub = hub;
         }
 
         public async Task<Result<AccountResponse>> GetAccountByIdAsync(long id, CancellationToken token)
@@ -37,10 +41,23 @@ namespace CaregoryAccountService.Services.Implementations
         {
 
             var account = createAccountRequest.ToAccount();
-
             await _accountRepository.AddAsync(account, token);
 
-            return Result<AccountResponse>.Success(account.ToAccountResponse());
+            if (account is null)
+            {
+                return Result<AccountResponse>.Failure(AccountErrors.AccountNotFound);
+            }
+            else
+            {
+                if (account.Balance != 0)
+                {
+                    var updateEvent = new AccountUpdateEvent(account, account.Balance);
+                    await _kafkaProducer.ProduceAsync("account-events", account.Id.ToString(), updateEvent);
+                }
+                await _kafkaProducer.ProduceAsync("notifications-events", account.UserId.ToString(), new NotificationEvent(account.UserId.ToString(), $"Создан счёт {account.AccountName}"));
+                return Result<AccountResponse>.Success(account.ToAccountResponse());
+            }
+
         }
 
         public async Task<Result<AccountResponse>> UpdateAccountAsync(UpdateAccountRequest updateAccountRequest,
@@ -117,7 +134,10 @@ namespace CaregoryAccountService.Services.Implementations
             account.Balance += value;
             account.TransactionsCount+= trCountChange;
             account = await _accountRepository.UpdateAsync(account, token);
-
+            if (account != null)
+            {
+                await SendToUserAsync(account.UserId.ToString(), account.ToAccountResponse());
+            }
             return account is null
                 ? Result<AccountResponse>.Failure(AccountErrors.AccountNotFound)
                 : Result<AccountResponse>.Success(account.ToAccountResponse());
@@ -129,6 +149,12 @@ namespace CaregoryAccountService.Services.Implementations
             return currency is null
                 ? Result<string>.Failure(AccountErrors.AccountNotFound)
                 : Result<string>.Success(currency.ToString());
+        }
+
+        public Task SendToUserAsync(string userId, AccountResponse message)
+        {
+            return _hub.Clients.Group(userId)
+                              .SendAsync("AccountBalanceUpdate", new { message });
         }
     }
 }

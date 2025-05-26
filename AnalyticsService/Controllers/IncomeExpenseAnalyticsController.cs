@@ -26,6 +26,8 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime primaryEndDate,
             [FromQuery] DateTime compareStartDate,
             [FromQuery] DateTime compareEndDate,
+            [FromQuery] long userId,
+            [FromQuery] string currency,
             CancellationToken token,
             [FromQuery] string? groupBy = null,
             [FromQuery] string? accountIds = null,
@@ -38,7 +40,7 @@ namespace AnalyticsService.Controllers
             var result = await _analyticsService.GetKpiAsync(
                 primaryStartDate, primaryEndDate,
                 compareStartDate, compareEndDate,
-                groupBy, accountIds, categoryIds, token);
+                groupBy, accountIds, categoryIds, token, userId, currency);
 
             return result.Match<ActionResult<ComparisonResponse<IncomeExpenseKpiDto>>>(
                 onSuccess: () => Ok(result.Value),
@@ -53,6 +55,8 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime primaryEndDate,
             [FromQuery] DateTime compareStartDate,
             [FromQuery] DateTime compareEndDate,
+            [FromQuery] long userId,
+            [FromQuery] string currency,
             [FromQuery] string groupBy,
             CancellationToken token,
             [FromQuery] string? accountIds = null,
@@ -67,7 +71,7 @@ namespace AnalyticsService.Controllers
             var result = await _analyticsService.GetTrendAsync(
                 primaryStartDate, primaryEndDate,
                 compareStartDate, compareEndDate,
-                groupBy, accountIds, categoryIds, token);
+                groupBy, accountIds, categoryIds, token, userId, currency);
 
             return result.Match<ActionResult<ComparisonResponse<IncomeExpenseTrendResponse>>>(
                 onSuccess: () => Ok(result.Value),
@@ -82,6 +86,8 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime primaryEndDate,
             [FromQuery] DateTime compareStartDate,
             [FromQuery] DateTime compareEndDate,
+            [FromQuery] long userId,
+            [FromQuery] string currency,
             CancellationToken token,
             [FromQuery] string? groupBy = null,
             [FromQuery] string? accountIds = null,
@@ -94,7 +100,7 @@ namespace AnalyticsService.Controllers
             var result = await _analyticsService.GetBreakdownAsync(
                 primaryStartDate, primaryEndDate,
                 compareStartDate, compareEndDate,
-                groupBy, accountIds, categoryIds, token);
+                groupBy, accountIds, categoryIds, token, userId, currency);
 
             return result.Match<ActionResult<ComparisonResponse<IncomeExpenseBreakdownResponse>>>(
                 onSuccess: () => Ok(result.Value),
@@ -110,6 +116,8 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime compareStartDate,
             [FromQuery] DateTime compareEndDate,
             [FromQuery] string groupBy,
+            [FromQuery] long userId,
+            [FromQuery] string currency,
             CancellationToken token,
             [FromQuery] string? accountIds = null,
             [FromQuery] string? categoryIds = null
@@ -123,7 +131,7 @@ namespace AnalyticsService.Controllers
             var result = await _analyticsService.GetTimeTableAsync(
                 primaryStartDate, primaryEndDate,
                 compareStartDate, compareEndDate,
-                groupBy, accountIds, categoryIds, token);
+                groupBy, accountIds, categoryIds, token, userId, currency);
 
             return result.Match<ActionResult<ComparisonResponse<IEnumerable<TimeTableRowResponse>>>>(
                 onSuccess: () => Ok(result.Value),
@@ -138,6 +146,8 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime primaryEndDate,
             [FromQuery] DateTime compareStartDate,
             [FromQuery] DateTime compareEndDate,
+            [FromQuery] long userId,
+            [FromQuery] string currency,
             CancellationToken token,
             [FromQuery] string? groupBy = null,
             [FromQuery] string? accountIds = null,
@@ -150,7 +160,7 @@ namespace AnalyticsService.Controllers
             var result = await _analyticsService.GetSourceTableAsync(
                 primaryStartDate, primaryEndDate,
                 compareStartDate, compareEndDate,
-                groupBy, accountIds, categoryIds, token);
+                groupBy, accountIds, categoryIds, token, userId, currency);
 
             return result.Match<ActionResult<ComparisonResponse<IEnumerable<CategoryAmountDto>>>>(
                 onSuccess: () => Ok(result.Value),
@@ -165,6 +175,8 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime primaryEndDate,
             [FromQuery] DateTime compareStartDate,
             [FromQuery] DateTime compareEndDate,
+            [FromQuery] long userId,
+            [FromQuery] string currency,
             CancellationToken token,
             [FromQuery] string? groupBy = null,
             [FromQuery] string? accountIds = null,
@@ -177,7 +189,7 @@ namespace AnalyticsService.Controllers
             var result = await _analyticsService.GetCategoryTableAsync(
                 primaryStartDate, primaryEndDate,
                 compareStartDate, compareEndDate,
-                groupBy, accountIds, categoryIds, token);
+                groupBy, accountIds, categoryIds, token, userId, currency);
 
             return result.Match<ActionResult<ComparisonResponse<IEnumerable<CategoryAmountDto>>>>(
                 onSuccess: () => Ok(result.Value),

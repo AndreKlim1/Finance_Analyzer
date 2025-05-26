@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using BudgetingService.Models;
 using BudgetingService.Messaging.Http;
 using BudgetingService.Messaging.DTO;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BudgetingService.Services.Implementations
 {
@@ -17,11 +18,13 @@ namespace BudgetingService.Services.Implementations
     {
         private readonly IBudgetRepository _budgetRepository;
         private readonly ITransactionsClient _transactionsClient;
+        private readonly ICurrencyConversionClient _currencyConversionClient;
 
-        public BudgetService(IBudgetRepository budgetRepository, ITransactionsClient transactionsClient)
+        public BudgetService(IBudgetRepository budgetRepository, ITransactionsClient transactionsClient, ICurrencyConversionClient currencyConversionClient)
         {
             _budgetRepository = budgetRepository;
             _transactionsClient = transactionsClient;
+            _currencyConversionClient = currencyConversionClient;
         }
 
         public async Task<Result<BudgetResponse>> GetBudgetByIdAsync(long id, CancellationToken token)
@@ -113,7 +116,12 @@ namespace BudgetingService.Services.Implementations
             var result = 0m;
             foreach(var transaction in transactions)
             {
-                result += Math.Abs(transaction.Value);
+                var updateValue = transaction.Value;
+                if (budget.Currency.ToString() != transaction.Currency)
+                {
+                    updateValue = Math.Abs(await _currencyConversionClient.ConvertTransactionValueAsync(budget.Currency.ToString(), transaction.Currency, transaction.Value));
+                }
+                result += Math.Abs(updateValue);
             }
             return result;
         }

@@ -25,7 +25,7 @@ var app = builder.Build();
 app.UseRouting();
 
 app.UseCors("CorsPolicy");
-
+app.UseWebSockets();
 await app.UseOcelot();
 
 app.Run();

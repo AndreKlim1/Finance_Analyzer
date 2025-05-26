@@ -5,5 +5,6 @@ namespace IntegrationService.DTO
         long? UserId,
         string CategoryName,
         string CategoryType,
-        string Icon);
+        string Icon,
+        string Color);
 }

@@ -33,10 +33,12 @@ namespace AnalyticsService.Services.Implementations
             string? groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId,
+            string currency = "USD")
         {
-            var primary = await ComputeKpiAsync(primaryStartDate, primaryEndDate, accountIds, categoryIds, token);
-            var comparison = await ComputeKpiAsync(compareStartDate, compareEndDate, accountIds, categoryIds, token);
+            var primary = await ComputeKpiAsync(primaryStartDate, primaryEndDate, accountIds, categoryIds, token, currency, userId);
+            var comparison = await ComputeKpiAsync(compareStartDate, compareEndDate, accountIds, categoryIds, token, currency, userId);
 
             var result = new ComparisonResponse<IncomeExpenseKpiDto>
             {
@@ -51,10 +53,12 @@ namespace AnalyticsService.Services.Implementations
             DateTime end,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            string currency,
+            long userId)
         {
             var filter = new TransactionFilterParameters(
-                1, /* userId placeholder */1,
+                1, userId,
                 null, start, end,
                 categoryIds, null, null, null,
                 accountIds);
@@ -63,7 +67,7 @@ namespace AnalyticsService.Services.Implementations
             decimal income = 0m, expense = 0m;
             foreach (var tx in transactions)
             {
-                var value = tx.Currency != "USD"
+                var value = tx.Currency != currency
                     ? await _currencyConversionClient.ConvertTransactionValueAsync(tx.Currency, tx.Currency, tx.Value)
                     : tx.Value;
                 if (value >= 0) income += value;
@@ -85,10 +89,12 @@ namespace AnalyticsService.Services.Implementations
             string groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId,
+            string currency = "USD")
         {
-            var primary = await ComputeTrendAsync(primaryStartDate, primaryEndDate, groupBy, accountIds, categoryIds, token);
-            var comparison = await ComputeTrendAsync(compareStartDate, compareEndDate, groupBy, accountIds, categoryIds, token);
+            var primary = await ComputeTrendAsync(primaryStartDate, primaryEndDate, groupBy, accountIds, categoryIds, token, currency, userId);
+            var comparison = await ComputeTrendAsync(compareStartDate, compareEndDate, groupBy, accountIds, categoryIds, token, currency, userId);
 
             var result = new ComparisonResponse<IncomeExpenseTrendResponse>
             {
@@ -104,10 +110,12 @@ namespace AnalyticsService.Services.Implementations
             string groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            string currency,
+            long userId)
         {
             var filter = new TransactionFilterParameters(
-                1, 1, null, start, end,
+                1, userId, null, start, end,
                 categoryIds, null, null, null,
                 accountIds);
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
@@ -125,7 +133,7 @@ namespace AnalyticsService.Services.Implementations
                 decimal inc = 0m, exp = 0m;
                 foreach (var tx in slice)
                 {
-                    var val = tx.Currency != "USD"
+                    var val = tx.Currency != currency
                         ? await _currencyConversionClient.ConvertTransactionValueAsync(tx.Currency, tx.Currency, tx.Value)
                         : tx.Value;
                     if (val >= 0) inc += val;
@@ -155,10 +163,12 @@ namespace AnalyticsService.Services.Implementations
             string? groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId,
+            string currency = "USD")
         {
-            var primary = await ComputeBreakdownAsync(primaryStartDate, primaryEndDate, accountIds, categoryIds, token);
-            var comparison = await ComputeBreakdownAsync(compareStartDate, compareEndDate, accountIds, categoryIds, token);
+            var primary = await ComputeBreakdownAsync(primaryStartDate, primaryEndDate, accountIds, categoryIds, token, currency, userId);
+            var comparison = await ComputeBreakdownAsync(compareStartDate, compareEndDate, accountIds, categoryIds, token, currency, userId);
 
             var result = new ComparisonResponse<IncomeExpenseBreakdownResponse>
             {
@@ -173,13 +183,22 @@ namespace AnalyticsService.Services.Implementations
             DateTime end,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            string currency,
+            long userId)
         {
             var filter = new TransactionFilterParameters(
-                1, 1, null, start, end,
+                1, userId, null, start, end,
                 categoryIds, null, null, null,
                 accountIds);
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
+            for(int i=0; i<transactions.Count; i++)
+            {
+                var value = transactions[i].Currency != currency
+                    ? await _currencyConversionClient.ConvertTransactionValueAsync(transactions[i].Currency, transactions[i].Currency, transactions[i].Value)
+                    : transactions[i].Value;
+                transactions[i].Value = value;
+            }
 
             var incomeGroup = transactions.Where(tx => tx.Value >= 0)
                 .GroupBy(tx => tx.CategoryId)
@@ -212,10 +231,12 @@ namespace AnalyticsService.Services.Implementations
             string groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId,
+            string currency = "USD")
         {
-            var primary = await ComputeTimeTableAsync(primaryStartDate, primaryEndDate, groupBy, accountIds, categoryIds, token);
-            var comparison = await ComputeTimeTableAsync(compareStartDate, compareEndDate, groupBy, accountIds, categoryIds, token);
+            var primary = await ComputeTimeTableAsync(primaryStartDate, primaryEndDate, groupBy, accountIds, categoryIds, token, currency, userId);
+            var comparison = await ComputeTimeTableAsync(compareStartDate, compareEndDate, groupBy, accountIds, categoryIds, token, currency, userId);
 
             var result = new ComparisonResponse<IEnumerable<TimeTableRowResponse>>
             {
@@ -231,13 +252,22 @@ namespace AnalyticsService.Services.Implementations
             string groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            string currency,
+            long userId)
         {
             var filter = new TransactionFilterParameters(
-                1, 1, null, start, end,
+                1, userId, null, start, end,
                 categoryIds, null, null, null,
                 accountIds);
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
+            for (int i = 0; i < transactions.Count; i++)
+            {
+                var value = transactions[i].Currency != currency
+                    ? await _currencyConversionClient.ConvertTransactionValueAsync(transactions[i].Currency, transactions[i].Currency, transactions[i].Value)
+                    : transactions[i].Value;
+                transactions[i].Value = value;
+            }
 
             var rows = new List<TimeTableRowResponse>();
             var cursor = start;
@@ -261,12 +291,15 @@ namespace AnalyticsService.Services.Implementations
             string? groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId,
+            string currency = "USD"
+            )
         {
             return await GetCategoryAmountComparisonAsync(
                 primaryStartDate, primaryEndDate,
                 compareStartDate, compareEndDate,
-                true, accountIds, categoryIds, token);
+                true, accountIds, categoryIds, token, currency, userId);
         }
 
         public async Task<Result<ComparisonResponse<IEnumerable<CategoryAmountDto>>>> GetCategoryTableAsync(
@@ -277,12 +310,14 @@ namespace AnalyticsService.Services.Implementations
             string? groupBy,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            long userId,
+            string currency = "USD")
         {
             return await GetCategoryAmountComparisonAsync(
                 primaryStartDate, primaryEndDate,
                 compareStartDate, compareEndDate,
-                false, accountIds, categoryIds, token);
+                false, accountIds, categoryIds, token, currency, userId);
         }
 
         private async Task<Result<ComparisonResponse<IEnumerable<CategoryAmountDto>>>> GetCategoryAmountComparisonAsync(
@@ -293,10 +328,12 @@ namespace AnalyticsService.Services.Implementations
             bool income,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            string currency,
+            long userId)
         {
-            var primary = await ComputeCategoryAmountsAsync(ps, pe, income, accountIds, categoryIds, token);
-            var comparison = await ComputeCategoryAmountsAsync(cs, ce, income, accountIds, categoryIds, token);
+            var primary = await ComputeCategoryAmountsAsync(ps, pe, income, accountIds, categoryIds, token, currency, userId);
+            var comparison = await ComputeCategoryAmountsAsync(cs, ce, income, accountIds, categoryIds, token, currency, userId);
             var result = new ComparisonResponse<IEnumerable<CategoryAmountDto>>
             {
                 PrimaryData = primary.Value,
@@ -311,13 +348,22 @@ namespace AnalyticsService.Services.Implementations
             bool income,
             string? accountIds,
             string? categoryIds,
-            CancellationToken token)
+            CancellationToken token,
+            string currency,
+            long userId)
         {
             var filter = new TransactionFilterParameters(
-                1, 1, null, start, end,
+                1, userId, null, start, end,
                 categoryIds, null, null, null,
                 accountIds);
             var transactions = await _transactionsClient.GetTransactionsAsync(filter, token);
+            for (int i = 0; i < transactions.Count; i++)
+            {
+                var value = transactions[i].Currency != currency
+                    ? await _currencyConversionClient.ConvertTransactionValueAsync(transactions[i].Currency, transactions[i].Currency, transactions[i].Value)
+                    : transactions[i].Value;
+                transactions[i].Value = value;
+            }
 
             var grouped = income
                 ? transactions.Where(tx => tx.Value >= 0).GroupBy(tx => tx.CategoryId)

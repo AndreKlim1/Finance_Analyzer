@@ -17,8 +17,9 @@ namespace BudgetingService.Messaging.BackgroundServices
         private readonly IConsumer<string, string> _consumer;
         private readonly ILogger<TransactionUpdateEventsConsumer> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IKafkaProducer _kafkaProducer;
 
-        public TransactionUpdateEventsConsumer(IOptions<KafkaSettings> options, ILogger<TransactionUpdateEventsConsumer> logger, IServiceProvider serviceProvider)
+        public TransactionUpdateEventsConsumer(IOptions<KafkaSettings> options, ILogger<TransactionUpdateEventsConsumer> logger, IServiceProvider serviceProvider, IKafkaProducer kafkaProducer)
         {
             _serviceProvider = serviceProvider;
             var kafkaSettings = options.Value;
@@ -32,6 +33,7 @@ namespace BudgetingService.Messaging.BackgroundServices
             _consumer = new ConsumerBuilder<string, string>(config).Build();
             _logger = logger;
             _consumer.Subscribe(new List<string> { "transaction-update-events" });
+            _kafkaProducer = kafkaProducer;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -82,10 +84,11 @@ namespace BudgetingService.Messaging.BackgroundServices
                 {
                     var containsPrev = false;
                     var containsCurr = false;
+
                     if (((((budget.BudgetType == BudgetType.SAVINGS && data.PrevTransaction.TransactionType == "INCOME") ||
                            (budget.BudgetType == BudgetType.EXPENSES && data.PrevTransaction.TransactionType == "EXPENSE")) &&
-                            budget.CategoryIds is null) || budget.CategoryIds.Contains(data.PrevTransaction.CategoryId)) &&
-                           (budget.AccountIds is null || budget.AccountIds.Contains(data.PrevTransaction.AccountId)) && 
+                            budget.CategoryIds.Count == 0) || budget.CategoryIds.Contains(data.PrevTransaction.CategoryId)) &&
+                           (budget.AccountIds.Count == 0 || budget.AccountIds.Contains(data.PrevTransaction.AccountId)) && 
                             data.PrevTransaction.TransactionDate <= budget.PeriodEnd && data.PrevTransaction.TransactionDate >= budget.PeriodStart)
                     {
                         containsPrev = true;
@@ -93,8 +96,8 @@ namespace BudgetingService.Messaging.BackgroundServices
 
                     if (((((budget.BudgetType == BudgetType.SAVINGS && data.CurrTransaction.TransactionType == "INCOME") ||
                            (budget.BudgetType == BudgetType.EXPENSES && data.CurrTransaction.TransactionType == "EXPENSE")) &&
-                            budget.CategoryIds is null) || budget.CategoryIds.Contains(data.CurrTransaction.CategoryId)) &&
-                           (budget.AccountIds is null || budget.AccountIds.Contains(data.CurrTransaction.AccountId)) &&
+                            budget.CategoryIds.Count == 0) || budget.CategoryIds.Contains(data.CurrTransaction.CategoryId)) &&
+                           (budget.AccountIds.Count == 0 || budget.AccountIds.Contains(data.CurrTransaction.AccountId)) &&
                             data.CurrTransaction.TransactionDate <= budget.PeriodEnd && data.CurrTransaction.TransactionDate >= budget.PeriodStart)
                     {
                         containsCurr = true;
@@ -126,7 +129,7 @@ namespace BudgetingService.Messaging.BackgroundServices
                         if (percent > budget.WarningThreshold && !budget.WarningShowed)
                         {
                             budget.WarningShowed = true;
-                            //отправка запроса в NotificationService для вывода уведомления пользователю
+                            await _kafkaProducer.ProduceAsync("notifications-events", budget.UserId.ToString(), new NotificationEvent(budget.UserId.ToString(), $"Бюджет {budget.BudgetName} заполнен больше чем на 80% процентов"));
                         }
                         else if (budget.WarningShowed && percent < budget.WarningThreshold)
                         {
@@ -171,9 +174,10 @@ namespace BudgetingService.Messaging.BackgroundServices
                         if (percent > budget.WarningThreshold && !budget.WarningShowed)
                         {
                             budget.WarningShowed = true;
-                            //отправка запроса в NotificationService для вывода уведомления пользователю
+                            await _kafkaProducer.ProduceAsync("notifications-events", budget.UserId.ToString(), new NotificationEvent(budget.UserId.ToString(), $"Бюджет {budget.BudgetName} заполнен больше чем на 80% процентов"));
+                            
                         }
-                        
+
                         await budgetService.UpdateBudgetAsync(budget, token);
                     }
                 }

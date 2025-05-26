@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TransactionsService.Repositories;
@@ -11,9 +12,11 @@ using TransactionsService.Repositories;
 namespace TransactionsService.Migrations
 {
     [DbContext(typeof(TransactionsServiceDbContext))]
-    partial class TransactionsServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250526202736_TranFix")]
+    partial class TranFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

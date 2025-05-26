@@ -17,11 +17,12 @@ using Microsoft.EntityFrameworkCore;
 using CategoryAccountService.Messaging.BackgroundServices;
 using CategoryAccountService.Messaging.Kafka;
 using CategoryAccountService.Messaging.Http;
+using CategoryAccountService.Messaging.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddSignalR();
 builder.Services.AddControllers();
 builder.Services.AddApiVersioning();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -94,7 +95,7 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
+app.MapHub<AccountsHub>("/accountsupdate");
 app.MapControllers();
 
 app.Run();

@@ -111,18 +111,6 @@ namespace CaregoryAccountService.Repositories.Configurations
                     TransactionsCount = 0,
                     Description = "Long-term savings account",
                     Color = "#80bed6"
-                },
-                new Account
-                {
-                    Id = 7,
-                    UserId = 2,
-                    AccountName = "Other USER bank",
-                    AccountType = AccountType.CASH,
-                    Currency = Currency.EUR,
-                    Balance = 3000,
-                    TransactionsCount = 0,
-                    Description = "Long-term savings account",
-                    Color = "#7d4aad"
                 }
 
 

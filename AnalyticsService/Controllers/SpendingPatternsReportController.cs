@@ -25,6 +25,7 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate,
             [FromQuery] string targetCurrency,
+            [FromQuery] long userId,
             CancellationToken token,
             [FromQuery] string? accountIds = null,
             [FromQuery] string? categoryIds = null
@@ -39,7 +40,7 @@ namespace AnalyticsService.Controllers
                 return BadRequest(new Error("Analytics.Validation", "Параметр 'targetCurrency' обязателен."));
             }
 
-            var result = await _analyticsService.GetSpendingPatternsKpiAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token);
+            var result = await _analyticsService.GetSpendingPatternsKpiAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token, userId);
 
             return result.Match<ActionResult<SpendingPatternsKpiResponse>>(
                 onSuccess: () => Ok(result.Value),
@@ -53,6 +54,7 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate,
             [FromQuery] string targetCurrency,
+            [FromQuery] long userId,
             CancellationToken token,
             [FromQuery] string? accountIds = null,
             [FromQuery] string? categoryIds = null
@@ -67,7 +69,7 @@ namespace AnalyticsService.Controllers
                 return BadRequest(new Error("Analytics.Validation", "Параметр 'targetCurrency' обязателен."));
             }
 
-            var result = await _analyticsService.GetDayOfWeekPatternsAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token);
+            var result = await _analyticsService.GetDayOfWeekPatternsAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token, userId);
 
             return result.Match<ActionResult<IEnumerable<DayOfWeekPatternResponse>>>(
                 onSuccess: () => Ok(result.Value),
@@ -81,6 +83,7 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate,
             [FromQuery] string targetCurrency,
+            [FromQuery] long userId,
             CancellationToken token,
             [FromQuery] string? accountIds = null,
             [FromQuery] string? categoryIds = null
@@ -95,7 +98,7 @@ namespace AnalyticsService.Controllers
                 return BadRequest(new Error("Analytics.Validation", "Параметр 'targetCurrency' обязателен."));
             }
 
-            var result = await _analyticsService.GetTimeOfDayPatternsAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token);
+            var result = await _analyticsService.GetTimeOfDayPatternsAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token, userId);
 
             return result.Match<ActionResult<IEnumerable<TimeOfDayPatternResponse>>>(
                 onSuccess: () => Ok(result.Value),
@@ -109,6 +112,7 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate,
             [FromQuery] string targetCurrency,
+            [FromQuery] long userId,
             CancellationToken token,
             [FromQuery] string? accountIds = null,
             [FromQuery] string? categoryIds = null
@@ -123,7 +127,7 @@ namespace AnalyticsService.Controllers
                 return BadRequest(new Error("Analytics.Validation", "Параметр 'targetCurrency' обязателен."));
             }
 
-            var result = await _analyticsService.GetValueDistributionAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token);
+            var result = await _analyticsService.GetValueDistributionAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token, userId);
 
             return result.Match<ActionResult<ValueDistributionResponse>>(
                 onSuccess: () => Ok(result.Value),
@@ -137,6 +141,7 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate,
             [FromQuery] string targetCurrency,
+            [FromQuery] long userId,
             CancellationToken token,
             [FromQuery] string? accountIds = null,
             [FromQuery] string? categoryIds = null
@@ -151,7 +156,7 @@ namespace AnalyticsService.Controllers
                 return BadRequest(new Error("Analytics.Validation", "Параметр 'targetCurrency' обязателен."));
             }
 
-            var result = await _analyticsService.GetAvgCheckTrendAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token);
+            var result = await _analyticsService.GetAvgCheckTrendAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token, userId);
 
             return result.Match<ActionResult<AvgCheckTrendResponse>>(
                 onSuccess: () => Ok(result.Value),
@@ -165,6 +170,7 @@ namespace AnalyticsService.Controllers
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate,
             [FromQuery] string targetCurrency,
+            [FromQuery] long userId,
             CancellationToken token,
             [FromQuery] string? accountIds = null,
             [FromQuery] string? categoryIds = null
@@ -179,7 +185,7 @@ namespace AnalyticsService.Controllers
                 return BadRequest(new Error("Analytics.Validation", "Параметр 'targetCurrency' обязателен."));
             }
 
-            var result = await _analyticsService.GetLargestTransactionsAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token);
+            var result = await _analyticsService.GetLargestTransactionsAsync(startDate, endDate, targetCurrency, accountIds, categoryIds, token, userId);
 
             return result.Match<ActionResult<IEnumerable<LargestTransactionResponse>>>(
                 onSuccess: () => Ok(result.Value),
